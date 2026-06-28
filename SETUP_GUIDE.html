@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEE 2027 Tracker — Setup Guide</title>
+<style>
+  body { background: #0f172a; color: #f1f5f9; font-family: 'Segoe UI', system-ui, sans-serif; max-width: 680px; margin: 0 auto; padding: 24px 16px; line-height: 1.6; }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #6366f1; }
+  .sub { font-size: 14px; color: #94a3b8; margin-bottom: 32px; }
+  h2 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: #f1f5f9; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+  .step { display: flex; gap: 12px; margin-bottom: 16px; }
+  .num { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: #6366f1; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .step-body { font-size: 14px; color: #cbd5e1; }
+  .step-body strong { color: #f1f5f9; }
+  code { background: #1e293b; border: 1px solid #334155; padding: 2px 7px; border-radius: 5px; font-size: 12px; color: #f59e0b; }
+  .box { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; margin: 12px 0; font-size: 13px; }
+  .script-box { background: #0a0f1a; border: 1px solid #334155; border-radius: 10px; padding: 16px; font-size: 12px; color: #f59e0b; font-family: monospace; white-space: pre; overflow-x: auto; margin: 12px 0; }
+  .tip { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #a5b4fc; margin: 12px 0; }
+  a { color: #6366f1; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(34,197,94,0.15); color: #22c55e; }
+</style>
+</head>
+<body>
+
+<h1>📚 JEE 2027 Tracker — Setup Guide</h1>
+<div class="sub">One-time setup (~15 minutes). After this, your tracker lives at a permanent URL, installs as an app, and syncs to Google Sheets automatically.</div>
+
+<h2>Part 1 — Host on GitHub Pages (free permanent URL)</h2>
+
+<div class="step">
+  <div class="num">1</div>
+  <div class="step-body">Go to <a href="https://github.com" target="_blank">github.com</a> and create a free account (if you don't have one). Just needs an email.</div>
+</div>
+
+<div class="step">
+  <div class="num">2</div>
+  <div class="step-body">Click the <strong>+</strong> icon → <strong>New repository</strong>. Name it exactly: <code>jee2027</code>. Set it to <strong>Public</strong>. Click <strong>Create repository</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">3</div>
+  <div class="step-body">In the new repo, click <strong>uploading an existing file</strong>. Upload all 4 files from the zip: <code>index.html</code>, <code>manifest.json</code>, <code>sw.js</code>, <code>icon-192.png</code>, <code>icon-512.png</code>. Click <strong>Commit changes</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">4</div>
+  <div class="step-body">Go to <strong>Settings</strong> (top of repo) → <strong>Pages</strong> (left sidebar) → Under <em>Source</em>, select <strong>Deploy from a branch</strong> → Branch: <strong>main</strong>, folder: <strong>/ (root)</strong>. Click <strong>Save</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">5</div>
+  <div class="step-body">Wait ~1 minute. Refresh the Pages settings. Your URL will appear: <strong>https://yourusername.github.io/jee2027</strong>. Bookmark this. This is your permanent tracker URL.</div>
+</div>
+
+<div class="tip">✅ At this point your tracker is live at your GitHub Pages URL. You can already use it — data saves locally in your browser. Now set up Google Sheets sync.</div>
+
+<h2>Part 2 — Connect Google Sheets (auto-sync)</h2>
+
+<div class="step">
+  <div class="num">1</div>
+  <div class="step-body">Go to <a href="https://sheets.google.com" target="_blank">sheets.google.com</a>. Create a new blank spreadsheet. Name it <strong>JEE 2027 Tracker</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">2</div>
+  <div class="step-body">In the spreadsheet, click <code>Extensions</code> in the top menu → <code>Apps Script</code>. A new tab opens with a code editor. <strong>Delete everything</strong> already in it.</div>
+</div>
+
+<div class="step">
+  <div class="num">3</div>
+  <div class="step-body">Paste this script into the editor (select all → paste):</div>
+</div>
+
+<div class="script-box">function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName('Log') || ss.insertSheet('Log');
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        'Date','Hours','Mood','Task %','Maths Notes',
+        'Physics Notes','Chem Notes','Test Name',
+        'Test Score','Weak Topics','Reflection'
+      ]);
+    }
+    sheet.appendRow([
+      data.date,
+      data.hours || '',
+      data.mood || '',
+      data.taskPct || 0,
+      data.mathNotes || '',
+      data.phyNotes || '',
+      data.chemNotes || '',
+      data.test ? data.test.name : '',
+      data.test ? data.test.score : '',
+      data.test ? data.test.weak : '',
+      data.reflection || ''
+    ]);
+    return ContentService
+      .createTextOutput(JSON.stringify({status:'ok'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</div>
+
+<div class="step">
+  <div class="num">4</div>
+  <div class="step-body">Click the <strong>💾 Save</strong> icon (or Ctrl+S). Name the project <strong>JEE Tracker Sync</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">5</div>
+  <div class="step-body">Click <strong>Deploy</strong> (blue button, top right) → <strong>New deployment</strong>. Click the gear icon ⚙️ next to "Type" → select <strong>Web app</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">6</div>
+  <div class="step-body">Settings: Description = <em>JEE Tracker</em> · Execute as = <strong>Me</strong> · Who has access = <strong>Anyone</strong>. Click <strong>Deploy</strong>.</div>
+</div>
+
+<div class="step">
+  <div class="num">7</div>
+  <div class="step-body">Google will ask you to authorize. Click <strong>Authorize access</strong> → choose your Google account → click <strong>Allow</strong>. Then copy the <strong>Web app URL</strong> that appears (starts with <code>https://script.google.com/macros/s/...</code>).</div>
+</div>
+
+<div class="step">
+  <div class="num">8</div>
+  <div class="step-body">Open your tracker (<strong>yourusername.github.io/jee2027</strong>) → tap <strong>⚙️</strong> (settings tab) → paste the URL into the box → click <strong>Connect</strong>. Done!</div>
+</div>
+
+<div class="tip">✅ From now on, every time you hit "Save today's log" in the tracker, a new row is added to your Google Sheet automatically — even from your phone.</div>
+
+<h2>Part 3 — Install as an app on Chrome</h2>
+
+<div class="step">
+  <div class="num">1</div>
+  <div class="step-body">Open your tracker URL in Chrome on your laptop. Look for a <strong>⊕ install icon</strong> in the address bar (right side). Click it → Install.</div>
+</div>
+
+<div class="step">
+  <div class="num">2</div>
+  <div class="step-body">The tracker opens as a standalone window — no browser tabs, no distractions. Pin it to your taskbar. It also works offline (data saves locally first, syncs when online).</div>
+</div>
+
+<div class="step">
+  <div class="num">3</div>
+  <div class="step-body"><strong>On Android phone:</strong> Open the URL in Chrome → tap the ⋮ menu → <strong>Add to Home Screen</strong>. It'll appear as an app icon on your home screen.</div>
+</div>
+
+<h2>That's it ✓</h2>
+
+<div class="box">
+  <strong>Your ecosystem:</strong><br><br>
+  📌 Tracker URL: <code>https://yourusername.github.io/jee2027</code><br>
+  📊 Google Sheet: auto-populated in your Drive every time you save<br>
+  💻 Desktop app: installed via Chrome PWA<br>
+  📱 Mobile app: installed via Chrome on Android<br>
+  🔌 Offline: works without internet, syncs when back online
+</div>
+
+</body>
+</html>
