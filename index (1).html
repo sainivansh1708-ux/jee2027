@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="JEE 2027 Daily Accountability Tracker">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>JEE 2027 Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg2: #1e293b;
+    --bg3: #334155;
+    --border: #334155;
+    --border2: #475569;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-soft: rgba(99,102,241,0.15);
+    --green: #22c55e;
+    --green-soft: rgba(34,197,94,0.15);
+    --amber: #f59e0b;
+    --amber-soft: rgba(245,158,11,0.15);
+    --red: #ef4444;
+    --red-soft: rgba(239,68,68,0.12);
+    --purple: #a855f7;
+    --purple-soft: rgba(168,85,247,0.15);
+    --radius: 10px;
+    --font: 'Segoe UI', system-ui, sans-serif;
+  }
+  /* LIGHT THEME */
+  body.light {
+    --bg: #f8fafc;
+    --bg2: #ffffff;
+    --bg3: #e2e8f0;
+    --border: #e2e8f0;
+    --border2: #cbd5e1;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #4f46e5;
+    --accent-soft: rgba(79,70,229,0.1);
+    --green: #16a34a;
+    --green-soft: rgba(22,163,74,0.1);
+    --amber: #d97706;
+    --amber-soft: rgba(217,119,6,0.1);
+    --red: #dc2626;
+    --red-soft: rgba(220,38,38,0.08);
+    --purple: #9333ea;
+    --purple-soft: rgba(147,51,234,0.1);
+  }
+  body.light textarea, body.light input, body.light select {
+    background: #f1f5f9;
+    color: var(--text);
+  }
+  body.light .test-block { background: #fffbeb; border-color: #fcd34d; }
+  body.light .script-box { background: #f8fafc; }
+  /* THEME TOGGLE BUTTON */
+  .theme-btn { background: none; border: 1px solid var(--border2); border-radius: 8px; color: var(--muted); cursor: pointer; font-size: 15px; padding: 4px 8px; line-height: 1; transition: all .15s; }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+  /* NAV */
+  .nav { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 16px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .nav-logo { font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .nav-logo span { color: var(--accent); }
+  .nav-tabs { display: flex; gap: 2px; }
+  .ntab { padding: 6px 12px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 500; font-family: var(--font); transition: all .15s; }
+  .ntab.active { background: var(--accent-soft); color: var(--accent); }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; margin-left: 4px; }
+  .sync-dot.off { background: var(--amber); }
+
+  /* MAIN */
+  .main { max-width: 720px; margin: 0 auto; padding: 16px; }
+  .page { display: none; } .page.active { display: block; }
+
+  /* STREAK BAR */
+  .streak-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+  .scard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+  .scard-num { font-size: 22px; font-weight: 600; color: var(--text); }
+  .scard-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* SECTION CARDS */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .card-title { font-size: 13px; font-weight: 600; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+  .bm { background: var(--accent-soft); color: var(--accent); }
+  .bp { background: var(--purple-soft); color: var(--purple); }
+  .bc { background: var(--green-soft); color: var(--green); }
+  .bw { background: var(--amber-soft); color: var(--amber); }
+
+  /* TASKS */
+  .tasks { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .task-row { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  .task-row input[type=checkbox] { width: 16px; height: 16px; min-width: 16px; accent-color: var(--accent); margin-top: 2px; cursor: pointer; }
+  .task-lbl { font-size: 12px; color: #cbd5e1; line-height: 1.5; user-select: none; }
+  .task-lbl.done { color: var(--muted); text-decoration: line-through; }
+
+  /* INPUTS */
+  .input-group { padding: 0 14px 12px; }
+  .input-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+  textarea, input, select { width: 100%; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; color: var(--text); font-family: var(--font); outline: none; transition: border-color .15s; }
+  textarea:focus, input:focus, select:focus { border-color: var(--accent); }
+  textarea { resize: none; }
+  textarea::placeholder, input::placeholder { color: var(--muted); }
+
+  /* META ROW */
+  .meta-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .meta-group { flex: 1; min-width: 120px; }
+  .meta-group label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
+
+  /* MOOD */
+  .mood-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+  .mood-lbl { font-size: 12px; color: var(--muted); }
+  .mbtn { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); cursor: pointer; font-size: 12px; font-family: var(--font); transition: all .15s; }
+  .mbtn.sel { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+  /* SAVE BTN */
+  .save-btn { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); margin-top: 4px; transition: opacity .15s; }
+  .save-btn:hover { opacity: .9; }
+  .save-btn:active { opacity: .75; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; }
+
+  /* TEST BLOCK */
+  .test-block { background: #1c1a10; border: 1px solid #78350f; border-radius: var(--radius); padding: 12px 14px; margin-bottom: 12px; display: none; }
+  .test-block.open { display: block; }
+  .test-block-title { font-size: 12px; font-weight: 600; color: var(--amber); margin-bottom: 8px; }
+  .test-fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .tf label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
+
+  /* TOGGLE ROW */
+  .toggle-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .toggle-row input { width: auto; }
+  .toggle-row label { font-size: 12px; color: var(--muted); cursor: pointer; }
+
+  /* HISTORY */
+  .hist-item { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+  .hist-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; cursor: pointer; }
+  .hist-date { font-size: 13px; font-weight: 500; }
+  .hist-meta { display: flex; gap: 8px; align-items: center; }
+  .hist-hrs { font-size: 11px; color: var(--muted); }
+  .hist-pct { font-size: 11px; font-weight: 500; padding: 1px 7px; border-radius: 6px; }
+  .pct-hi { background: var(--green-soft); color: var(--green); }
+  .pct-mid { background: var(--amber-soft); color: var(--amber); }
+  .pct-lo { background: var(--red-soft); color: var(--red); }
+  .hist-body { padding: 10px 14px; border-top: 1px solid var(--border); display: none; }
+  .hist-body.open { display: block; }
+  .hist-line { font-size: 12px; color: #94a3b8; margin-bottom: 4px; line-height: 1.5; }
+  .hist-line strong { color: var(--text); }
+  .hist-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; border-top: 1px solid var(--border); padding-top: 6px; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .stat-c { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+  .stat-big { font-size: 26px; font-weight: 600; }
+  .stat-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* HEATMAP */
+  .hm-title { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .hm-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .hm-day-labels { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+  .hm-day-label { font-size: 9px; color: var(--muted); text-align: center; }
+  .hm-cell { aspect-ratio: 1; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; }
+  .hm-empty { background: var(--bg3); color: var(--muted); }
+  .hm-full { background: var(--green); color: #fff; }
+  .hm-mid { background: var(--amber); color: #fff; }
+  .hm-low { background: var(--red-soft); color: var(--red); border: 1px solid var(--red); }
+
+  /* PLAN TAB */
+  .plan-month { margin-bottom: 20px; }
+  .plan-month-title { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .plan-week { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+  .plan-week-head { padding: 10px 14px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+  .pw-title { font-size: 12px; font-weight: 500; }
+  .pw-date { font-size: 11px; color: var(--muted); }
+  .plan-week-body { padding: 10px 14px; display: none; }
+  .plan-week-body.open { display: block; }
+  .subj-row { display: grid; grid-template-columns: 60px 1fr; gap: 6px; margin-bottom: 6px; font-size: 12px; }
+  .subj-name { color: var(--muted); font-weight: 500; }
+  .subj-val { color: #cbd5e1; line-height: 1.5; }
+  .test-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 500; margin: 2px; }
+  .tt-qpt { background: var(--accent-soft); color: var(--accent); }
+  .tt-qapt { background: var(--purple-soft); color: var(--purple); }
+  .tt-big { background: var(--amber-soft); color: var(--amber); }
+
+  /* SETTINGS */
+  .settings-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .settings-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .settings-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .settings-input-row { display: flex; gap: 8px; }
+  .settings-input-row input { flex: 1; }
+  .settings-btn { padding: 8px 14px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--font); white-space: nowrap; }
+  .settings-btn.red { background: var(--red); }
+  .settings-btn.green { background: var(--green); }
+  .step { display: flex; gap: 10px; margin-bottom: 10px; }
+  .step-num { width: 22px; height: 22px; min-width: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .step-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .step-text code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--amber); }
+  .copy-btn { padding: 3px 8px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); font-size: 10px; cursor: pointer; font-family: var(--font); margin-left: 6px; }
+  .copy-btn:hover { color: var(--text); }
+  .status-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 32px 0; color: var(--muted); font-size: 13px; }
+
+  /* RESPONSIVE */
+  @media(max-width:480px) {
+    .streak-bar { grid-template-columns: repeat(2,1fr); }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .test-fields { grid-template-columns: 1fr; }
+    .nav-tabs .ntab { font-size: 11px; padding: 5px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">📚 <span>JEE 2027</span> Tracker</div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle dark/light mode">🌙</button>
+      <div class="nav-tabs">
+        <button class="ntab active" onclick="goPage('today')">Today</button>
+        <button class="ntab" onclick="goPage('plan')">Plan</button>
+        <button class="ntab" onclick="goPage('history')">History</button>
+        <button class="ntab" onclick="goPage('stats')">Stats</button>
+        <button class="ntab" onclick="goPage('settings')">⚙️</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ══════════════ TODAY ══════════════ -->
+<div class="page active" id="page-today">
+  <div class="streak-bar">
+    <div class="scard"><div class="scard-num" id="s-streak">0</div><div class="scard-lbl">Streak 🔥</div></div>
+    <div class="scard"><div class="scard-num" id="s-days">0</div><div class="scard-lbl">Days logged</div></div>
+    <div class="scard"><div class="scard-num" id="s-avg">0</div><div class="scard-lbl">Avg hrs/day</div></div>
+    <div class="scard"><div class="scard-num" id="s-tasks">0/13</div><div class="scard-lbl">Tasks today</div></div>
+  </div>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--muted)" id="todayLabel"></div>
+
+  <!-- Meta -->
+  <div class="meta-row">
+    <div class="meta-group">
+      <label>Hours studied</label>
+      <select id="hours">
+        <option value="">— select —</option>
+        <option>4</option><option>5</option><option>6</option><option>7</option>
+        <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+      </select>
+    </div>
+    <div class="meta-group">
+      <label>Focus level</label>
+      <div class="mood-row" style="margin-bottom:0;margin-top:4px">
+        <button class="mbtn" onclick="setMood('🔥')" id="mb-🔥">🔥</button>
+        <button class="mbtn" onclick="setMood('✅')" id="mb-✅">✅</button>
+        <button class="mbtn" onclick="setMood('😐')" id="mb-😐">😐</button>
+        <button class="mbtn" onclick="setMood('😴')" id="mb-😴">😴</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATHS -->
+  <div class="card">
+    <div class="card-head"><span class="card-title">📐 Mathematics</span><span class="badge bm">Mathsmerizing + Black Book</span></div>
+    <div class="tasks">
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Mathsmerizing lecture(s) completed for today's chapter</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Black Book — 15 min struggle per problem before checking solution</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Maths chapter test done</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Maths chapter test done</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Maths question cold</span></label>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Chapter covered + what was hard</div>
+      <textarea id="mathNotes" rows="2" placeholder="e.g. Indefinite Integration — substitution done, stuck on partial fractions in Black Book Q12..."></textarea>
+    </div>
+  </div>
+
+  <!-- PHYSICS -->
+  <div class="card">
+    <div class="card-head"><span class="card-title">⚡ Physics</span><span class="badge bp">Numerical Odyssey + Alok sir notes</span></div>
+    <div class="tasks">
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Numerical Odyssey — completed today's section in order (no skipping levels)</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Alok sir notes consulted only for concept gaps (not re-reading)</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Physics chapter test done</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Physics chapter test done</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Physics problem cold</span></label>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Chapter + what stumped you</div>
+      <textarea id="phyNotes" rows="2" placeholder="e.g. NLM — Odyssey Level 3 Q7 stuck, FBD in non-inertial frame..."></textarea>
+    </div>
+  </div>
+
+  <!-- CHEMISTRY -->
+  <div class="card">
+    <div class="card-head"><span class="card-title">🧪 Chemistry</span><span class="badge bc">Sachin Rana / Phys Chem / Inorganic</span></div>
+    <div class="tasks">
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Sachin Rana video(s) OR Physical Chem hard Qs OR Inorganic Alok sir revision</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — 1 Chemistry chapter test done</span></label>
+      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Stayed within 1.5 hr Chemistry cap (Chemistry is your strongest — don't over-invest)</span></label>
+    </div>
+    <div class="input-group">
+      <div class="input-label">What you covered</div>
+      <textarea id="chemNotes" rows="2" placeholder="e.g. Sachin Rana video 24 — Alcohol oxidation patterns..."></textarea>
+    </div>
+  </div>
+
+  <!-- TEST -->
+  <div class="toggle-row">
+    <input type="checkbox" id="testToggle" onchange="document.getElementById('testBlock').classList.toggle('open',this.checked)">
+    <label for="testToggle">I attempted a part test today (QPT / QAPT / QFT)</label>
+  </div>
+  <div class="test-block" id="testBlock">
+    <div class="test-block-title">📝 Test log</div>
+    <div class="test-fields">
+      <div class="tf"><label>Test name</label><input id="testName" placeholder="e.g. QPT 3"></div>
+      <div class="tf"><label>Score / Total</label><input id="testScore" placeholder="e.g. 180/300"></div>
+      <div class="tf"><label>Weakest topic</label><input id="testWeak" placeholder="e.g. Rotation, Conics"></div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="card" style="margin-top:4px">
+    <div class="card-head"><span class="card-title">💭 Day reflection</span></div>
+    <div class="input-group" style="padding-top:10px">
+      <textarea id="reflection" rows="3" placeholder="What went well today? What needs fixing tomorrow? Any mindset note..."></textarea>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveDay()">✓ Save today's log</button>
+  <div style="height:20px"></div>
+</div>
+
+<!-- ══════════════ PLAN ══════════════ -->
+<div class="page" id="page-plan">
+  <div id="planContent"></div>
+</div>
+
+<!-- ══════════════ HISTORY ══════════════ -->
+<div class="page" id="page-history">
+  <div style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--muted)">All logged days — tap to expand</div>
+  <div id="histList"><div class="empty">No days logged yet. Start today! 💪</div></div>
+</div>
+
+<!-- ══════════════ STATS ══════════════ -->
+<div class="page" id="page-stats">
+  <div class="stats-grid">
+    <div class="stat-c"><div class="stat-big" id="st-streak" style="color:var(--amber)">0</div><div class="stat-sub">Day streak 🔥</div></div>
+    <div class="stat-c"><div class="stat-big" id="st-days" style="color:var(--accent)">0</div><div class="stat-sub">Days logged</div></div>
+    <div class="stat-c"><div class="stat-big" id="st-hours" style="color:var(--green)">0</div><div class="stat-sub">Total hours</div></div>
+    <div class="stat-c"><div class="stat-big" id="st-avg">0</div><div class="stat-sub">Avg hrs/day</div></div>
+    <div class="stat-c"><div class="stat-big" id="st-tests" style="color:var(--purple)">0</div><div class="stat-sub">Tests logged</div></div>
+    <div class="stat-c"><div class="stat-big" id="st-task">0%</div><div class="stat-sub">Avg task %</div></div>
+  </div>
+  <div class="hm-title">Last 28 days</div>
+  <div class="hm-day-labels"><span class="hm-day-label">M</span><span class="hm-day-label">T</span><span class="hm-day-label">W</span><span class="hm-day-label">T</span><span class="hm-day-label">F</span><span class="hm-day-label">S</span><span class="hm-day-label">S</span></div>
+  <div class="hm-days" id="heatmap"></div>
+  <div style="font-size:10px;color:var(--muted);margin-top:8px">🟩 8+ hrs &nbsp;🟨 5–7 hrs &nbsp;🟥 &lt;5 hrs &nbsp;⬜ not logged</div>
+</div>
+
+<!-- ══════════════ SETTINGS ══════════════ -->
+<div class="page" id="page-settings">
+  <div class="settings-card">
+    <div class="settings-title">🔗 Google Sheets sync</div>
+    <div class="settings-desc">Every time you save a day, your data is automatically sent to a Google Sheet in your Google Drive. Set it up once — works forever. Follow the steps below.</div>
+
+    <div class="step"><div class="step-num">1</div><div class="step-text">Go to <a href="https://sheets.google.com" target="_blank" style="color:var(--accent)">sheets.google.com</a> and create a new blank spreadsheet. Name it <strong>JEE 2027 Tracker</strong>.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">In the spreadsheet, click <code>Extensions → Apps Script</code>. Delete everything in the editor.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Paste the script below into the editor and click Save (💾).<button class="copy-btn" onclick="copyScript()">Copy script</button></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Click <code>Deploy → New deployment</code>. Type: <strong>Web app</strong>. Execute as: <strong>Me</strong>. Access: <strong>Anyone</strong>. Click Deploy and copy the URL.</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text">Paste that URL in the box below and click Connect.</div></div>
+
+    <div class="settings-input-row" style="margin-top:12px">
+      <input id="sheetUrl" placeholder="Paste your Apps Script Web App URL here..." value="">
+      <button class="settings-btn green" onclick="saveSheetUrl()">Connect</button>
+    </div>
+    <div class="status-row">
+      <div class="sync-dot off" id="syncDot"></div>
+      <span id="syncStatus">Not connected</span>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <div class="settings-title">📱 Install as app</div>
+    <div class="settings-desc">On Chrome desktop: click the install icon (⊕) in the address bar → Install. The tracker will open as a standalone app, just like any other program. On Android: tap ⋮ → Add to Home Screen.</div>
+  </div>
+
+  <div class="settings-card">
+    <div class="settings-title">🗑️ Data</div>
+    <div class="settings-desc">All your logs are saved locally in this browser. Clearing will permanently delete everything.</div>
+    <button class="settings-btn red" onclick="clearData()" style="width:auto">Clear all local data</button>
+  </div>
+
+  <div id="scriptPreview" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:11px;color:var(--amber);font-family:monospace;white-space:pre-wrap;margin-top:8px;max-height:200px;overflow-y:auto"></div>
+</div>
+
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const LSKEY = 'jee2027_v1';
+const URLKEY = 'jee2027_sheeturl';
+let DB = {};
+let mood = '';
+
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(k) {
+  const [y,m,d] = k.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const dt = new Date(k);
+  return `${days[dt.getDay()]}, ${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+}
+
+function loadDB() {
+  try { DB = JSON.parse(localStorage.getItem(LSKEY) || '{}'); } catch(e) { DB = {}; }
+}
+function saveDB() {
+  localStorage.setItem(LSKEY, JSON.stringify(DB));
+}
+
+// ═══════════════════════════════════════
+// TODAY
+// ═══════════════════════════════════════
+function initToday() {
+  document.getElementById('todayLabel').textContent = fmtDate(todayKey()) + " — Today's Log";
+  const tk = todayKey();
+  if (DB[tk]) {
+    const d = DB[tk];
+    if (d.hours) document.getElementById('hours').value = d.hours;
+    if (d.mood) setMood(d.mood, false);
+    if (d.mathNotes) document.getElementById('mathNotes').value = d.mathNotes;
+    if (d.phyNotes) document.getElementById('phyNotes').value = d.phyNotes;
+    if (d.chemNotes) document.getElementById('chemNotes').value = d.chemNotes;
+    if (d.reflection) document.getElementById('reflection').value = d.reflection;
+    if (d.tasks) {
+      const boxes = document.querySelectorAll('.task-check');
+      d.tasks.forEach((v,i) => { if(boxes[i]) boxes[i].checked = v; });
+      taskChanged();
+    }
+    if (d.test) {
+      document.getElementById('testToggle').checked = true;
+      document.getElementById('testBlock').classList.add('open');
+      document.getElementById('testName').value = d.test.name || '';
+      document.getElementById('testScore').value = d.test.score || '';
+      document.getElementById('testWeak').value = d.test.weak || '';
+    }
+  }
+  updateStreak();
+}
+
+function setMood(m, update=true) {
+  mood = m;
+  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('sel'));
+  const el = document.getElementById('mb-'+m);
+  if (el) el.classList.add('sel');
+}
+
+function taskChanged() {
+  const boxes = document.querySelectorAll('.task-check');
+  const done = [...boxes].filter(b=>b.checked).length;
+  document.getElementById('s-tasks').textContent = done+'/'+boxes.length;
+  boxes.forEach(b => {
+    const lbl = b.closest('.task-row').querySelector('.task-lbl');
+    if (lbl) lbl.className = 'task-lbl' + (b.checked ? ' done' : '');
+  });
+}
+
+async function saveDay() {
+  const tk = todayKey();
+  const boxes = [...document.querySelectorAll('.task-check')];
+  const tasks = boxes.map(b=>b.checked);
+  const done = tasks.filter(Boolean).length;
+  const entry = {
+    date: tk,
+    hours: document.getElementById('hours').value,
+    mood,
+    tasks,
+    taskPct: Math.round(done/tasks.length*100),
+    mathNotes: document.getElementById('mathNotes').value,
+    phyNotes: document.getElementById('phyNotes').value,
+    chemNotes: document.getElementById('chemNotes').value,
+    reflection: document.getElementById('reflection').value,
+  };
+  if (document.getElementById('testToggle').checked) {
+    entry.test = {
+      name: document.getElementById('testName').value,
+      score: document.getElementById('testScore').value,
+      weak: document.getElementById('testWeak').value,
+    };
+  }
+  DB[tk] = entry;
+  saveDB();
+  updateStreak();
+  renderHistory();
+  renderStats();
+  await syncToSheet(entry);
+  showToast('✓ Day saved!');
+}
+
+// ═══════════════════════════════════════
+// STATS + STREAK
+// ═══════════════════════════════════════
+function updateStreak() {
+  const keys = Object.keys(DB).sort().reverse();
+  let streak = 0;
+  let check = todayKey();
+  for (let i=0; i<365; i++) {
+    if (DB[check]) streak++;
+    else break;
+    const d = new Date(check); d.setDate(d.getDate()-1);
+    check = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  const totalDays = keys.length;
+  const totalHours = keys.reduce((s,k)=>s+(parseInt(DB[k].hours)||0),0);
+  const avgH = totalDays ? Math.round(totalHours/totalDays) : 0;
+  document.getElementById('s-streak').textContent = streak;
+  document.getElementById('s-days').textContent = totalDays;
+  document.getElementById('s-avg').textContent = avgH;
+  return { streak, totalDays, totalHours, avgH };
+}
+
+function renderStats() {
+  const keys = Object.keys(DB).sort().reverse();
+  const { streak, totalDays, totalHours, avgH } = updateStreak();
+  document.getElementById('st-streak').textContent = streak;
+  document.getElementById('st-days').textContent = totalDays;
+  document.getElementById('st-hours').textContent = totalHours;
+  document.getElementById('st-avg').textContent = avgH;
+  document.getElementById('st-tests').textContent = keys.filter(k=>DB[k].test).length;
+  const avgTask = totalDays ? Math.round(keys.reduce((s,k)=>s+(DB[k].taskPct||0),0)/totalDays) : 0;
+  document.getElementById('st-task').textContent = avgTask+'%';
+  // heatmap
+  const hm = document.getElementById('heatmap');
+  const cells = [];
+  for (let i=27; i>=0; i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if (!DB[k]) { cells.push(`<div class="hm-cell hm-empty">·</div>`); continue; }
+    const hrs = parseInt(DB[k].hours)||0;
+    if (hrs>=8) cells.push(`<div class="hm-cell hm-full" title="${fmtDate(k)}: ${hrs}h">✓</div>`);
+    else if (hrs>=5) cells.push(`<div class="hm-cell hm-mid" title="${fmtDate(k)}: ${hrs}h">${hrs}</div>`);
+    else cells.push(`<div class="hm-cell hm-low" title="${fmtDate(k)}: ${hrs}h">${hrs||'·'}</div>`);
+  }
+  hm.innerHTML = cells.join('');
+}
+
+// ═══════════════════════════════════════
+// HISTORY
+// ═══════════════════════════════════════
+function renderHistory() {
+  const keys = Object.keys(DB).sort().reverse();
+  const el = document.getElementById('histList');
+  if (!keys.length) { el.innerHTML = '<div class="empty">No days logged yet. Start today! 💪</div>'; return; }
+  el.innerHTML = keys.map((k,i) => {
+    const d = DB[k];
+    const pct = d.taskPct || 0;
+    const pClass = pct>=80?'pct-hi':pct>=50?'pct-mid':'pct-lo';
+    return `<div class="hist-item">
+      <div class="hist-head" onclick="toggleHist('hb${i}')">
+        <span class="hist-date">${fmtDate(k)}</span>
+        <div class="hist-meta">
+          <span class="hist-hrs">${d.hours||'?'} hrs</span>
+          <span>${d.mood||''}</span>
+          <span class="hist-pct ${pClass}">${pct}%</span>
+        </div>
+      </div>
+      <div class="hist-body" id="hb${i}">
+        ${d.mathNotes?`<div class="hist-line"><strong>Maths:</strong> ${d.mathNotes}</div>`:''}
+        ${d.phyNotes?`<div class="hist-line"><strong>Physics:</strong> ${d.phyNotes}</div>`:''}
+        ${d.chemNotes?`<div class="hist-line"><strong>Chem:</strong> ${d.chemNotes}</div>`:''}
+        ${d.test?`<div class="hist-line"><strong>Test:</strong> ${d.test.name} — ${d.test.score}${d.test.weak?' | Weak: '+d.test.weak:''}</div>`:''}
+        ${d.reflection?`<div class="hist-note">"${d.reflection}"</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleHist(id) { document.getElementById(id).classList.toggle('open'); }
+
+// ═══════════════════════════════════════
+// PLAN DATA
+// ═══════════════════════════════════════
+const PLAN = [
+  { month: 'Jun 29 – Jul 31', weeks: [
+    { title:'Week 1: Indefinite Integration + Physics Mechanics backfill', date:'29 Jun – 5 Jul',
+      m:'Finish remaining Mathsmerizing Indefinite Integration lectures · Black Book: all Indefinite Integration Qs (15 min struggle rule) · QCT: 5 tests · QACT: 1 Adv pattern test',
+      p:'Numerical Odyssey Vol 1: Units & Dimensions → Motion 1D (all graded levels) · QCT: Units (4) + Motion 1D (5) · QACT: both chapters',
+      c:'Sachin Rana: ~3 videos/day — Alcohols/Phenols section · Physical Chem: Thermodynamics hard Qs (6 PYQ tests)',
+      tests:['QAPT 1 — 28 Jun (attempt ASAP)','QPT 1 — 21 Jun (should be done)'] },
+    { title:'Week 2: Definite Integration + Motion 2D + NLM', date:'6 Jul – 12 Jul',
+      m:'Mathsmerizing: Definite Integration full playlist · Black Book: Definite Integration Qs · QCT: 5 tests',
+      p:'Numerical Odyssey Vol 1: Motion 2D → NLM (Laws of Motion) complete · QCT: Motion 2D (5) + NLM (5) · QACT: both',
+      c:'Sachin Rana: Aldehydes & Ketones + Carboxylic Acids (~10 videos) · Physical Chem: Chemical Kinetics hard Qs',
+      tests:['QPT 2 — 12 Jul (Trig, Solutions, Electrochemistry, Trig Equations)'] },
+    { title:'Week 3: AOD + WPE + COM refresh', date:'13 Jul – 19 Jul',
+      m:'Mathsmerizing: Application of Derivatives (AOD) full playlist · Black Book: AOD all problems · QCT: 6 tests',
+      p:'Numerical Odyssey Vol 1: Work Power Energy → COM & Collision REFRESH (harder levels only) · QCT: WPE (5) + COM (4)',
+      c:'Sachin Rana: Amines + Biomolecules + Polymers section · Physical Chem: Electrochemistry hard Qs',
+      tests:['QAPT 2 — 19 Jul (Laws of Motion, Solutions, Kinetics, Solid State, Trig)'] },
+    { title:'Week 4: Differential Equations + Rotational Motion', date:'20 Jul – 26 Jul',
+      m:'Mathsmerizing: Differential Equations full playlist · Black Book: Diff Eq all Qs · QCT: 6 tests',
+      p:'Numerical Odyssey Vol 1: Rotational Motion — continue + complete all levels · Gravitation (short) · QCT: Rotation (5) + Gravitation (5)',
+      c:'Sachin Rana: Final chapters — target COMPLETE by 25 Jul · Physical Chem: Solutions hard Qs',
+      tests:['QPT 3 — 26 Jul (COM/Collision, Rotational, Chem Eq/Ionic Eq, PnC/Binomial)'] },
+    { title:'Week 5: Probability + Mech Solids/Fluids', date:'27 Jul – 31 Jul',
+      m:'Mathsmerizing: Probability — give full attention (high JEE Adv weight) · Black Book: Probability · QCT: 6 tests',
+      p:'Numerical Odyssey Vol 1: Mech Solids + Mech Fluids · QCT: Solids (4) + Fluids (5)',
+      c:'Sachin Rana DONE ✓ → Start Organic PYQ chapter tests · Physical Chem: Ionic Equilibrium hard Qs · Inorganic: 1st full revision of Alok sir notes (3-day sprint)',
+      tests:['QPT 4 — 2 Aug (All chapters till QPT 3 — revision test)'] },
+  ]},
+  { month: 'August 2026', weeks: [
+    { title:'Week 6: Coordinate Geometry + Oscillations', date:'1 Aug – 9 Aug',
+      m:'Straight Lines + Circles: theory if gaps else straight to Black Book · QCT: Straight Lines (6) + Circle (5) · QACT: both',
+      p:'Numerical Odyssey Vol 1: Oscillations → Waves & Sound (start) · QCT: Oscillations (5) · QACT: Oscillations',
+      c:'Inorganic 1st revision DONE · Physical Chem: Chemical Equilibrium hard Qs · Organic PYQ tests: 2/day',
+      tests:['QPT 4 — 2 Aug','QPT 5 — 9 Aug (Atomic, Dual Nature, Nuclear, Redox, Thermo, Straight Lines, Circle)'] },
+    { title:'Week 7: Conics + Waves + Thermal', date:'10 Aug – 16 Aug',
+      m:'Parabola + Ellipse + Hyperbola — theory if weak from last year, else Black Book · QCT: Parabola (5) + Ellipse (4) + Hyperbola (4)',
+      p:'Numerical Odyssey Vol 1: Waves & Sound COMPLETE → Thermal Properties of Matter · QCT: Waves (5) + Thermal (5)',
+      c:'Physical Chem: Redox + Electrochemistry deep Qs · Organic PYQ tests continue',
+      tests:['QAPT 3 — 16 Aug (COM/Collision, Rotational, Chem Eq/Ionic Eq, PnC/Binomial)'] },
+    { title:'Week 8: Trigonometry + Thermodynamics + KTG', date:'17 Aug – 23 Aug',
+      m:'Trig Ratios + Equations: Mathsmerizing if weak + Black Book · Sequences & Series: Black Book only · QCT: Trig (9) + Sequences (6)',
+      p:'Numerical Odyssey Vol 1: Thermodynamics → KTG COMPLETE · QCT: Thermo (5) + KTG (5) · QACT: Thermal Adv test',
+      c:'Physical Chem: KTG + Thermo hard Qs (aligns with Physics this week) · Inorganic: p-block quick scan',
+      tests:['QPT 6 — 23 Aug (KTG, Thermal, Thermo, Periodicity, Chemical Bonding, Conics)'] },
+    { title:'Week 9: PnC + Quadratic + Binomial · Start Vol 2 Electrostatics', date:'24 Aug – 30 Aug',
+      m:'PnC: Mathsmerizing (heavy chapter) + Black Book · Quadratic + Binomial: Black Book only · QCT: PnC (7) + Quadratic (5) + Binomial (5)',
+      p:'Vol 1 COMPLETE ✓ — do 2 consolidation QACT tests · Start Numerical Odyssey Vol 2: Electrostatics — longest chapter',
+      c:'Inorganic 2nd full revision (3-day sprint) · Physical Chem: States of Matter hard Qs',
+      tests:['QAPT 4 — 30 Aug (Atomic/Nuclear, Redox/States/Thermo, Straight Lines/Circle)'] },
+  ]},
+  { month: 'September 2026', weeks: [
+    { title:'Week 10: Functions + Sets + Electrostatics wraps', date:'31 Aug – 6 Sep',
+      m:'Functions: Mathsmerizing (2 full days — often weak) + Black Book · Sets & Relations + Inverse Trig · QCT: Functions (6) + Sets (4) + Inv Trig (5)',
+      p:'Numerical Odyssey Vol 2: Electrostatics COMPLETE · Gravitation advanced problems · QCT: Electrostatics (6) + Gravitation (5)',
+      c:'Physical Chem: Chemical Bonding conceptual Qs (Adv loves these) · Inorganic: d&f block quick revision',
+      tests:['QPT 7 — 6 Sep (Mech Fluids/Solids/Oscillations, GOC/Isomerism, Matrices/Determinants)'] },
+    { title:'Week 11: Limits + Continuity + Capacitance', date:'7 Sep – 13 Sep',
+      m:'Limits: Mathsmerizing if gaps + Black Book · Continuity & Differentiability: same · QCT: Limits (4) + C&D (5)',
+      p:'Numerical Odyssey Vol 2: Capacitance all levels · QCT: Capacitance (4) · QACT: Capacitance',
+      c:'Physical Chem: Periodicity hard Qs · Organic: Haloalkane + Alcohol PYQ tests',
+      tests:['QPT 8 — 13 Sep (All from QPT 5–7 revision)','QAPT 5 — 13 Sep (KTG/Thermal/Thermo, Periodicity/Bonding, Conics)'] },
+    { title:'Week 12: Black Book Round 2 (Maths) + Current Electricity', date:'14 Sep – 20 Sep',
+      m:'Black Book Round 2: Integration (Indefinite + Definite) — wrong questions only · Black Book R2: Probability · PYQ QACT: Integration (3 tests)',
+      p:'Numerical Odyssey Vol 2: Current Electricity FULL (longest chapter in Vol 2) · QCT: Current Electricity (7 tests)',
+      c:'Physical Chem: Solutions hard Qs · Inorganic: s-block + Hydrogen revision · Organic: Carbonyl PYQ tests',
+      tests:['No part test — Saturday: timed Black Book session (2 hrs) + Physics mock section'] },
+    { title:'Week 13: Coord Geom Round 2 + Magnetic Effects', date:'21 Sep – 27 Sep',
+      m:'Black Book R2: Coordinate Geometry wrong Qs only · PYQ QACT: Coord Geom (4 tests) · QCT: re-test weakest conic',
+      p:'Current Electricity wrap → Numerical Odyssey Vol 2: Magnetic Effects of Current (start) · QCT: Magnetic (6 tests)',
+      c:'Inorganic 3rd full revision (2-day sprint) · Physical Chem: Electrochemistry + Kinetics targeted Qs',
+      tests:['QPT 9 — 27 Sep (Electrostatics, Gravitation, Hydrocarbons/Haloalkanes, Sets/Functions/Inv Trig)','QAPT 6 — 27 Sep (Mech Fluids/Solids/Oscillations, GOC/Isomerism, Matrices/Det)'] },
+  ]},
+  { month: 'October 2026', weeks: [
+    { title:'Week 14: EM Induction + PYQ Maths marathon', date:'28 Sep – 11 Oct',
+      m:'PYQ QACT: Integration chapterwise (6 tests from 150 PYQ bank) · PYQ QACT: Probability (6 tests) · Black Book R2: any remaining',
+      p:'Magnetic Effects COMPLETE → Mag Properties (short) → EM Induction start · QCT: Magnetic (remaining) + EM Induction (6)',
+      c:'Physical Chem: Coordination + d&f block hard Qs · Organic: Amines + Biomolecules PYQ tests',
+      tests:['QPT 10 — 11 Oct (Capacitance, Current Electricity, Alcohols/Aldehydes, Limits/Continuity/AOD)','QAPT 7 — 11 Oct (Electrostatics/Gravitation, Hydrocarbons/Haloalkanes, Sets/Functions/Inv Trig)'] },
+    { title:'Week 15: AC + Ray Optics + PYQ Maths', date:'12 Oct – 18 Oct',
+      m:'PYQ QACT: Complex Numbers + Matrices/Det (strong chapters — keep sharp) · PYQ QACT: Vectors + 3D · Target 80%+ on all PYQ tests',
+      p:'Numerical Odyssey Vol 2: Alternating Current COMPLETE → Ray Optics START (long chapter) · QCT: AC (6) + Ray Optics first half',
+      c:'Physical Chem: Surface Chemistry Qs · Inorganic: Qualitative analysis practice (Adv-specific) · Organic: Full reaction list from Sachin Rana',
+      tests:['QPT 11 — 18 Oct (All from QPT 9+10 — revision test) → critical diagnostic'] },
+    { title:'Week 16: Wave Optics + Diff Eq Round 2', date:'19 Oct – 25 Oct',
+      m:'PYQ QACT: Diff Equations (5 tests) · PYQ QACT: Conics (5 tests) · Black Book: final AOD wrong Qs pass',
+      p:'Ray Optics COMPLETE → Wave Optics ALL levels · QCT: Ray Optics (7) + Wave Optics (6) · QACT: both chapters',
+      c:'Physical Chem: Full hard problem notebook revision pass · Inorganic 4th revision (1.5 days, key reactions only)',
+      tests:['QPT 12 — 25 Oct (Magnetic Effects, Carboxylic/Amines, Indefinite/Definite Integration)','QAPT 8 — 25 Oct (Capacitance, Current Elec, Alcohols/Aldehydes, Limits/Continuity/AOD)'] },
+    { title:'Week 17: Modern Physics starts + Maths consolidation', date:'26 Oct – 31 Oct',
+      m:'Error notebook: FULL review of all flagged Maths mistakes since Week 1 · PYQ QACT: 6 mixed tests across weak chapters',
+      p:'Numerical Odyssey Vol 2: Dual Nature → Atomic Physics COMPLETE · QCT: Dual Nature (4) + Atomic (4) · QACT: both',
+      c:'Organic: Reaction mechanism revision (rewatch top 10 Sachin Rana videos) · Physical Chem: Error notebook targeted Qs',
+      tests:['No part test — Saturday: self-timed 3-subject mock using 3 QCT tests (1 hr each subject)'] },
+  ]},
+  { month: 'November 2026 — Peak', weeks: [
+    { title:'Week 18: Nuclear + Semiconductors — Vol 2 COMPLETE', date:'1 Nov – 8 Nov',
+      m:'Full PYQ mock: 5 QACT chapterwise tests · Error notebook: final Maths weak list (1 hr targeted daily)',
+      p:'Numerical Odyssey Vol 2: Nuclear Physics → Semiconductors + EM Waves COMPLETE ✓ · QCT: Nuclear (5) + Semiconductors (6) + EM Waves (4) · VOL 2 DONE',
+      c:'Inorganic 5th revision (key facts only, 1.5 days) · Organic: 1 PYQ full paper organic section · Physical Chem: Error notebook Qs',
+      tests:['QPT 13 — 8 Nov (EM Induction, AC, Biomolecules/Coordination, Area/Diff Equations)','QAPT 9 — 8 Nov (Magnetic Effects, Carboxylic/Amines, Indefinite/Definite Integration)'] },
+    { title:'Week 19: Full subject revision sprint', date:'9 Nov – 15 Nov',
+      m:'PYQ QACT marathon: 2 tests/day from 150 PYQ bank — mixed chapters · Weak chapter: 1 hr targeted daily from error notebook · Target: 75%+ on all PYQ tests',
+      p:'QACT chapterwise PYQ: EM, Optics, Modern Physics (2/day) · Revisit Odyssey: chapters with persistent errors only',
+      c:'1 hr/day MAX — alternate: Inorganic key facts → Organic reactions → Physical Chem formula list · 1 QCT test/day',
+      tests:['QPT 14 — 15 Nov (All from QPT 12+13 — last real diagnostic before full tests)'] },
+    { title:'Week 20: Final part tests + 2026 JEE papers', date:'16 Nov – 22 Nov',
+      m:'2026 JEE Advanced Maths section timed attempt · Every wrong Q → 30 min targeted fix · PYQ QACT: 2 tests/day on weakest chapter',
+      p:'2026 JEE Advanced Physics section timed attempt · Error analysis → find Odyssey chapter gaps · QACT: 2 Physics PYQ tests/day',
+      c:'2026 JEE Advanced Chem section timed attempt · 1 hr/day maintenance only',
+      tests:['QPT 15 — 22 Nov (Wave Optics, Ray Optics, d&f/p Block, 3D/Vectors)','QAPT 10 — 22 Nov (AC/EM Induction, Biomolecules/Polymers, Area/Diff Equations)'] },
+    { title:'Week 21: PEAK WEEK — QFT 1 drops', date:'23 Nov – 29 Nov',
+      m:'Error notebook: FINAL complete review of all flagged mistakes since June · PYQ 2024–25 paper Maths sections timed · Light formula + key results revision',
+      p:'PYQ 2024–25 paper Physics sections timed · Final Numerical Odyssey mistake log scan · Key formula + derivation sheet from Alok sir notes',
+      c:'PYQ 2024–25 Chem sections timed · Inorganic: final key facts scan · Organic: named reaction list',
+      tests:['QPT 16 — 29 Nov (Waves/EM Waves/Semiconductors, GOC/Hydrocarbons, Complex No./Probability/Stats)','QFT 1 — 29 Nov ⭐ FIRST FULL TEST'] },
+  ]},
+];
+
+function renderPlan() {
+  const el = document.getElementById('planContent');
+  el.innerHTML = PLAN.map(month => `
+    <div class="plan-month">
+      <div class="plan-month-title">${month.month}</div>
+      ${month.weeks.map((w,i) => `
+        <div class="plan-week">
+          <div class="plan-week-head" onclick="togglePW('pw-${month.month.slice(0,3)}-${i}')">
+            <div>
+              <div class="pw-title">${w.title}</div>
+              <div class="pw-date">${w.date}</div>
+            </div>
+            <span style="color:var(--muted);font-size:12px">▾</span>
+          </div>
+          <div class="plan-week-body" id="pw-${month.month.slice(0,3)}-${i}">
+            <div class="subj-row"><span class="subj-name" style="color:var(--accent)">Maths</span><span class="subj-val">${w.m}</span></div>
+            <div class="subj-row"><span class="subj-name" style="color:var(--purple)">Physics</span><span class="subj-val">${w.p}</span></div>
+            <div class="subj-row"><span class="subj-name" style="color:var(--green)">Chem</span><span class="subj-val">${w.c}</span></div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+              ${w.tests.map(t => `<span class="test-tag ${t.includes('QFT')?'tt-big':t.includes('QAPT')?'tt-qapt':'tt-qpt'}">${t}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+function togglePW(id) { document.getElementById(id).classList.toggle('open'); }
+
+// ═══════════════════════════════════════
+// GOOGLE SHEETS SYNC
+// ═══════════════════════════════════════
+const APPS_SCRIPT = `function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName('Log') || ss.insertSheet('Log');
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Date','Hours','Mood','Task%','Maths Notes','Physics Notes','Chem Notes','Test Name','Test Score','Weak Topics','Reflection']);
+    }
+    sheet.appendRow([
+      data.date, data.hours || '', data.mood || '', data.taskPct || 0,
+      data.mathNotes || '', data.phyNotes || '', data.chemNotes || '',
+      data.test ? data.test.name : '', data.test ? data.test.score : '', data.test ? data.test.weak : '',
+      data.reflection || ''
+    ]);
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+async function syncToSheet(entry) {
+  const url = localStorage.getItem(URLKEY);
+  if (!url) return;
+  try {
+    await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(entry),
+    });
+  } catch(e) { console.log('Sync failed (offline?):', e); }
+}
+
+function saveSheetUrl() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if (!url) return;
+  localStorage.setItem(URLKEY, url);
+  document.getElementById('syncDot').classList.remove('off');
+  document.getElementById('syncStatus').textContent = 'Connected ✓';
+  showToast('Google Sheets connected!');
+}
+
+function copyScript() {
+  navigator.clipboard.writeText(APPS_SCRIPT).then(() => showToast('Script copied!'));
+  document.getElementById('scriptPreview').style.display = 'block';
+  document.getElementById('scriptPreview').textContent = APPS_SCRIPT;
+}
+
+function loadSettings() {
+  const url = localStorage.getItem(URLKEY);
+  if (url) {
+    document.getElementById('sheetUrl').value = url;
+    document.getElementById('syncDot').classList.remove('off');
+    document.getElementById('syncStatus').textContent = 'Connected ✓';
+  }
+}
+
+// ═══════════════════════════════════════
+// NAV + UTILS
+// ═══════════════════════════════════════
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t=>{ if(t.getAttribute('onclick').includes("'"+id+"'")) t.classList.add('active'); });
+  if (id==='history') renderHistory();
+  if (id==='stats') renderStats();
+  if (id==='settings') loadSettings();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function clearData() {
+  if (!confirm('Delete ALL your logged data? This cannot be undone.')) return;
+  localStorage.removeItem(LSKEY);
+  DB = {};
+  updateStreak(); renderHistory(); renderStats();
+  showToast('Data cleared');
+}
+
+// ═══════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('jee2027_theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isLight ? '☀️' : '🌙';
+}
+function loadTheme() {
+  const saved = localStorage.getItem('jee2027_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+loadDB();
+loadTheme();
+renderPlan();
+initToday();
+renderStats();
+
+// PWA install prompt
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  window._installPrompt = e;
+});
+</script>
+
+<!-- PWA Service Worker registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
