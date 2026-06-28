@@ -255,6 +255,67 @@ body.light .calc-display{background:var(--bg3)}
   .ch-grid{grid-template-columns:repeat(2,1fr)}.pl-grid{grid-template-columns:repeat(2,1fr)}
   .form-grid{grid-template-columns:1fr}.yt-search-row{flex-wrap:wrap}
 }
+  /* ===== My Custom Channels ===== */
+
+.custom-channel-form{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin:15px 0;
+}
+
+.custom-channel-form input,
+.custom-channel-form select{
+padding:10px;
+border-radius:8px;
+border:1px solid #444;
+background:#222;
+color:white;
+flex:1;
+}
+
+.custom-channel-form button{
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#ff3b30;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+#customChannels{
+margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:15px;
+}
+
+.custom-card{
+background:#1f1f1f;
+border-radius:12px;
+padding:15px;
+border:1px solid #333;
+}
+
+.custom-card h4{
+margin:0 0 8px;
+}
+
+.custom-card a{
+color:#4da3ff;
+text-decoration:none;
+}
+
+.custom-card button{
+margin-top:10px;
+padding:8px 12px;
+background:#e53935;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -408,7 +469,41 @@ body.light .calc-display{background:var(--bg3)}
         </a>
       </div>
     </div>
+<!-- ================= MY CUSTOM CHANNELS ================= -->
 
+<div class="section">
+
+<h3>📺 My Channels</h3>
+
+<div class="custom-channel-form">
+
+<input id="channelName" placeholder="Channel Name">
+
+<select id="channelSubject">
+
+<option>Physics</option>
+
+<option>Chemistry</option>
+
+<option>Maths</option>
+
+<option>Other</option>
+
+</select>
+
+<input id="channelLink" placeholder="YouTube Channel Link">
+
+<button onclick="addChannel()">
+
+➕ Add Channel
+
+</button>
+
+</div>
+
+<div id="customChannels"></div>
+
+</div>
     <!-- Playlist Tracker -->
     <div>
       <div class="section-label">📋 Playlist Progress</div>
@@ -808,6 +903,99 @@ function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.re
 // ══ INIT ══
 loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ================= CUSTOM CHANNELS =================
+
+let customChannels = JSON.parse(localStorage.getItem("customChannels") || "[]");
+
+function saveChannels(){
+    localStorage.setItem("customChannels", JSON.stringify(customChannels));
+}
+
+function renderCustomChannels(){
+
+    const box = document.getElementById("customChannels");
+
+    if(!box) return;
+
+    box.innerHTML = "";
+
+    customChannels.forEach((c,index)=>{
+
+        box.innerHTML += `
+        <div class="custom-card">
+
+            <h4>${c.name}</h4>
+
+            <p>${c.subject}</p>
+
+            <a href="${c.link}" target="_blank">
+            🔗 Open Channel
+            </a>
+
+            <br>
+
+            <button onclick="deleteChannel(${index})">
+            🗑 Delete
+            </button>
+
+        </div>
+        `;
+
+    });
+
+}
+
+function addChannel(){
+
+    const name=document.getElementById("channelName").value.trim();
+
+    const subject=document.getElementById("channelSubject").value;
+
+    const link=document.getElementById("channelLink").value.trim();
+
+    if(name=="" || link==""){
+
+        alert("Please fill all fields.");
+
+        return;
+
+    }
+
+    customChannels.push({
+
+        name:name,
+
+        subject:subject,
+
+        link:link
+
+    });
+
+    saveChannels();
+
+    renderCustomChannels();
+
+    document.getElementById("channelName").value="";
+
+    document.getElementById("channelLink").value="";
+
+}
+
+function deleteChannel(index){
+
+    customChannels.splice(index,1);
+
+    saveChannels();
+
+    renderCustomChannels();
+
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    renderCustomChannels();
+
+});
 </script>
 </body>
 </html>
