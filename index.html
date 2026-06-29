@@ -604,7 +604,196 @@ cursor:pointer;
   .timer-segment { min-width: 55px; padding: 8px 2px; }
 }
 
+/* ══════════════════════════════════════════ */
+/* PREMIUM APP DESIGN COMPONENT SECTIONS   */
+/* ══════════════════════════════════════════ */
 
+/* 1. Countdown Module Grid */
+.premium-countdown-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+.premium-countdown-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.timer-grid-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.timer-segment {
+  flex: 1;
+  min-width: 72px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 4px;
+  border-radius: 12px;
+}
+
+.timer-digits {
+  font-size: 36px;
+  font-weight: 200;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.timer-colon {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--muted);
+  opacity: 0.3;
+  padding-bottom: 16px;
+  animation: pulseGlow 2s infinite;
+}
+
+.timer-label-sub {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* 2. Layered Transparent Motivational Sanctuary Panel */
+.premium-motivation-panel {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  margin-bottom: 24px;
+  background: var(--bg2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.motivation-content {
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.quote-icon {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.3;
+  font-family: serif;
+  margin-bottom: 6px;
+}
+
+.dynamic-quote {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.quote-target-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.campus-graphic-gate {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  overflow: hidden;
+  display: flex;
+}
+
+.campus-layer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.iit-bombay-mask {
+  left: 0;
+  width: 65%;
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
+  opacity: 0.35;
+  z-index: 1;
+}
+
+.iit-delhi-mask {
+  right: 0;
+  width: 55%;
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0.25;
+  z-index: 2;
+}
+
+.campus-graphic-gate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--bg) 0%, transparent 25%, transparent 75%, var(--bg) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.premium-motivation-panel:hover .campus-layer {
+  transform: scale(1.05);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+}
+
+@media (max-width: 768px) {
+  .premium-motivation-panel { grid-template-columns: 1fr; }
+  .campus-graphic-gate { height: 130px; min-height: 130px; }
+  .campus-graphic-gate::after { background: linear-gradient(0deg, var(--bg) 0%, transparent 40%, transparent 60%, var(--bg) 100%); }
+  .timer-digits { font-size: 26px; }
+  .timer-segment { min-width: 55px; padding: 8px 2px; }
+}
   
 </style>
 </head>
@@ -684,6 +873,77 @@ cursor:pointer;
   </div>
 </div>
 <!-- ⚡ END OF COUNTDOWN BOARD ⚡ -->
+
+  
+  
+  
+  
+  <div class="card premium-countdown-card">
+  <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); display: flex; align-items: center; gap: 6px;">
+    <span>⚡</span> THE ULTIMATE HORIZON
+  </div>
+  
+  <div style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin-top: 4px; color: var(--text);" id="advTimerHeader">
+    JEE Advanced 2027
+  </div>
+
+  <div class="timer-grid-wrapper">
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-days">000</div>
+      <div class="timer-label-sub">Days</div>
+    </div>
+    
+    <div class="timer-colon">:</div>
+
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-hours">00</div>
+      <div class="timer-label-sub">Hours</div>
+    </div>
+
+    <div class="timer-colon">:</div>
+
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-minutes">00</div>
+      <div class="timer-label-sub">Mins</div>
+    </div>
+
+    <div class="timer-colon">:</div>
+
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-seconds" style="color: var(--amber); font-weight: 400;">00</div>
+      <div class="timer-label-sub">Secs</div>
+    </div>
+  </div>
+
+  <div style="font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 14px; opacity: 0.7;" id="advTargetFootnote">
+    Target Exam Date: 16 May 2027
+  </div>
+</div>
+
+<div class="card premium-motivation-panel">
+  <div class="motivation-content">
+    <div class="quote-icon">“</div>
+    <div class="dynamic-quote" id="motivationQuoteDisplay">
+      Loading your destination vector...
+    </div>
+    <div class="quote-target-badge">
+      <span>📍</span> CAMPUS DESIRE: IIT DELHI • IIT BOMBAY
+    </div>
+  </div>
+
+  <div class="campus-graphic-gate">
+    <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600" class="campus-layer iit-bombay-mask" alt="IIT Powai Core Entry" />
+    
+    <img src="https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=600" class="campus-layer iit-delhi-mask" alt="IIT Hauz Khas Core Entry" />
+  </div>
+</div>
+
+
+
+
+
+
+  
   <div class="dash-stat-row" id="dashStatRow"></div>
 
   <div class="dash-chart-card">
@@ -2026,6 +2286,73 @@ if (document.readyState === "loading") {
 } else {
   startPremiumCountdown();
 }
+
+
+// ══════════════════════════════════════════ */
+/* DASHBOARD LIVE ENGINE ROUTINES       */
+/* ══════════════════════════════════════════ */
+
+function startDashboardPremiumFeatures() {
+  // 1. High-Precision Live Ticker Routine
+  const targetDateValue = new Date("May 16, 2027 00:00:00").getTime();
+
+  function runCountdownTicker() {
+    const currentMoment = new Date().getTime();
+    const remainingGap = targetDateValue - currentMoment;
+
+    if (remainingGap <= 0) {
+      clearInterval(tickerIntervalLoop);
+      document.getElementById("advTimerHeader").innerHTML = "The Ultimate Battle Has Begun! 🚀";
+      document.getElementById("advTargetFootnote").textContent = "Time to conquer your destiny.";
+      return;
+    }
+
+    const d = Math.floor(remainingGap / (1000 * 60 * 60 * 24));
+    const h = Math.floor((remainingGap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((remainingGap % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((remainingGap % (1000 * 60)) / 1000);
+
+    const targetD = document.getElementById("adv-days");
+    const targetH = document.getElementById("adv-hours");
+    const targetM = document.getElementById("adv-minutes");
+    const targetS = document.getElementById("adv-seconds");
+
+    if (targetD) targetD.textContent = String(d).padStart(3, '0');
+    if (targetH) targetH.textContent = String(h).padStart(2, '0');
+    if (targetM) targetM.textContent = String(m).padStart(2, '0');
+    if (targetS) targetS.textContent = String(s).padStart(2, '0');
+  }
+
+  runCountdownTicker();
+  const tickerIntervalLoop = setInterval(runCountdownTicker, 1000);
+
+  // 2. Dynamic Strategic Motivation Quotes Loader
+  const coreQuotesCollection = [
+    "To stand where others fall, you must endure what others run from. The gates of Powai demand your absolute best.",
+    "Hauz Khas doesn't reward excuses. It rewards the silent, late-night hours no one else sees.",
+    "The depth of your struggle defines the height of your rank. Breathe it in, lock in, and conquer.",
+    "Every raw mathematical equation solved is a step closer to walking through the main corridor of IIT Bombay.",
+    "When your energy fades, remember the pristine view of the Dogra Hall roof structure. It's waiting for you."
+  ];
+
+  const randomSelection = coreQuotesCollection[Math.floor(Math.random() * coreQuotesCollection.length)];
+  const quoteTargetNode = document.getElementById("motivationQuoteDisplay");
+  if (quoteTargetNode) {
+    quoteTargetNode.textContent = randomSelection;
+  }
+}
+
+// Securely run everything on interface render states
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startDashboardPremiumFeatures);
+} else {
+  startDashboardPremiumFeatures();
+}
+
+
+
+
+  
 </script>
 </body>
 </html>
