@@ -15,23 +15,99 @@
   --text:#f1f5f9;--muted:#94a3b8;--accent:#6366f1;--accent-soft:rgba(99,102,241,.15);
   --green:#22c55e;--green-soft:rgba(34,197,94,.15);--amber:#f59e0b;--amber-soft:rgba(245,158,11,.15);
   --red:#ef4444;--red-soft:rgba(239,68,68,.12);--purple:#a855f7;--purple-soft:rgba(168,85,247,.15);
-  --radius:10px;--font:'Segoe UI',system-ui,sans-serif;
+  --radius:20px;--radius-sm:14px;--radius-lg:28px;--font:'Segoe UI',system-ui,sans-serif;
+  --glass-bg:rgba(30,41,59,.55);--glass-border:rgba(255,255,255,.08);--glass-blur:18px;
+  --card-shadow:0 8px 32px rgba(0,0,0,.25);
 }
+
+/* ══ THEMES ══ */
 body.light{
   --bg:#f8fafc;--bg2:#ffffff;--bg3:#e2e8f0;--border:#e2e8f0;--border2:#cbd5e1;
   --text:#0f172a;--muted:#64748b;--accent:#4f46e5;--accent-soft:rgba(79,70,229,.1);
   --green:#16a34a;--green-soft:rgba(22,163,74,.1);--amber:#d97706;--amber-soft:rgba(217,119,6,.1);
   --red:#dc2626;--red-soft:rgba(220,38,38,.08);--purple:#9333ea;--purple-soft:rgba(147,51,234,.1);
+  --glass-bg:rgba(255,255,255,.55);--glass-border:rgba(15,23,42,.06);
+  --card-shadow:0 8px 28px rgba(15,23,42,.08);
 }
+body.theme-lavender{
+  --bg:#1b1530;--bg2:#2a2147;--bg3:#3a2e5e;--border:#473a6e;--border2:#5b4d87;
+  --text:#f3effc;--muted:#b6a8d9;--accent:#b794f6;--accent-soft:rgba(183,148,246,.18);
+  --green:#5eead4;--green-soft:rgba(94,234,212,.15);--amber:#fbbf8c;--amber-soft:rgba(251,191,140,.15);
+  --red:#f472b6;--red-soft:rgba(244,114,182,.14);--purple:#c084fc;--purple-soft:rgba(192,132,252,.18);
+  --glass-bg:rgba(58,46,94,.5);--glass-border:rgba(216,180,254,.12);
+  --card-shadow:0 8px 32px rgba(91,61,153,.3);
+}
+body.theme-lavender-light{
+  --bg:#f6f1fd;--bg2:#fdfaff;--bg3:#ece2fb;--border:#e3d4f8;--border2:#d3bdf2;
+  --text:#3b2a5e;--muted:#8a7aab;--accent:#9333ea;--accent-soft:rgba(147,51,234,.1);
+  --green:#0d9488;--green-soft:rgba(13,148,136,.1);--amber:#d97706;--amber-soft:rgba(217,119,6,.1);
+  --red:#db2777;--red-soft:rgba(219,39,119,.1);--purple:#a855f7;--purple-soft:rgba(168,85,247,.12);
+  --glass-bg:rgba(255,255,255,.6);--glass-border:rgba(147,51,234,.08);
+  --card-shadow:0 8px 28px rgba(147,51,234,.1);
+}
+body.theme-sky{
+  --bg:#eef6fc;--bg2:#ffffff;--bg3:#dcf0fb;--border:#cbe7f7;--border2:#a9d8f0;
+  --text:#0c3a52;--muted:#5b87a0;--accent:#0ea5e9;--accent-soft:rgba(14,165,233,.12);
+  --green:#16a34a;--green-soft:rgba(22,163,74,.1);--amber:#d97706;--amber-soft:rgba(217,119,6,.1);
+  --red:#e11d48;--red-soft:rgba(225,29,72,.1);--purple:#7c5cfc;--purple-soft:rgba(124,92,252,.12);
+  --glass-bg:rgba(255,255,255,.55);--glass-border:rgba(14,165,233,.1);
+  --card-shadow:0 8px 28px rgba(14,165,233,.12);
+}
+body.theme-sunshine{
+  --bg:#fdf6e8;--bg2:#fffdf6;--bg3:#fbecc4;--border:#f5dfa0;--border2:#ecc96e;
+  --text:#473410;--muted:#8a7048;--accent:#f59e0b;--accent-soft:rgba(245,158,11,.14);
+  --green:#16a34a;--green-soft:rgba(22,163,74,.1);--amber:#ea580c;--amber-soft:rgba(234,88,12,.12);
+  --red:#dc2626;--red-soft:rgba(220,38,38,.08);--purple:#9333ea;--purple-soft:rgba(147,51,234,.1);
+  --glass-bg:rgba(255,253,246,.6);--glass-border:rgba(245,158,11,.12);
+  --card-shadow:0 8px 28px rgba(245,158,11,.14);
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
-body.light textarea,body.light input,body.light select{background:#f1f5f9;color:var(--text)}
-body.light .test-block{background:#fffbeb;border-color:#fcd34d}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;letter-spacing:.01em;transition:background .35s ease,color .35s ease;position:relative}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:var(--bg-glow,radial-gradient(circle at 15% 0%,var(--accent-soft),transparent 45%),radial-gradient(circle at 85% 20%,var(--purple-soft),transparent 45%),radial-gradient(circle at 50% 100%,var(--green-soft),transparent 40%));
+}
 a{text-decoration:none}
 
+/* ══ GLOBAL GLASS + ROUNDED OVERRIDE ══
+   Applies a soft rounded, frosted-glass treatment across every card-like
+   surface in the app, without needing to touch each component individually. */
+.card,.scard,.hist-item,.stat-c,.plan-week,.settings-card,.ch-card,.pl-card,
+.add-pl-wrap,.lib-pal-card,.lib-chap-card,.lib-chap-detail,.ge-card,
+.custom-card,.timer-card,.session-log,.calc-card{
+  background:var(--glass-bg)!important;
+  border:1px solid var(--glass-border)!important;
+  border-radius:var(--radius)!important;
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  box-shadow:var(--card-shadow);
+  transition:background .35s ease,border-color .35s ease,transform .2s ease,box-shadow .2s ease;
+}
+.lib-pal-card,.lib-chap-card,.ch-card,.pl-card,.ge-card,.custom-card{border-radius:var(--radius-lg)!important}
+.badge,.lib-chip,.ch-subj-pill,.test-tag,.hist-pct,.pl-count,.scard-lbl{border-radius:999px!important}
+.save-btn,.settings-btn,.lib-file-btn,.timer-btn,.preset-btn,.pl-btn,.theme-btn,.ntab,.mbtn,
+.copy-btn,.vid-id-btn,.ge-del,.yt-search-btn,.yt-search-btn2{
+  border-radius:999px!important;
+  transition:all .2s ease;
+}
+.calc-btn{border-radius:var(--radius-sm)!important;transition:all .2s ease}
+.save-btn:hover,.settings-btn:hover,.lib-file-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+textarea,input,select{border-radius:var(--radius-sm)!important;background:var(--bg3)!important;border:1px solid var(--border)!important}
+.nav{background:var(--glass-bg)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border)!important}
+h1,h2,h3,.card-title,.lib-pal-name,.settings-title,.pl-name,.ch-name,.lib-chap-detail-title{letter-spacing:.015em;font-weight:700}
+
+/* ══ THEME PICKER ══ */
+.theme-picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:4px}
+.theme-swatch{border:2px solid var(--border);border-radius:var(--radius-lg);padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s ease;display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--bg3)}
+.theme-swatch:hover{transform:translateY(-2px)}
+.theme-swatch.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.theme-swatch-dot{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.08)}
+.theme-swatch-name{font-size:11px;font-weight:600;color:var(--text)}
+
 /* NAV */
-.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;position:sticky;top:0;z-index:100}
-.nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav{background:var(--glass-bg);border-bottom:1px solid var(--glass-border);padding:0 24px;position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--text)}
 .nav-logo span{color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:6px}
@@ -39,8 +115,68 @@ a{text-decoration:none}
 .ntab{padding:5px 10px;border-radius:8px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;font-weight:500;font-family:var(--font);transition:all .15s}
 .ntab.active{background:var(--accent-soft);color:var(--accent)}
 .theme-btn{background:none;border:1px solid var(--border2);border-radius:8px;color:var(--muted);cursor:pointer;font-size:14px;padding:4px 8px;line-height:1}
-.main{max-width:960px;margin:0 auto;padding:16px}
+
+/* APP SHELL — sidebar + content, desktop-first */
+.app-shell{max-width:1400px;margin:0 auto;display:flex;align-items:flex-start;gap:24px;padding:24px}
+.sidebar{width:220px;min-width:220px;position:sticky;top:80px;display:flex;flex-direction:column;gap:4px}
+.side-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:transparent;border:1px solid transparent}
+.side-link:hover{background:var(--glass-bg);border-color:var(--glass-border)}
+.side-link.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.side-link-icon{font-size:16px;width:20px;text-align:center}
+.main{flex:1;min-width:0;padding:0}
 .page{display:none}.page.active{display:block}
+
+@media(max-width:900px){
+  .app-shell{flex-direction:column;padding:14px;gap:14px}
+  .sidebar{display:none}
+}
+
+
+/* ══════════ DASHBOARD (HOME) ══════════ */
+.dash-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.dash-greeting{font-size:24px;font-weight:700;letter-spacing:-.01em}
+.dash-date{font-size:13px;color:var(--muted);font-weight:500}
+
+.dash-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.dash-stat{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:16px 18px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow);position:relative;overflow:hidden;transition:transform .2s ease}
+.dash-stat:hover{transform:translateY(-2px)}
+.dash-stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.dash-stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.dash-stat-icon{font-size:15px;opacity:.85}
+.dash-stat-num{font-size:28px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+.dash-stat-unit{font-size:12px;font-weight:600;color:var(--muted);margin-left:3px}
+.dash-stat-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.dash-spark{width:100%;height:34px;margin-top:8px;display:block}
+
+.dash-chart-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:20px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow);margin-bottom:22px}
+.dash-chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:8px}
+.dash-chart-title{font-size:14px;font-weight:700}
+.dash-chart-tabs{display:flex;gap:4px;background:var(--bg3);padding:3px;border-radius:999px}
+.dash-chart-tab{padding:5px 12px;border:none;background:transparent;border-radius:999px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;font-family:var(--font);transition:all .15s}
+.dash-chart-tab.active{background:var(--accent);color:#fff}
+.dash-chart-readout{font-size:12px;color:var(--muted);min-height:18px;margin-bottom:6px}
+.dash-chart-readout strong{color:var(--text);font-weight:700}
+.dash-trend-canvas{width:100%!important;height:220px;display:block;cursor:crosshair}
+
+.dash-section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:24px 0 12px}
+
+.dash-tile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dash-tile{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow);transition:all .2s ease;display:flex;flex-direction:column;gap:10px;min-height:118px}
+.dash-tile:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.2)}
+.dash-tile-icon-wrap{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.dash-tile-body{flex:1}
+.dash-tile-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.dash-tile-stat{font-size:11px;color:var(--muted);line-height:1.4}
+
+@media(max-width:1100px){
+  .dash-stat-row{grid-template-columns:repeat(2,1fr)}
+  .dash-tile-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .dash-stat-row{grid-template-columns:1fr 1fr}
+  .dash-tile-grid{grid-template-columns:1fr 1fr}
+  .dash-stat-num{font-size:22px}
+}
 
 /* CARDS */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
@@ -62,8 +198,7 @@ a{text-decoration:none}
 body.light .task-lbl{color:#334155}
 .input-group{padding:0 14px 12px}
 .input-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-textarea,input,select{width:100%;background:#0f172a;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s}
-body.light textarea,body.light input,body.light select{background:#f1f5f9}
+textarea,input,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s}
 textarea:focus,input:focus,select:focus{border-color:var(--accent)}
 textarea{resize:none}
 textarea::placeholder,input::placeholder{color:var(--muted)}
@@ -77,7 +212,7 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
 .save-btn:hover{opacity:.9}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
 .toast.show{opacity:1}
-.test-block{background:#1c1a10;border:1px solid #78350f;border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;display:none}
+.test-block{background:var(--amber-soft);border:1px solid var(--amber);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;display:none;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
 .test-block.open{display:block}
 .test-block-title{font-size:12px;font-weight:600;color:var(--amber);margin-bottom:8px}
 .test-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -270,19 +405,19 @@ margin:15px 0;
 .custom-channel-form input,
 .custom-channel-form select{
 padding:10px;
-border-radius:8px;
-border:1px solid #444;
-background:#222;
-color:white;
+border-radius:var(--radius-sm);
+border:1px solid var(--border);
+background:var(--bg3);
+color:var(--text);
 flex:1;
 }
 
 .custom-channel-form button{
 padding:10px 18px;
 border:none;
-border-radius:8px;
-background:#ff3b30;
-color:white;
+border-radius:999px;
+background:var(--red);
+color:#fff;
 cursor:pointer;
 font-weight:bold;
 }
@@ -295,28 +430,26 @@ gap:15px;
 }
 
 .custom-card{
-background:#1f1f1f;
-border-radius:12px;
 padding:15px;
-border:1px solid #333;
 }
 
 .custom-card h4{
 margin:0 0 8px;
+color:var(--text);
 }
 
 .custom-card a{
-color:#4da3ff;
+color:var(--accent);
 text-decoration:none;
 }
 
 .custom-card button{
 margin-top:10px;
 padding:8px 12px;
-background:#e53935;
-color:white;
+background:var(--red);
+color:#fff;
 border:none;
-border-radius:6px;
+border-radius:999px;
 cursor:pointer;
 }
 
@@ -390,30 +523,64 @@ cursor:pointer;
 
 <nav class="nav">
   <div class="nav-inner">
-  <div class="nav-logo" onclick="goPage('today'); window.scrollTo({top:0, behavior:'smooth'});" style="cursor:pointer;">
+  <div class="nav-logo" onclick="goPage('dashboard'); window.scrollTo({top:0, behavior:'smooth'});" style="cursor:pointer;">
     📚 <span>JEE 2027</span>
 </div>
     <div class="nav-right">
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-      <div class="nav-tabs">
-        <button class="ntab active" onclick="goPage('today')">Today</button>
-        <button class="ntab" onclick="goPage('plan')">Plan</button>
-        <button class="ntab" onclick="goPage('resources')">📺 Resources</button>
-        <button class="ntab" onclick="goPage('library')">📚 Library</button>
-        <button class="ntab" onclick="goPage('timer')">⏱ Timer</button>
-        <button class="ntab" onclick="goPage('calc')">🧮 Calc</button>
-        <button class="ntab" onclick="goPage('history')">History</button>
-        <button class="ntab" onclick="goPage('stats')">Stats</button>
+      <div class="nav-tabs" id="navTabsCompact">
         <button class="ntab" onclick="goPage('settings')">⚙️</button>
       </div>
     </div>
   </div>
 </nav>
 
+<div class="app-shell">
+  <div class="sidebar" id="sidebar">
+    <div class="side-link active" data-page="dashboard" onclick="goPage('dashboard')"><span class="side-link-icon">🏠</span> Dashboard</div>
+    <div class="side-link" data-page="today" onclick="goPage('today')"><span class="side-link-icon">📝</span> Today</div>
+    <div class="side-link" data-page="plan" onclick="goPage('plan')"><span class="side-link-icon">🗓️</span> Plan</div>
+    <div class="side-link" data-page="resources" onclick="goPage('resources')"><span class="side-link-icon">📺</span> Resources</div>
+    <div class="side-link" data-page="library" onclick="goPage('library')"><span class="side-link-icon">📚</span> Library</div>
+    <div class="side-link" data-page="timer" onclick="goPage('timer')"><span class="side-link-icon">⏱️</span> Timer</div>
+    <div class="side-link" data-page="calc" onclick="goPage('calc')"><span class="side-link-icon">🧮</span> Calculator</div>
+    <div class="side-link" data-page="history" onclick="goPage('history')"><span class="side-link-icon">📖</span> History</div>
+    <div class="side-link" data-page="stats" onclick="goPage('stats')"><span class="side-link-icon">📊</span> Stats</div>
+    <div class="side-link" data-page="settings" onclick="goPage('settings')"><span class="side-link-icon">⚙️</span> Settings</div>
+  </div>
+
 <div class="main">
 
+<!-- DASHBOARD (HOME) -->
+<div class="page active" id="page-dashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-greeting" id="dashGreeting">Welcome back</div>
+      <div class="dash-date" id="dashDate"></div>
+    </div>
+  </div>
+
+  <div class="dash-stat-row" id="dashStatRow"></div>
+
+  <div class="dash-chart-card">
+    <div class="dash-chart-head">
+      <div class="dash-chart-title">📈 Study trend</div>
+      <div class="dash-chart-tabs">
+        <button class="dash-chart-tab active" onclick="setDashMetric('hours',this)">Hours</button>
+        <button class="dash-chart-tab" onclick="setDashMetric('taskPct',this)">Tasks %</button>
+      </div>
+    </div>
+    <div class="dash-chart-readout" id="dashChartReadout">Hover the graph to see a day's numbers</div>
+    <canvas class="dash-trend-canvas" id="dashTrendCanvas"></canvas>
+  </div>
+
+  <div class="dash-section-label">Jump to a section</div>
+  <div class="dash-tile-grid" id="dashTileGrid"></div>
+  <div style="height:24px"></div>
+</div>
+
 <!-- TODAY -->
-<div class="page active" id="page-today">
+<div class="page" id="page-today">
   <div class="streak-bar">
     <div class="scard"><div class="scard-num" id="s-streak">0</div><div class="scard-lbl">Streak 🔥</div></div>
     <div class="scard"><div class="scard-num" id="s-days">0</div><div class="scard-lbl">Days logged</div></div>
@@ -746,6 +913,11 @@ cursor:pointer;
 <!-- SETTINGS -->
 <div class="page" id="page-settings">
   <div class="settings-card">
+    <div class="settings-title">🎨 App theme</div>
+    <div class="settings-desc">Pick a mood for the whole app. Subject colors (Physics, Chemistry, Maths) stay true to each subject no matter what you choose.</div>
+    <div class="theme-picker-grid" id="themePicker"></div>
+  </div>
+  <div class="settings-card">
     <div class="settings-title">🔗 Google Sheets sync</div>
     <div class="settings-desc">Every save pushes a row to your Google Sheet automatically.</div>
     <div class="step"><div class="step-num">1</div><div class="step-text">Create a blank Google Sheet at <a href="https://sheets.google.com" target="_blank" style="color:var(--accent)">sheets.google.com</a></div></div>
@@ -767,6 +939,7 @@ cursor:pointer;
 </div>
 
 </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -779,6 +952,58 @@ const LIBKEY='jee2027_library_v1', GEKEY='jee2027_ge_videos_v1';
 let libData = {}, geVideos = [];
 let libState = { view:'palettes', subject:null, chapter:null };
 let libCurrentBlobUrl = null;
+
+// hoisted data tables (must be declared before INIT runs, since dashboard tiles read them immediately)
+const LIB_CHAPTERS = {
+  physics: [
+    "Units, Dimensions & Measurement","Kinematics","Laws of Motion","Work, Energy & Power",
+    "System of Particles & Rotational Motion","Gravitation","Mechanical Properties of Solids",
+    "Mechanical Properties of Fluids","Thermal Properties of Matter","Thermodynamics",
+    "Kinetic Theory of Gases","Oscillations","Waves","Electrostatics","Current Electricity",
+    "Moving Charges & Magnetism","Electromagnetic Induction","Alternating Current",
+    "Electromagnetic Waves","Ray Optics & Optical Instruments","Wave Optics",
+    "Dual Nature of Radiation & Matter","Atoms","Nuclei","Semiconductor Electronics",
+    "Experimental Skills"
+  ],
+  chemistry: [
+    "Some Basic Concepts of Chemistry","Structure of Atom","Classification of Elements & Periodicity",
+    "Chemical Bonding & Molecular Structure","States of Matter (Gaseous & Liquid)","Thermodynamics",
+    "Equilibrium","Redox Reactions & Electrochemistry","Chemical Kinetics","Surface Chemistry",
+    "General Principles of Metallurgy","p-Block Elements","d & f Block Elements",
+    "Coordination Compounds","Purification & Characterisation of Organic Compounds",
+    "Hydrocarbons","Haloalkanes & Haloarenes","Alcohols, Phenols & Ethers",
+    "Aldehydes, Ketones & Carboxylic Acids","Amines","Biomolecules & Polymers",
+    "Practical / Environmental Chemistry"
+  ],
+  maths: [
+    "Sets, Relations & Functions","Complex Numbers & Quadratic Equations","Matrices & Determinants",
+    "Permutations & Combinations","Mathematical Induction","Binomial Theorem",
+    "Sequences & Series","Limits, Continuity & Differentiability","Differential Calculus (Applications)",
+    "Integral Calculus","Differential Equations","Coordinate Geometry — Straight Lines & Circles",
+    "Conic Sections (Parabola, Ellipse, Hyperbola)","Three Dimensional Geometry","Vector Algebra",
+    "Statistics & Probability","Trigonometry","Mathematical Reasoning"
+  ]
+};
+const LIB_META = {
+  physics:{label:"Physics",icon:"⚡",color:"bp"},
+  chemistry:{label:"Chemistry",icon:"🧪",color:"bc"},
+  maths:{label:"Mathematics",icon:"📐",color:"bm"}
+};
+const jeeChannels = [
+  { name: "Physics Wallah", subject: "Physics", link: "https://www.youtube.com/@PhysicsWallah" },
+  { name: "JEE Wallah", subject: "JEE", link: "https://www.youtube.com/@JEEWallah" },
+  { name: "Unacademy JEE", subject: "Physics", link: "https://www.youtube.com/@unacademyjee" },
+  { name: "Vedantu JEE", subject: "Physics", link: "https://www.youtube.com/@VedantuJEE" },
+  { name: "Physics Galaxy", subject: "Physics", link: "https://www.youtube.com/@PhysicsGalaxy" },
+  { name: "Mohit Tyagi", subject: "Maths", link: "https://www.youtube.com/@MohitTyagi" },
+  { name: "Competishun", subject: "Physics", link: "https://www.youtube.com/@Competishun" },
+  { name: "MathonGo", subject: "Maths", link: "https://www.youtube.com/@MathonGo" },
+  { name: "Apni Kaksha", subject: "Physics", link: "https://www.youtube.com/@ApniKaksha" },
+  { name: "Eduniti", subject: "Physics", link: "https://www.youtube.com/@Eduniti" },
+  { name: "Vora Classes", subject: "Chemistry", link: "https://www.youtube.com/@VoraClasses" },
+  { name: "Sachin Rana Chemistry", subject: "Chemistry", link: "https://www.youtube.com/@SachinRana" }
+];
+
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function fmtDate(k){const[y,m,d]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const dt=new Date(k);return`${dn[dt.getDay()]}, ${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`}
 function loadDB(){try{DB=JSON.parse(localStorage.getItem(LSKEY)||'{}')}catch(e){DB={}};try{playlists=JSON.parse(localStorage.getItem(PLKEY)||'[]')}catch(e){playlists=[]};try{sessions=JSON.parse(localStorage.getItem(SESSKEY)||'[]')}catch(e){sessions=[]}}
@@ -786,8 +1011,44 @@ function saveDB(){localStorage.setItem(LSKEY,JSON.stringify(DB))}
 function showToast(msg,clr){const t=document.getElementById('toast');t.textContent=msg;t.style.background=clr||'var(--green)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ══ THEME ══
-function toggleTheme(){const l=document.body.classList.toggle('light');localStorage.setItem('jee2027_theme',l?'light':'dark');document.getElementById('themeBtn').textContent=l?'☀️':'🌙';renderCharts()}
-function loadTheme(){if(localStorage.getItem('jee2027_theme')==='light'){document.body.classList.add('light');document.getElementById('themeBtn').textContent='☀️'}}
+const THEMES=[
+  {id:'dark',name:'Midnight',cls:'',dot:'#0f172a',icon:'🌙'},
+  {id:'light',name:'Daylight',cls:'light',dot:'#f8fafc',icon:'☀️'},
+  {id:'lavender',name:'Lavender',cls:'theme-lavender',dot:'#b794f6',icon:'🌸'},
+  {id:'lavender-light',name:'Soft Lilac',cls:'theme-lavender-light',dot:'#9333ea',icon:'💜'},
+  {id:'sky',name:'Sky Blue',cls:'theme-sky',dot:'#0ea5e9',icon:'🌤️'},
+  {id:'sunshine',name:'Sunshine',cls:'theme-sunshine',dot:'#f59e0b',icon:'🌻'}
+];
+function applyTheme(id){
+  const t=THEMES.find(x=>x.id===id)||THEMES[0];
+  document.body.classList.remove('light','theme-lavender','theme-lavender-light','theme-sky','theme-sunshine');
+  if(t.cls)document.body.classList.add(t.cls);
+  localStorage.setItem('jee2027_theme',t.id);
+  const btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t.icon;
+  renderThemePicker();
+  renderCharts();
+}
+function toggleTheme(){
+  const cur=localStorage.getItem('jee2027_theme')||'dark';
+  const idx=THEMES.findIndex(t=>t.id===cur);
+  const next=THEMES[(idx+1)%THEMES.length];
+  applyTheme(next.id);
+}
+function loadTheme(){
+  const saved=localStorage.getItem('jee2027_theme');
+  applyTheme(saved||'dark');
+}
+function renderThemePicker(){
+  const el=document.getElementById('themePicker');
+  if(!el)return;
+  const cur=localStorage.getItem('jee2027_theme')||'dark';
+  el.innerHTML=THEMES.map(t=>`
+    <div class="theme-swatch ${t.id===cur?'sel':''}" onclick="applyTheme('${t.id}')">
+      <div class="theme-swatch-dot" style="background:${t.dot}"></div>
+      <div class="theme-swatch-name">${t.icon} ${t.name}</div>
+    </div>`).join('');
+}
 
 // ══ TODAY ══
 function initToday(){
@@ -840,13 +1101,17 @@ function renderStats(){
 
 // ══ CHARTS ══
 function renderCharts(){
-  const isDark=!document.body.classList.contains('light');
-  const tc=isDark?'#94a3b8':'#64748b',gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
+  const cs=getComputedStyle(document.body);
+  const get=v=>cs.getPropertyValue(v).trim();
+  const isDark=!document.body.classList.contains('light')&&!document.body.classList.contains('theme-lavender-light')&&!document.body.classList.contains('theme-sky')&&!document.body.classList.contains('theme-sunshine');
+  const tc=get('--muted')||(isDark?'#94a3b8':'#64748b');
+  const gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
+  const accent=get('--accent')||'#6366f1',green=get('--green')||'#22c55e',amber=get('--amber')||'#f59e0b',purple=get('--purple')||'#a855f7';
   const keys=Object.keys(DB).sort().slice(-14);
-  drawBar('chartHours',keys.map(k=>fmtDate(k).slice(0,6)),keys.map(k=>parseInt(DB[k].hours)||0),'#6366f1',tc,gc,12);
-  drawBar('chartTasks',keys.map(k=>fmtDate(k).slice(0,6)),keys.map(k=>DB[k].taskPct||0),'#22c55e',tc,gc,100);
+  drawBar('chartHours',keys.map(k=>fmtDate(k).slice(0,6)),keys.map(k=>parseInt(DB[k].hours)||0),accent,tc,gc,12);
+  drawBar('chartTasks',keys.map(k=>fmtDate(k).slice(0,6)),keys.map(k=>DB[k].taskPct||0),green,tc,gc,100);
   const mv={'🔥':0,'✅':0,'😐':0,'😴':0};Object.values(DB).forEach(d=>{if(d.mood&&mv[d.mood]!==undefined)mv[d.mood]++});
-  drawPie('chartMood',Object.keys(mv),Object.values(mv),['#f59e0b','#22c55e','#94a3b8','#6366f1'],tc);
+  drawPie('chartMood',Object.keys(mv),Object.values(mv),[amber,green,tc,accent],tc);
 }
 function drawBar(id,labels,values,color,tc,gc,maxHint){
   const canvas=document.getElementById(id);if(!canvas)return;
@@ -869,6 +1134,196 @@ function drawPie(id,labels,values,colors,tc){
   values.forEach((v,i)=>{if(!v)return;const s=2*Math.PI*v/total;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+s);ctx.fillStyle=colors[i];ctx.fill();angle+=s});
   labels.forEach((l,i)=>{const x=H+10,y=20+i*26;ctx.beginPath();ctx.fillStyle=colors[i];ctx.roundRect(x,y-8,12,12,3);ctx.fill();ctx.fillStyle=tc;ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText(`${l} ${values[i]}`,x+16,y+2)});
 }
+
+// ══════════ DASHBOARD (HOME) ══════════
+function dashThemeColors(){
+  const cs=getComputedStyle(document.body);
+  const get=v=>cs.getPropertyValue(v).trim();
+  return{accent:get('--accent')||'#6366f1',green:get('--green')||'#22c55e',amber:get('--amber')||'#f59e0b',
+    purple:get('--purple')||'#a855f7',muted:get('--muted')||'#94a3b8',
+    isLightish:document.body.classList.contains('light')||document.body.classList.contains('theme-lavender-light')||document.body.classList.contains('theme-sky')||document.body.classList.contains('theme-sunshine')};
+}
+
+// Tiny smooth sparkline for stat tiles — no axes, just a soft trend line + fill
+function drawSparkline(canvas,values,color){
+  if(!canvas)return;
+  const W=canvas.offsetWidth||140,H=34;
+  canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+  const ctx=canvas.getContext('2d');ctx.scale(devicePixelRatio,devicePixelRatio);
+  ctx.clearRect(0,0,W,H);
+  if(!values.length)return;
+  const max=Math.max(...values,1),min=Math.min(...values,0);
+  const range=(max-min)||1;
+  const pad=3;
+  const pts=values.map((v,i)=>({x:pad+i*(W-pad*2)/Math.max(values.length-1,1),y:H-pad-((v-min)/range)*(H-pad*2)}));
+  // smooth path via quadratic mid-points
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=0;i<pts.length-1;i++){const mx=(pts[i].x+pts[i+1].x)/2,my=(pts[i].y+pts[i+1].y)/2;ctx.quadraticCurveTo(pts[i].x,pts[i].y,mx,my)}
+  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y);
+  ctx.strokeStyle=color;ctx.lineWidth=2;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+  // soft fill under the line
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,color+'33');grad.addColorStop(1,color+'00');
+  ctx.lineTo(pts[pts.length-1].x,H);ctx.lineTo(pts[0].x,H);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+}
+
+// Apple-Health-style interactive trend chart: smooth curve, hover dot + readout
+let dashMetric='hours';
+let dashHoverHandlerAttached=false;
+function setDashMetric(metric,btn){
+  dashMetric=metric;
+  document.querySelectorAll('.dash-chart-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  drawDashTrend();
+}
+function drawDashTrend(){
+  const canvas=document.getElementById('dashTrendCanvas');if(!canvas)return;
+  const keys=Object.keys(DB).sort().slice(-30);
+  const colors=dashThemeColors();
+  const color=dashMetric==='hours'?colors.accent:colors.green;
+  const values=keys.map(k=>dashMetric==='hours'?(parseInt(DB[k].hours)||0):(DB[k].taskPct||0));
+  const W=canvas.parentElement.clientWidth-40||600,H=220;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+  const ctx=canvas.getContext('2d');ctx.setTransform(1,0,0,1,0,0);ctx.scale(devicePixelRatio,devicePixelRatio);
+  ctx.clearRect(0,0,W,H);
+  const readout=document.getElementById('dashChartReadout');
+  if(!values.length){
+    ctx.fillStyle=colors.muted;ctx.font='13px system-ui';ctx.textAlign='center';
+    ctx.fillText('No data yet — log a day to see your trend here',W/2,H/2);
+    if(readout)readout.textContent="Hover the graph to see a day's numbers";
+    canvas._dashPts=null;
+    return;
+  }
+  const pad={t:20,r:16,b:30,l:16};
+  const maxHint=dashMetric==='hours'?12:100;
+  const max=Math.max(...values,maxHint*0.4);
+  const min=0;
+  const range=(max-min)||1;
+  const pts=values.map((v,i)=>({
+    x:pad.l+i*(W-pad.l-pad.r)/Math.max(values.length-1,1),
+    y:pad.t+(H-pad.t-pad.b)*(1-((v-min)/range)),
+    v,k:keys[i]
+  }));
+  // gridlines
+  ctx.strokeStyle=colors.isLightish?'rgba(0,0,0,.06)':'rgba(255,255,255,.06)';ctx.lineWidth=1;
+  for(let i=0;i<=3;i++){const y=pad.t+(H-pad.t-pad.b)*(i/3);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke()}
+  // smooth line
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=0;i<pts.length-1;i++){const mx=(pts[i].x+pts[i+1].x)/2,my=(pts[i].y+pts[i+1].y)/2;ctx.quadraticCurveTo(pts[i].x,pts[i].y,mx,my)}
+  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y);
+  ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+  // fill
+  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);grad.addColorStop(0,color+'2e');grad.addColorStop(1,color+'02');
+  ctx.lineTo(pts[pts.length-1].x,H-pad.b);ctx.lineTo(pts[0].x,H-pad.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  // dots
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()});
+  canvas._dashPts=pts;
+  if(readout)readout.innerHTML=`Latest: <strong>${values[values.length-1]}${dashMetric==='hours'?' hrs':'%'}</strong> on ${fmtDate(keys[keys.length-1])} &nbsp;·&nbsp; hover the graph for any day`;
+
+  if(!dashHoverHandlerAttached){
+    dashHoverHandlerAttached=true;
+    canvas.addEventListener('mousemove',e=>{
+      const pts=canvas._dashPts;if(!pts)return;
+      const rect=canvas.getBoundingClientRect();
+      const mx=e.clientX-rect.left;
+      let nearest=pts[0],best=Infinity;
+      pts.forEach(p=>{const d=Math.abs(p.x-mx);if(d<best){best=d;nearest=p}});
+      const readout=document.getElementById('dashChartReadout');
+      if(readout)readout.innerHTML=`${fmtDate(nearest.k)}: <strong>${nearest.v}${dashMetric==='hours'?' hrs':'%'}</strong>`;
+      redrawDashHover(nearest);
+    });
+    canvas.addEventListener('mouseleave',()=>{drawDashTrend()});
+  }
+}
+function redrawDashHover(point){
+  const canvas=document.getElementById('dashTrendCanvas');if(!canvas||!canvas._dashPts)return;
+  drawDashTrend();
+  const colors=dashThemeColors();
+  const ctx=canvas.getContext('2d');
+  const H=canvas.height/devicePixelRatio,pad={t:20,b:30};
+  ctx.save();
+  ctx.strokeStyle=colors.muted;ctx.setLineDash([3,3]);ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(point.x,pad.t);ctx.lineTo(point.x,H-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(point.x,point.y,5,0,Math.PI*2);
+  ctx.fillStyle=document.body.classList.contains('light')||colors.isLightish?'#fff':'#0f172a';
+  ctx.fill();
+  ctx.lineWidth=2.5;ctx.strokeStyle=dashMetric==='hours'?colors.accent:colors.green;ctx.stroke();
+  ctx.restore();
+}
+
+const DASH_TILES=[
+  {page:'today',icon:'📝',name:'Today',iconBg:'accent-soft',iconColor:'accent',statFn:()=>{const k=todayKey();return DB[k]?`${DB[k].taskPct||0}% of today's tasks done`:'Not logged yet — tap to start'}},
+  {page:'plan',icon:'🗓️',name:'Plan',iconBg:'purple-soft',iconColor:'purple',statFn:()=>'Your week-by-week JEE roadmap'},
+  {page:'resources',icon:'📺',name:'Resources',iconBg:'red-soft',iconColor:'red',statFn:()=>`${playlists.length} playlist${playlists.length===1?'':'s'} tracked`},
+  {page:'library',icon:'📚',name:'Library',iconBg:'green-soft',iconColor:'green',statFn:()=>{let n=0;['physics','chemistry','maths'].forEach(s=>(LIB_CHAPTERS[s]||[]).forEach((_,i)=>{const e=libData[s+'::'+i];if(e&&(e.link||e.notes||e.pdfName))n++}));return`${n} chapters with material · ${geVideos.length} extra videos`}},
+  {page:'timer',icon:'⏱️',name:'Timer',iconBg:'amber-soft',iconColor:'amber',statFn:()=>{const t=sessions.reduce((s,x)=>s+x.secs,0);return t?`${Math.round(t/60)} min logged today`:'No sessions logged today'}},
+  {page:'calc',icon:'🧮',name:'Calculator',iconBg:'accent-soft',iconColor:'accent',statFn:()=>'Basic & scientific modes'},
+  {page:'history',icon:'📖',name:'History',iconBg:'purple-soft',iconColor:'purple',statFn:()=>`${Object.keys(DB).length} day${Object.keys(DB).length===1?'':'s'} logged`},
+  {page:'stats',icon:'📊',name:'Stats',iconBg:'green-soft',iconColor:'green',statFn:()=>'Streaks, charts & heatmap'}
+];
+
+function renderDashStats(){
+  const{streak,totalDays,totalHours,avgH}=updateStreak();
+  const keys=Object.keys(DB).sort();
+  const last7h=keys.slice(-7).map(k=>parseInt(DB[k].hours)||0);
+  const last7t=keys.slice(-7).map(k=>DB[k].taskPct||0);
+  const colors=dashThemeColors();
+  const testsLogged=keys.filter(k=>DB[k].test).length;
+  const el=document.getElementById('dashStatRow');
+  if(!el)return;
+  el.innerHTML=`
+    <div class="dash-stat">
+      <div class="dash-stat-top"><span class="dash-stat-label">Streak</span><span class="dash-stat-icon">🔥</span></div>
+      <div><span class="dash-stat-num">${streak}</span><span class="dash-stat-unit">day${streak===1?'':'s'}</span></div>
+      <div class="dash-stat-sub">${totalDays} total days logged</div>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-top"><span class="dash-stat-label">Avg hours/day</span><span class="dash-stat-icon">⏳</span></div>
+      <div><span class="dash-stat-num">${avgH}</span><span class="dash-stat-unit">hrs</span></div>
+      <canvas class="dash-spark" id="sparkHours"></canvas>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-top"><span class="dash-stat-label">Task completion</span><span class="dash-stat-icon">✅</span></div>
+      <div><span class="dash-stat-num">${last7t.length?last7t[last7t.length-1]:0}</span><span class="dash-stat-unit">%</span></div>
+      <canvas class="dash-spark" id="sparkTasks"></canvas>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-top"><span class="dash-stat-label">Tests logged</span><span class="dash-stat-icon">📝</span></div>
+      <div><span class="dash-stat-num">${testsLogged}</span><span class="dash-stat-unit">total</span></div>
+      <div class="dash-stat-sub">${totalHours} total hours studied</div>
+    </div>`;
+  setTimeout(()=>{
+    drawSparkline(document.getElementById('sparkHours'),last7h.length?last7h:[0],colors.accent);
+    drawSparkline(document.getElementById('sparkTasks'),last7t.length?last7t:[0],colors.green);
+  },20);
+}
+
+function renderDashTiles(){
+  const el=document.getElementById('dashTileGrid');if(!el)return;
+  el.innerHTML=DASH_TILES.map(t=>`
+    <div class="dash-tile" onclick="goPage('${t.page}')">
+      <div class="dash-tile-icon-wrap" style="background:var(--${t.iconBg});color:var(--${t.iconColor})">${t.icon}</div>
+      <div class="dash-tile-body">
+        <div class="dash-tile-name">${t.name}</div>
+        <div class="dash-tile-stat">${t.statFn()}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderDashboard(){
+  const greetEl=document.getElementById('dashGreeting'),dateEl=document.getElementById('dashDate');
+  if(greetEl){
+    const h=new Date().getHours();
+    greetEl.textContent=h<12?'Good morning ☀️':h<17?'Good afternoon 👋':'Good evening 🌙';
+  }
+  if(dateEl)dateEl.textContent=fmtDate(todayKey());
+  renderDashStats();
+  renderDashTiles();
+  setTimeout(drawDashTrend,30);
+}
+window.addEventListener('resize',()=>{if(document.getElementById('page-dashboard').classList.contains('active'))drawDashTrend()});
+
 
 // ══ HISTORY ══
 function renderHistory(){
@@ -988,7 +1443,7 @@ const APPS_SCRIPT=`function doPost(e){try{var data=JSON.parse(e.postData.content
 async function syncToSheet(entry){const url=localStorage.getItem(URLKEY);if(!url)return;try{await fetch(url,{method:'POST',body:JSON.stringify(entry)})}catch(e){}}
 function saveSheetUrl(){const url=document.getElementById('sheetUrl').value.trim();if(!url)return;localStorage.setItem(URLKEY,url);document.getElementById('syncDot').classList.remove('off');document.getElementById('syncStatus').textContent='Connected ✓';showToast('Google Sheets connected!')}
 function copyScript(){navigator.clipboard.writeText(APPS_SCRIPT).then(()=>showToast('Script copied!'))}
-function loadSettings(){const url=localStorage.getItem(URLKEY);if(url){document.getElementById('sheetUrl').value=url;document.getElementById('syncDot').classList.remove('off');document.getElementById('syncStatus').textContent='Connected ✓'}}
+function loadSettings(){const url=localStorage.getItem(URLKEY);if(url){document.getElementById('sheetUrl').value=url;document.getElementById('syncDot').classList.remove('off');document.getElementById('syncStatus').textContent='Connected ✓'}renderThemePicker()}
 function clearData(){if(!confirm('Delete ALL data?'))return;localStorage.removeItem(LSKEY);DB={};updateStreak();renderHistory();showToast('Cleared','var(--red)')}
 
 // ══ PLAN ══
@@ -997,10 +1452,10 @@ const PLAN=[{month:'Jun 29 – Jul 31',weeks:[{title:'Week 1: Indefinite Integra
 function renderPlan(){document.getElementById('planContent').innerHTML=PLAN.map(mo=>`<div class="plan-month"><div class="plan-month-title">${mo.month}</div>${mo.weeks.map((w,i)=>`<div class="plan-week"><div class="plan-week-head" onclick="document.getElementById('pw${mo.month.slice(0,3)+i}').classList.toggle('open')"><div><div class="pw-title">${w.title}</div><div class="pw-date">${w.date}</div></div><span style="color:var(--muted)">▾</span></div><div class="plan-week-body" id="pw${mo.month.slice(0,3)+i}"><div class="subj-row"><span class="subj-name" style="color:var(--accent)">Maths</span><span class="subj-val">${w.m}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--purple)">Physics</span><span class="subj-val">${w.p}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--green)">Chem</span><span class="subj-val">${w.c}</span></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${w.tests.map(t=>`<span class="test-tag ${t.includes('⭐')||t.includes('FULLY')?'tt-big':t.includes('QAPT')?'tt-qapt':'tt-qpt'}">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('')}
 
 // ══ NAV ══
-function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.ntab').forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active')});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes()}
+function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes();if(id==='dashboard')renderDashboard()}
 
 // ══ INIT ══
-loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();
+loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();renderDashboard();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 // ═══════════════════════════════
 // CUSTOM CHANNELS SYSTEM
@@ -1054,26 +1509,6 @@ function deleteChannel(index){
     saveChannels();
     renderCustomChannels();
 }
-
-
-// ═══════════════════════════════
-// JEE SEARCH DATABASE
-// ═══════════════════════════════
-
-const jeeChannels = [
-  { name: "Physics Wallah", subject: "Physics", link: "https://www.youtube.com/@PhysicsWallah" },
-  { name: "JEE Wallah", subject: "JEE", link: "https://www.youtube.com/@JEEWallah" },
-  { name: "Unacademy JEE", subject: "Physics", link: "https://www.youtube.com/@unacademyjee" },
-  { name: "Vedantu JEE", subject: "Physics", link: "https://www.youtube.com/@VedantuJEE" },
-  { name: "Physics Galaxy", subject: "Physics", link: "https://www.youtube.com/@PhysicsGalaxy" },
-  { name: "Mohit Tyagi", subject: "Maths", link: "https://www.youtube.com/@MohitTyagi" },
-  { name: "Competishun", subject: "Physics", link: "https://www.youtube.com/@Competishun" },
-  { name: "MathonGo", subject: "Maths", link: "https://www.youtube.com/@MathonGo" },
-  { name: "Apni Kaksha", subject: "Physics", link: "https://www.youtube.com/@ApniKaksha" },
-  { name: "Eduniti", subject: "Physics", link: "https://www.youtube.com/@Eduniti" },
-  { name: "Vora Classes", subject: "Chemistry", link: "https://www.youtube.com/@VoraClasses" },
-  { name: "Sachin Rana Chemistry", subject: "Chemistry", link: "https://www.youtube.com/@SachinRana" }
-];
 
 
 // ═══════════════════════════════
@@ -1141,41 +1576,6 @@ function addFromSearch(name, subject, link){
 // LIBRARY SYSTEM
 // ═══════════════════════════════
 
-const LIB_CHAPTERS = {
-  physics: [
-    "Units, Dimensions & Measurement","Kinematics","Laws of Motion","Work, Energy & Power",
-    "System of Particles & Rotational Motion","Gravitation","Mechanical Properties of Solids",
-    "Mechanical Properties of Fluids","Thermal Properties of Matter","Thermodynamics",
-    "Kinetic Theory of Gases","Oscillations","Waves","Electrostatics","Current Electricity",
-    "Moving Charges & Magnetism","Electromagnetic Induction","Alternating Current",
-    "Electromagnetic Waves","Ray Optics & Optical Instruments","Wave Optics",
-    "Dual Nature of Radiation & Matter","Atoms","Nuclei","Semiconductor Electronics",
-    "Experimental Skills"
-  ],
-  chemistry: [
-    "Some Basic Concepts of Chemistry","Structure of Atom","Classification of Elements & Periodicity",
-    "Chemical Bonding & Molecular Structure","States of Matter (Gaseous & Liquid)","Thermodynamics",
-    "Equilibrium","Redox Reactions & Electrochemistry","Chemical Kinetics","Surface Chemistry",
-    "General Principles of Metallurgy","p-Block Elements","d & f Block Elements",
-    "Coordination Compounds","Purification & Characterisation of Organic Compounds",
-    "Hydrocarbons","Haloalkanes & Haloarenes","Alcohols, Phenols & Ethers",
-    "Aldehydes, Ketones & Carboxylic Acids","Amines","Biomolecules & Polymers",
-    "Practical / Environmental Chemistry"
-  ],
-  maths: [
-    "Sets, Relations & Functions","Complex Numbers & Quadratic Equations","Matrices & Determinants",
-    "Permutations & Combinations","Mathematical Induction","Binomial Theorem",
-    "Sequences & Series","Limits, Continuity & Differentiability","Differential Calculus (Applications)",
-    "Integral Calculus","Differential Equations","Coordinate Geometry — Straight Lines & Circles",
-    "Conic Sections (Parabola, Ellipse, Hyperbola)","Three Dimensional Geometry","Vector Algebra",
-    "Statistics & Probability","Trigonometry","Mathematical Reasoning"
-  ]
-};
-const LIB_META = {
-  physics:{label:"Physics",icon:"⚡",color:"bp"},
-  chemistry:{label:"Chemistry",icon:"🧪",color:"bc"},
-  maths:{label:"Mathematics",icon:"📐",color:"bm"}
-};
 
 function loadLibrary(){
   try{ libData = JSON.parse(localStorage.getItem(LIBKEY) || '{}'); }catch(e){ libData = {}; }
