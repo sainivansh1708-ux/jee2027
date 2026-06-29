@@ -1717,55 +1717,19 @@ function libGoDetail(subject, idx){
     </div>`;
 }
 
-async function libHandlePdf(input) {
+function libHandlePdf(input){
   const file = input.files[0];
-  if (!file) return;
-
-  const filePath = `${libState.subject}/${libState.chapter}/${Date.now()}_${file.name}`;
-
-  const { error } = await supabase.storage
-    .from("notes")
-    .upload(filePath, file);
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  const { data } = supabase.storage
-    .from("notes")
-    .getPublicUrl(filePath);
-
-  const pdfUrl = data.publicUrl;
-
- await supabase
-.from("library")
-.delete()
-.eq("subject", libState.subject)
-.eq("chapter", libState.chapter);
-
-const { error: dbError } = await supabase
-.from("library")
-.insert({
-subject: libState.subject,
-chapter: libState.chapter,
-pdf_name: file.name,
-pdf_url: pdfUrl
-});
-
-if (dbError) {
-alert(dbError.message);
-return;
-}
-
-  const frame = document.getElementById("libPdfFrame");
-  frame.src = pdfUrl;
-  frame.classList.add("open");
-
-  document.getElementById("libPdfInfo").textContent =
-    "Loaded: " + file.name;
-
-  showToast("PDF Uploaded Successfully");
+  if(!file) return;
+  if(libCurrentBlobUrl) URL.revokeObjectURL(libCurrentBlobUrl);
+  libCurrentBlobUrl = URL.createObjectURL(file);
+  const e = libGetEntry(libState.subject, libState.chapter);
+  e.pdfName = file.name;
+  saveLibrary();
+  document.getElementById('libPdfInfo').textContent = 'Loaded: '+file.name+' (this session)';
+  const frame = document.getElementById('libPdfFrame');
+  frame.src = libCurrentBlobUrl;
+  frame.classList.add('open');
+  showToast('PDF loaded for this session');
 }
   async function loadPdf(subject, chapter) {
 
