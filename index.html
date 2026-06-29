@@ -668,131 +668,65 @@ cursor:pointer;
 /* ─────────────────────────────────────────── */
 
 .premium-motivation-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-bottom: 24px;
+ display: block; /* Removes grid, collapses to single column */
+  margin-bottom: 20px;
   border-radius: 20px !important;
-  overflow: hidden;
   position: relative;
   background: #0d0d1a !important;
   border: 2px solid rgba(99,102,241,0.4) !important;
   box-shadow: 0 0 0 1px rgba(99,102,241,0.15), 0 12px 40px rgba(0,0,0,0.5) !important;
-  min-height: 200px;
+  min-height: 150px; /* Reduced height to be compact */
+  padding: 20px;
+  text-align: center; /* Centers the content */
 }
 
 /* Left: motivation text */
 .motivation-content {
-  padding: 26px 22px;
+ padding: 10px;
   display: flex;
   flex-direction: column;
+  align-items: center; /* Centers items horizontally */
   justify-content: center;
-  position: relative;
-  z-index: 4;
-  background: linear-gradient(135deg, rgba(13,13,26,0.98) 0%, rgba(13,13,26,0.85) 100%);
 }
 
 .quote-icon {
-  font-family: Georgia, serif;
-  font-size: 42px;
+ font-family: Georgia, serif;
+  font-size: 48px; /* Slightly larger icon */
   line-height: 0.8;
   color: #ff2d78;
   opacity: 0.7;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .dynamic-quote {
   font-family: 'Oswald', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.55;
+  font-size: 18px; /* Increased font size for better readability */
+  font-weight: 500; /* Slightly bolder for impact */
+  line-height: 1.4;
   color: #e2e8f0;
-  letter-spacing: 0.01em;
-  margin-bottom: 14px;
+  margin-bottom: 15px;
   font-style: italic;
 }
 
 .quote-target-badge {
-  display: inline-flex;
+ display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: linear-gradient(90deg, rgba(255,45,120,0.15), rgba(99,102,241,0.15));
-  border: 1px solid rgba(255,45,120,0.3);
-  border-radius: 999px;
-  padding: 5px 12px;
+  justify-content: center;
+  gap: 8px;
+  /* Slightly more vibrant gradient */
+  background: linear-gradient(90deg, rgba(255,45,120,0.2), rgba(99,102,241,0.2));
+  border: 1px solid rgba(255,45,120,0.5);
+  border-radius: 8px; /* Changed from rounded to soft-square for a modern look */
+  padding: 6px 16px;
   font-family: 'Black Ops One', sans-serif;
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  color: #facc15;
-  text-shadow: 0 0 8px rgba(250,204,21,0.5);
+  font-size: 11px; /* Increased from 9px for better readability */
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: #fef08a; /* Brighter yellow for better contrast */
+  text-shadow: 0 0 10px rgba(250,204,21,0.7);
   width: fit-content;
+  margin-top: 10px; /* Added margin to separate it from the quote */
 }
-
-/* Right: stacked campus photos */
-.campus-graphic-gate {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-}
-
-/* Reset old absolute positioning */
-.campus-layer {
-  position: relative !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  mix-blend-mode: normal !important;
-  clip-path: none !important;
-  opacity: 1 !important;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: block !important;
-  filter: saturate(1.1) brightness(0.85) !important;
-}
-.campus-layer:hover { transform: scale(1.04) !important; }
-
-/* Labels on each photo */
-.iit-bombay-mask { order: 1; }
-.iit-delhi-mask  { order: 2; }
-
-/* IIT B label */
-.iit-bombay-mask::after,
-.iit-delhi-mask::after { display: none; } /* we use a wrapper pseudo instead */
-
-.campus-graphic-gate::before {
-  content: 'IIT BOMBAY';
-  position: absolute;
-  top: 8px; left: 10px;
-  z-index: 10;
-  font-family: 'Black Ops One', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: #facc15;
-  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(250,204,21,0.8);
-  pointer-events: none;
-}
-.campus-graphic-gate::after {
-  content: 'IIT DELHI';
-  position: absolute;
-  bottom: 8px; left: 10px;
-  z-index: 10;
-  font-family: 'Black Ops One', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: #818cf8;
-  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(129,140,248,0.8);
-  pointer-events: none;
-  background: none !important;
-}
-
-/* divider between photos */
-.campus-graphic-gate .campus-layer:first-child {
-  border-bottom: 2px solid rgba(255,45,120,0.5);
-}
-
 @media (max-width: 768px) {
   .premium-motivation-panel { grid-template-columns: 1fr; }
   .campus-graphic-gate { height: 180px; min-height: 180px; grid-template-rows: 1fr; grid-template-columns: 1fr 1fr; }
@@ -893,11 +827,7 @@ cursor:pointer;
     </div>
   </div>
 
-  <div class="campus-graphic-gate">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/IIT_Bombay_Main_Gate.jpg/640px-IIT_Bombay_Main_Gate.jpg" class="campus-layer iit-bombay-mask" alt="IIT Bombay" onerror="this.src='https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format'" />
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/IIT_Delhi_Main_Building.jpg/640px-IIT_Delhi_Main_Building.jpg" class="campus-layer iit-delhi-mask" alt="IIT Delhi" onerror="this.src='https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format'" />
-  </div>
-</div>
+ 
 
 
 
