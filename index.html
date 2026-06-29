@@ -1208,7 +1208,7 @@ function renderCrumbs(){
     html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">${name}</span>`;
   }
   if(libState.view==='ge'){
-    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">📦 Other GE Content</span>`;
+    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">📦 Other JEE Content</span>`;
   }
   el.innerHTML = html;
 }
@@ -1242,7 +1242,7 @@ function libGoPalettes(){
       </div>
       <div class="lib-pal-card" onclick="libGoGE()">
         <div class="lib-pal-icon">📦</div>
-        <div class="lib-pal-name">Other GE Content</div>
+        <div class="lib-pal-name">Other JEE Content</div>
         <div class="lib-pal-sub">Misc. videos & resources</div>
         <span class="lib-pal-count" style="background:var(--amber-soft);color:var(--amber)">${geVideos.length} videos added</span>
       </div>
@@ -1360,7 +1360,7 @@ function libSaveNotes(subject, idx){
   showToast('Notes saved');
 }
 
-// ── Other GE Content ──
+// ── Other JEE Content ──
 function libGoGE(){
   libState = { view:'ge', subject:null, chapter:null };
   renderCrumbs();
@@ -1380,7 +1380,7 @@ function renderGeGrid(){
       </div>
     </div>`).join('');
   document.getElementById('libContent').innerHTML = `
-    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📦 Other GE Content — any random videos you want to keep</div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📦 Other JEE Content — any random videos you want to keep</div>
     <div class="ge-add-wrap">
       <div class="ge-add-row">
         <input id="geTitle" placeholder="Title (e.g. 'Random GK video')">
