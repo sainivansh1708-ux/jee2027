@@ -942,6 +942,13 @@ cursor:pointer;
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://nprjtssljmkvhphjbhgm.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wcmp0c3Nsam1rdmhwaGpiaGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MDY4MTQsImV4cCI6MjA5ODI4MjgxNH0.Hw7FGhtBAsHFnCrbTeHS61JGT00ntt5M92WPffBm83M";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
 <script>
 // ══ DATA ══
 const LSKEY='jee2027_v3',URLKEY='jee2027_sheeturl',PLKEY='jee2027_pl3',SESSKEY='jee2027_sess';
@@ -1687,11 +1694,11 @@ function libGoDetail(subject, idx){
 
       <div class="lib-section">
         <div class="lib-section-title">📄 Chapter notes PDF</div>
-        <div class="lib-section-desc">Upload the PDF to view it right now. Browser storage can't keep large files permanently, so re-upload it next time you visit this chapter — use the link box below if you want something that stays saved (e.g. a Drive link to the PDF).</div>
+        <div class="lib-section-desc">Upload a PDF once — it saves to the cloud and reloads automatically every time you open this chapter.</div>
         <div class="lib-file-row">
           <button class="lib-file-btn" onclick="document.getElementById('libPdfInput').click()">Choose PDF</button>
           <input type="file" id="libPdfInput" accept="application/pdf" style="display:none" onchange="libHandlePdf(this)">
-          <span class="lib-file-info" id="libPdfInfo">${e.pdfName ? 'Loaded: '+e.pdfName+' (this session)' : 'No PDF loaded this session'}</span>
+          <span class="lib-file-info" id="libPdfInfo">${e.pdfName ? 'Loaded: '+e.pdfName+' (this session)' : 'No PDF uploaded yet'}</span>
         </div>
         <iframe class="lib-pdf-frame" id="libPdfFrame"></iframe>
       </div>
@@ -1715,40 +1722,65 @@ function libGoDetail(subject, idx){
         <span class="lib-saved-tag ${e.notes?'show':''}" id="libNotesSaved">✓ Saved</span>
       </div>
     </div>`;
+  loadPdf(subject, idx);
 }
 
-function libHandlePdf(input){
+async function libHandlePdf(input){
   const file = input.files[0];
   if(!file) return;
+  const infoEl  = document.getElementById('libPdfInfo');
+  const frame   = document.getElementById('libPdfFrame');
+  const subject = libState.subject;
+  const chapter = libState.chapter;
+
+  // Show PDF locally immediately
   if(libCurrentBlobUrl) URL.revokeObjectURL(libCurrentBlobUrl);
   libCurrentBlobUrl = URL.createObjectURL(file);
-  const e = libGetEntry(libState.subject, libState.chapter);
-  e.pdfName = file.name;
-  saveLibrary();
-  document.getElementById('libPdfInfo').textContent = 'Loaded: '+file.name+' (this session)';
-  const frame = document.getElementById('libPdfFrame');
   frame.src = libCurrentBlobUrl;
   frame.classList.add('open');
-  showToast('PDF loaded for this session');
+  infoEl.textContent = 'Uploading to cloud…';
+
+  const safeName    = file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const storagePath = 'pdfs/' + subject + '/' + chapter + '/' + Date.now() + '_' + safeName;
+
+  // Upload to Supabase Storage only (no DB table needed)
+  const { error: uploadError } = await supabase
+    .storage.from('library-pdfs')
+    .upload(storagePath, file, { upsert: true });
+
+  if(uploadError){
+    infoEl.textContent = '⚠️ Upload failed: ' + uploadError.message;
+    showToast('Upload failed', 'var(--amber)');
+    return;
+  }
+
+  // Get permanent public URL
+  const { data: urlData } = supabase.storage.from('library-pdfs').getPublicUrl(storagePath);
+  const pdfUrl = urlData.publicUrl;
+
+  // Save URL to localStorage only — no DB table required!
+  const e = libGetEntry(subject, chapter);
+  e.pdfName = file.name;
+  e.pdfUrl  = pdfUrl;
+  saveLibrary();
+
+  frame.src = pdfUrl;
+  infoEl.textContent = '✓ Saved permanently: ' + file.name;
+  showToast('PDF saved permanently ✓');
 }
-  async function loadPdf(subject, chapter) {
+function loadPdf(subject, chapter){
+  const infoEl = document.getElementById('libPdfInfo');
+  const frame  = document.getElementById('libPdfFrame');
+  const e = libGetEntry(subject, chapter);
 
-  const { data, error } = await supabase
-    .from("library")
-    .select("*")
-    .eq("subject", subject)
-    .eq("chapter", chapter)
-    .single();
-
-  if (error || !data) return;
-
-  const frame = document.getElementById("libPdfFrame");
-
-  frame.src = data.pdf_url;
-  frame.classList.add("open");
-
-  document.getElementById("libPdfInfo").textContent =
-      "Loaded: " + data.pdf_name;
+  // Load from localStorage — no DB needed
+  if(e.pdfUrl){
+    frame.src = e.pdfUrl;
+    frame.classList.add('open');
+    infoEl.textContent = '✓ ' + (e.pdfName || 'PDF loaded');
+    return;
+  }
+  infoEl.textContent = 'No PDF uploaded yet';
 }
 
 function libSaveLink(subject, idx){
@@ -1826,20 +1858,6 @@ function libDeleteGE(i){
   renderGeGrid();
 }
 
-</script>
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Supabase Configuration -->
-<script>
-const SUPABASE_URL = "https://nprjtssljmkvhphjbhgm.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wcmp0c3Nsam1rdmhwaGpiaGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MDY4MTQsImV4cCI6MjA5ODI4MjgxNH0.Hw7FGhtBAsHFnCrbTeHS61JGT00ntt5M92WPffBm83M";
-
-const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
-console.log("Supabase Connected!", supabase);
 </script>
 </body>
 </html>
