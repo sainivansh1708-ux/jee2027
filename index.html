@@ -2241,59 +2241,12 @@ function libDeleteGE(i){
   saveGeVideos();
   renderGeGrid();
 }
-// HIGH-PRECISION JEE ADVANCED COUNTDOWN CALCULATOR
-function startPremiumCountdown() {
-  const targetExamDate = new Date("May 16, 2027 00:00:00").getTime();
-
-  function calculateRemainingTime() {
-    const timeNow = new Date().getTime();
-    const difference = targetExamDate - timeNow;
-
-    // Checking if target date has arrived
-    if (difference <= 0) {
-      clearInterval(liveTickerInterval);
-      document.getElementById("advTimerHeader").innerHTML = "The Ultimate Battle Has Arrived! 🚀";
-      document.getElementById("advTargetFootnote").textContent = "Give it your absolute best assignment!";
-      return;
-    }
-
-    // Mathematical conversions for remaining units
-    const totalDays = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const totalHours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const totalMinutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    const totalSeconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-    // Render numbers to layout elements with strict standard character padding lengths
-    const elementDays = document.getElementById("adv-days");
-    const elementHours = document.getElementById("adv-hours");
-    const elementMins = document.getElementById("adv-minutes");
-    const elementSecs = document.getElementById("adv-seconds");
-
-    if (elementDays) elementDays.textContent = String(totalDays).padStart(3, '0');
-    if (elementHours) elementHours.textContent = String(totalHours).padStart(2, '0');
-    if (elementMins) elementMins.textContent = String(totalMinutes).padStart(2, '0');
-    if (elementSecs) elementSecs.textContent = String(totalSeconds).padStart(2, '0');
-  }
-
-  // Fire execution cycle instantly, then bind to repeating 1-second interval loops
-  calculateRemainingTime();
-  const liveTickerInterval = setInterval(calculateRemainingTime, 1000);
-}
-
-// Ensure the engine starts cleanly alongside your main dashboard view loading states
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", startPremiumCountdown);
-} else {
-  startPremiumCountdown();
-}
-
-
-// ══════════════════════════════════════════ */
-/* DASHBOARD LIVE ENGINE ROUTINES       */
-/* ══════════════════════════════════════════ */
+// ═════════════════════════════════════════════════════════════
+// HIGH-PERFORMANCE UNIFIED LIVE DASHBOARD ENGINE & QUOTE REPOSITORY
+// ═════════════════════════════════════════════════════════════
 
 function startDashboardPremiumFeatures() {
-  // 1. High-Precision Live Ticker Routine
+  // 1. HIGH-PRECISION COUNTDOWN TICKER ROUTINE
   const targetDateValue = new Date("May 16, 2027 00:00:00").getTime();
 
   function runCountdownTicker() {
@@ -2326,13 +2279,67 @@ function startDashboardPremiumFeatures() {
   runCountdownTicker();
   const tickerIntervalLoop = setInterval(runCountdownTicker, 1000);
 
-  // 2. Dynamic Strategic Motivation Quotes Loader
+  // 2. MASSIVE RANDOM DAILY STRATEGIC MOTIVATION ENGINE
   const coreQuotesCollection = [
+    // --- THE GATES OF OLYMPUS (IIT B & IIT D) ---
     "To stand where others fall, you must endure what others run from. The gates of Powai demand your absolute best.",
     "Hauz Khas doesn't reward excuses. It rewards the silent, late-night hours no one else sees.",
-    "The depth of your struggle defines the height of your rank. Breathe it in, lock in, and conquer.",
+    "The depth of your struggle defines the height of your AIR. Breathe it in, lock in, and conquer.",
     "Every raw mathematical equation solved is a step closer to walking through the main corridor of IIT Bombay.",
-    "When your energy fades, remember the pristine view of the Dogra Hall roof structure. It's waiting for you."
+    "When your energy fades, remember the pristine view of the Dogra Hall roof structure. It's waiting for you.",
+    "IIT Delhi isn't built on wishful thinking; it is built on the ruins of the comfort zones you destroy today.",
+    "Powai does not care about your past mock scores. It only respects the relentless execution you put down right now.",
+    "Imagine looking at your name on the dynamic allocation list with 'IIT Bombay - Computer Science' next to it. Focus.",
+    "The air hits different in Hauz Khas. Earn the right to breathe it.",
+    "The elite don't wait for motivation. They grind because the dream of Powai keeps them up at 3:00 AM.",
+
+    // --- SCIENTIFIC & TECHNICAL RAW DRIVE ---
+    "There is no coefficient of friction that can halt your momentum if your internal discipline is absolute.",
+    "Treat your failures like experimental errors. Isolate the variables, adjust the strategy, and re-solve.",
+    "Your potential energy is useless unless you find a way to convert it into raw, unstoppable kinetic output.",
+    "When thermodynamics breaks your spirit, let your focus achieve absolute zero entropy. Pure, unadulterated focus.",
+    "Calculus isn't just mathematics; it's the language of continuous changes. Accelerate your growth curve.",
+    "Be like a particle under ideal constraints: zero deviations, maximum velocity, straight toward the destination.",
+    "Let your dedication be a fundamental constant—unyielding, universal, and immune to external shifts.",
+    "In a world full of noise, let your concentration act as a perfect low-pass filter. Block everything out.",
+    "Every hard-hitting Irodov problem you conquer today shifts your probability density closer to an elite rank.",
+    "Mechanics teaches us that every action has an equal reaction. Let the magnitude of your effort shake the system.",
+
+    // --- STOIC & DISCIPLINED GRIND ---
+    "Your competition is solving another complex block problem while you are waiting for inspiration. Wake up.",
+    "The error log you write in your notebook dictates the glory you will see on the final rank display.",
+    "Sleepless nights and isolated days are the currency required to buy a seat in the most prestigious rooms.",
+    "When you feel like quitting, remember that thousands of aspirants are breaking down at this exact second. Outlast them.",
+    "A bad mock test score isn't a death sentence; it's a system diagnostic. Fix the leaks and reload.",
+    "Discipline is doing what needs to be done, with absolute perfection, even when your mind is screaming for rest.",
+    "You don't need a perfect background. You just need a perfect, unbreakable commitment to the next 24 hours.",
+    "Stop looking at the mountain and just focus on the current step. One derivation, one concept, one chapter at a time.",
+    "The pain of discipline is microscopic compared to the heavyweight crushing pain of regret on result day.",
+    "Let them sleep. Let them celebrate. Your celebration will happen inside the auditorium of IIT Bombay.",
+
+    // --- HARD-HITTING REALITY CHECKS ---
+    "Nobody owes you an IIT seat. Thousands want it just as badly. Prove you deserve it more.",
+    "The exam paper doesn't care about your intentions. It only reads the cold, hard logic of your answers.",
+    "If it were easy, everyone sitting around you would be an IITian. The difficulty is the filter.",
+    "Excuses look good only to those who fail. The elite don't have space for them in their daily tracker.",
+    "Every time you pick up your phone to waste ten minutes, someone else just memorized an organic mechanism.",
+    "You are writing your own destiny with the ink of your midnight sweat. Make it a masterpiece.",
+    "Your parents are silently sacrificing their present for your future. Keep your eyes on the board.",
+    "The syllabus looks impossible only until you break it down into relentless, daily operational objectives.",
+    "When the final timer hits zero on May 16, 2027, make sure you leave that exam hall with absolute peace of mind.",
+    "You are not studying to pass an exam; you are studying to completely transform the trajectory of your entire life.",
+
+    // --- THE WARRIOR ARCHETYPE ---
+    "Walk into your study room like a general stepping onto a battlefield. Clear eyes. Zero emotions. Total war.",
+    "Let the silence of your execution create the loudest roar when the final JEE Advanced results drop.",
+    "True grit is staying glued to your desk when a chemistry chapter feels completely impossible to crack.",
+    "Gold is forged under immense pressure and extreme heat. Welcome the heat of this competitive crucible.",
+    "Champions don't complain about the hardness of the paper; they calibrate their minds to cut through it like a diamond.",
+    "Let your obsession with perfection border on madness. That is what it takes to break into the double-digit ranks.",
+    "There are no shortcuts to Hauz Khas. You climb every single step by conquering your own laziness day after day.",
+    "Your desk is a sanctuary. Protect it from distractions, self-doubt, and low energy.",
+    "Every single line of notes you revise is a shield against failure on the day of reckoning.",
+    "Look into the mirror. That is your only real competition. Outperform him every single day."
   ];
 
   const randomSelection = coreQuotesCollection[Math.floor(Math.random() * coreQuotesCollection.length)];
@@ -2342,15 +2349,12 @@ function startDashboardPremiumFeatures() {
   }
 }
 
-// Securely run everything on interface render states
+// Ensure the engine starts cleanly alongside your layout loading states
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", startDashboardPremiumFeatures);
 } else {
   startDashboardPremiumFeatures();
 }
-
-
-
 
   
 </script>
