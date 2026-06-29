@@ -1797,7 +1797,19 @@ const PLAN=[{month:'Jun 29 – Jul 31',weeks:[{title:'Week 1: Indefinite Integra
 function renderPlan(){document.getElementById('planContent').innerHTML=PLAN.map(mo=>`<div class="plan-month"><div class="plan-month-title">${mo.month}</div>${mo.weeks.map((w,i)=>`<div class="plan-week"><div class="plan-week-head" onclick="document.getElementById('pw${mo.month.slice(0,3)+i}').classList.toggle('open')"><div><div class="pw-title">${w.title}</div><div class="pw-date">${w.date}</div></div><span style="color:var(--muted)">▾</span></div><div class="plan-week-body" id="pw${mo.month.slice(0,3)+i}"><div class="subj-row"><span class="subj-name" style="color:var(--accent)">Maths</span><span class="subj-val">${w.m}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--purple)">Physics</span><span class="subj-val">${w.p}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--green)">Chem</span><span class="subj-val">${w.c}</span></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${w.tests.map(t=>`<span class="test-tag ${t.includes('⭐')||t.includes('FULLY')?'tt-big':t.includes('QAPT')?'tt-qapt':'tt-qpt'}">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('')}
 
 // ══ NAV ══
-function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes();if(id==='dashboard')renderDashboard()}
+function goPage(id){
+  // 🔊 Play your personal focus sound instantly on tab switch
+  const focusAudio = new Audio('focus.mp3');
+  focusAudio.play().catch(err => console.log("Audio waiting for interaction")
+  
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+                    document.getElementById('page-'+id).classList.add('active');
+                    document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));
+                    window.scrollTo({top:0,behavior:'smooth'});
+                    if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();
+                    if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes();
+                    if(id==='dashboard')renderDashboard()
+                   }
 
 // ══ INIT ══
 loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();renderDashboard();
