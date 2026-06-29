@@ -518,281 +518,289 @@ cursor:pointer;
   .lib-pal-grid{grid-template-columns:1fr 1fr}
 }
   /* PREMIUM APPLE-INSPIRED COUNTDOWN DISPLAY */
+/* ══════════════════════════════════════════════════ */
+/*  BOLD COMIC-STYLE COUNTDOWN + MOTIVATION PANEL   */
+/* ══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Oswald:wght@700&family=Russo+One&display=swap');
+
+/* --- COUNTDOWN CARD --- */
 .premium-countdown-card {
   position: relative;
   overflow: hidden;
-  padding: 24px 20px;
-  margin: 16px 0 24px 0;
+  padding: 28px 24px 24px;
+  margin: 16px 0 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg2) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #1a0533 0%, #0d1b4b 50%, #001a2e 100%) !important;
+  border: 3px solid #ff2d78 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 0 1px #ff2d7840, 0 8px 40px rgba(255,45,120,0.35), inset 0 1px 0 rgba(255,255,255,0.08) !important;
 }
 
-/* Glass-ambient glow design */
+/* Animated corner sparks */
 .premium-countdown-card::before {
   content: '';
   position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.15;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(255,45,120,0.22) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(99,102,241,0.22) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 5%,  rgba(250,204,21,0.18) 0%, transparent 40%);
   pointer-events: none;
 }
 
-.timer-grid-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 16px;
-  width: 100%;
-  max-width: 440px;
-}
-
-.timer-segment {
-  flex: 1;
-  min-width: 72px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 12px 4px;
-  border-radius: 12px;
-}
-
-.timer-digits {
-  font-size: 36px;
-  font-weight: 200; /* Ultra-clean, thin luxury numerical typography */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-  font-variant-numeric: tabular-nums; /* Prevents text shifting as numbers tick */
-  line-height: 1;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-
-.timer-colon {
-  font-size: 24px;
-  font-weight: 300;
-  color: var(--muted);
-  opacity: 0.3;
-  padding-bottom: 16px;
-  animation: pulseGlow 2s infinite;
-}
-
-.timer-label-sub {
-  font-size: 9px;
-  font-weight: 700;
+/* "JEE ADVANCED 2027" big title */
+#advTimerHeader {
+  font-family: 'Black Ops One', 'Russo One', Impact, sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+  color: #fff !important;
+  text-shadow:
+    3px 3px 0 #ff2d78,
+    6px 6px 0 rgba(255,45,120,0.35),
+    0 0 30px rgba(255,45,120,0.6) !important;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-top: 6px;
+  margin-top: 0 !important;
 }
 
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.6; }
-}
-
-@media (max-width: 480px) {
-  .timer-digits { font-size: 26px; }
-  .timer-segment { min-width: 55px; padding: 8px 2px; }
-}
-
-/* ══════════════════════════════════════════ */
-/* PREMIUM APP DESIGN COMPONENT SECTIONS   */
-/* ══════════════════════════════════════════ */
-
-/* 1. Countdown Module Grid */
-.premium-countdown-card {
-  position: relative;
-  overflow: hidden;
-  padding: 24px 20px;
-  margin: 16px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg2) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-}
-
-.premium-countdown-card::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.15;
-  pointer-events: none;
+/* "THE ULTIMATE HORIZON" label above */
+.premium-countdown-card > div:first-child {
+  font-family: 'Oswald', 'Black Ops One', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: #facc15 !important;
+  text-shadow: 0 0 12px rgba(250,204,21,0.7) !important;
 }
 
 .timer-grid-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 20px;
   width: 100%;
-  max-width: 440px;
+  max-width: 500px;
 }
 
 .timer-segment {
   flex: 1;
-  min-width: 72px;
+  min-width: 80px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 12px 4px;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+  padding: 14px 6px 10px;
+  border-radius: 14px;
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.3s;
 }
+.timer-segment:hover { transform: translateY(-3px); border-color: #ff2d78; }
 
 .timer-digits {
-  font-size: 36px;
-  font-weight: 200;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+  font-family: 'Black Ops One', 'Russo One', Impact, monospace !important;
+  font-size: 44px;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--text);
-  letter-spacing: -0.02em;
+  color: #fff;
+  letter-spacing: 0.02em;
+  text-shadow:
+    3px 3px 0 rgba(255,45,120,0.8),
+    0 0 20px rgba(99,102,241,0.5);
 }
 
+/* Days gets yellow accent */
+#adv-days { color: #facc15 !important; text-shadow: 3px 3px 0 #b45309, 0 0 20px rgba(250,204,21,0.6) !important; }
+/* Hours gets pink */
+#adv-hours { color: #ff2d78 !important; text-shadow: 3px 3px 0 #7f1d4b, 0 0 20px rgba(255,45,120,0.6) !important; }
+/* Minutes gets indigo */
+#adv-minutes { color: #818cf8 !important; text-shadow: 3px 3px 0 #3730a3, 0 0 20px rgba(99,102,241,0.6) !important; }
+/* Seconds gets green */
+#adv-seconds { color: #34d399 !important; text-shadow: 3px 3px 0 #065f46, 0 0 20px rgba(52,211,153,0.6) !important; font-weight: 400 !important; }
+
 .timer-colon {
-  font-size: 24px;
-  font-weight: 300;
-  color: var(--muted);
-  opacity: 0.3;
-  padding-bottom: 16px;
-  animation: pulseGlow 2s infinite;
+  font-size: 32px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.25);
+  padding-bottom: 24px;
+  animation: pulseGlow 1.5s infinite;
+  line-height: 1;
+  font-family: 'Black Ops One', sans-serif;
 }
 
 .timer-label-sub {
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-top: 6px;
-}
-
-/* 2. Layered Transparent Motivational Sanctuary Panel */
-.premium-motivation-panel {
-  display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  margin-bottom: 24px;
-  background: var(--bg2) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-  position: relative;
-}
-
-.motivation-content {
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-}
-
-.quote-icon {
-  font-size: 28px;
-  line-height: 1;
-  color: var(--accent);
-  opacity: 0.3;
-  font-family: serif;
-  margin-bottom: 6px;
-}
-
-.dynamic-quote {
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  margin-bottom: 12px;
-}
-
-.quote-target-badge {
-  font-size: 9px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--muted);
+  color: rgba(255,255,255,0.45);
+  margin-top: 8px;
+}
+
+/* Footnote date */
+#advTargetFootnote {
+  font-family: 'Oswald', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(255,255,255,0.4) !important;
+  margin-top: 18px !important;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 480px) {
+  .timer-digits { font-size: 30px; }
+  .timer-segment { min-width: 58px; padding: 10px 4px 8px; }
+  #advTimerHeader { font-size: 20px !important; }
+}
+
+/* ─────────────────────────────────────────── */
+/*  MOTIVATION PANEL — Campus Photos + Quote  */
+/* ─────────────────────────────────────────── */
+
+.premium-motivation-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 24px;
+  border-radius: 20px !important;
+  overflow: hidden;
+  position: relative;
+  background: #0d0d1a !important;
+  border: 2px solid rgba(99,102,241,0.4) !important;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.15), 0 12px 40px rgba(0,0,0,0.5) !important;
+  min-height: 200px;
+}
+
+/* Left: motivation text */
+.motivation-content {
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 4;
+  background: linear-gradient(135deg, rgba(13,13,26,0.98) 0%, rgba(13,13,26,0.85) 100%);
+}
+
+.quote-icon {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  line-height: 0.8;
+  color: #ff2d78;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.dynamic-quote {
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #e2e8f0;
+  letter-spacing: 0.01em;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.quote-target-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  background: linear-gradient(90deg, rgba(255,45,120,0.15), rgba(99,102,241,0.15));
+  border: 1px solid rgba(255,45,120,0.3);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: 'Black Ops One', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #facc15;
+  text-shadow: 0 0 8px rgba(250,204,21,0.5);
+  width: fit-content;
 }
 
+/* Right: stacked campus photos */
 .campus-graphic-gate {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 160px;
+  min-height: 200px;
   overflow: hidden;
-  display: flex;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
 }
 
+/* Reset old absolute positioning */
 .campus-layer {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  mix-blend-mode: normal !important;
+  clip-path: none !important;
+  opacity: 1 !important;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: block !important;
+  filter: saturate(1.1) brightness(0.85) !important;
+}
+.campus-layer:hover { transform: scale(1.04) !important; }
+
+/* Labels on each photo */
+.iit-bombay-mask { order: 1; }
+.iit-delhi-mask  { order: 2; }
+
+/* IIT B label */
+.iit-bombay-mask::after,
+.iit-delhi-mask::after { display: none; } /* we use a wrapper pseudo instead */
+
+.campus-graphic-gate::before {
+  content: 'IIT BOMBAY';
   position: absolute;
-  top: 0;
-  height: 100%;
-  object-fit: cover;
-  mix-blend-mode: luminosity;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.iit-bombay-mask {
-  left: 0;
-  width: 65%;
-  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
-  opacity: 0.35;
-  z-index: 1;
-}
-
-.iit-delhi-mask {
-  right: 0;
-  width: 55%;
-  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
-  opacity: 0.25;
-  z-index: 2;
-}
-
-.campus-graphic-gate::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--bg) 0%, transparent 25%, transparent 75%, var(--bg) 100%);
+  top: 8px; left: 10px;
+  z-index: 10;
+  font-family: 'Black Ops One', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #facc15;
+  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(250,204,21,0.8);
   pointer-events: none;
-  z-index: 3;
+}
+.campus-graphic-gate::after {
+  content: 'IIT DELHI';
+  position: absolute;
+  bottom: 8px; left: 10px;
+  z-index: 10;
+  font-family: 'Black Ops One', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #818cf8;
+  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(129,140,248,0.8);
+  pointer-events: none;
+  background: none !important;
 }
 
-.premium-motivation-panel:hover .campus-layer {
-  transform: scale(1.05);
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.6; }
+/* divider between photos */
+.campus-graphic-gate .campus-layer:first-child {
+  border-bottom: 2px solid rgba(255,45,120,0.5);
 }
 
 @media (max-width: 768px) {
   .premium-motivation-panel { grid-template-columns: 1fr; }
-  .campus-graphic-gate { height: 130px; min-height: 130px; }
-  .campus-graphic-gate::after { background: linear-gradient(0deg, var(--bg) 0%, transparent 40%, transparent 60%, var(--bg) 100%); }
-  .timer-digits { font-size: 26px; }
-  .timer-segment { min-width: 55px; padding: 8px 2px; }
+  .campus-graphic-gate { height: 180px; min-height: 180px; grid-template-rows: 1fr; grid-template-columns: 1fr 1fr; }
+  .campus-graphic-gate .campus-layer:first-child { border-bottom: none; border-right: 2px solid rgba(255,45,120,0.5); }
+  .campus-graphic-gate::before { top: 6px; font-size: 9px; }
+  .campus-graphic-gate::after { bottom: 6px; left: 50%; font-size: 9px; }
+  .timer-digits { font-size: 30px; }
+  .timer-segment { min-width: 58px; padding: 10px 4px 8px; }
 }
   
 </style>
@@ -838,7 +846,7 @@ cursor:pointer;
     </div>
   </div>
 <div class="card premium-countdown-card">
-  <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); display: flex; align-items: center; gap: 6px;">
+  <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.18em; color: #facc15; display: flex; align-items: center; gap: 6px; font-family: 'Oswald', sans-serif; text-shadow: 0 0 12px rgba(250,204,21,0.7);">
     <span>⚡</span> THE ULTIMATE HORIZON
   </div>
   
@@ -886,9 +894,8 @@ cursor:pointer;
   </div>
 
   <div class="campus-graphic-gate">
-    <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600" class="campus-layer iit-bombay-mask" alt="IIT IIT BOMBAY Core Entry" />
-    
-    <img src="https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=600" class="campus-layer iit-delhi-mask" alt="IIT IIT DELHI Core Entry" />
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/IIT_Bombay_Main_Gate.jpg/640px-IIT_Bombay_Main_Gate.jpg" class="campus-layer iit-bombay-mask" alt="IIT Bombay" onerror="this.src='https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format'" />
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/IIT_Delhi_Main_Building.jpg/640px-IIT_Delhi_Main_Building.jpg" class="campus-layer iit-delhi-mask" alt="IIT Delhi" onerror="this.src='https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format'" />
   </div>
 </div>
 
@@ -2211,6 +2218,7 @@ function libDeleteGE(i){
 function startDashboardPremiumFeatures() {
   // 1. HIGH-PRECISION COUNTDOWN TICKER ROUTINE
   const targetDateValue = new Date("May 16, 2027 00:00:00").getTime();
+  let tickerIntervalLoop = null;
 
   function runCountdownTicker() {
     const currentMoment = new Date().getTime();
@@ -2240,7 +2248,7 @@ function startDashboardPremiumFeatures() {
   }
 
   runCountdownTicker();
-  const tickerIntervalLoop = setInterval(runCountdownTicker, 1000);
+  tickerIntervalLoop = setInterval(runCountdownTicker, 1000);
 
   // 2. MASSIVE RANDOM DAILY STRATEGIC MOTIVATION ENGINE
   const coreQuotesCollection = [
