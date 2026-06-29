@@ -517,6 +517,95 @@ cursor:pointer;
 @media(max-width:640px){
   .lib-pal-grid{grid-template-columns:1fr 1fr}
 }
+  /* PREMIUM APPLE-INSPIRED COUNTDOWN DISPLAY */
+.premium-countdown-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px;
+  margin: 16px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Glass-ambient glow design */
+.premium-countdown-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.timer-grid-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.timer-segment {
+  flex: 1;
+  min-width: 72px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 4px;
+  border-radius: 12px;
+}
+
+.timer-digits {
+  font-size: 36px;
+  font-weight: 200; /* Ultra-clean, thin luxury numerical typography */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+  font-variant-numeric: tabular-nums; /* Prevents text shifting as numbers tick */
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.timer-colon {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--muted);
+  opacity: 0.3;
+  padding-bottom: 16px;
+  animation: pulseGlow 2s infinite;
+}
+
+.timer-label-sub {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+}
+
+@media (max-width: 480px) {
+  .timer-digits { font-size: 26px; }
+  .timer-segment { min-width: 55px; padding: 8px 2px; }
+}
+
+
+  
 </style>
 </head>
 <body>
@@ -559,7 +648,42 @@ cursor:pointer;
       <div class="dash-date" id="dashDate"></div>
     </div>
   </div>
+<div class="card premium-countdown-card">
+  <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); display: flex; align-items: center; gap: 6px;">
+    <span>⚡</span> THE ULTIMATE HORIZON
+  </div>
+  
+  <div style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin-top: 4px; color: var(--text);" id="advTimerHeader">
+    JEE Advanced 2027
+  </div>
 
+  <div class="timer-grid-wrapper">
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-days">000</div>
+      <div class="timer-label-sub">Days</div>
+    </div>
+    <div class="timer-colon">:</div>
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-hours">00</div>
+      <div class="timer-label-sub">Hours</div>
+    </div>
+    <div class="timer-colon">:</div>
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-minutes">00</div>
+      <div class="timer-label-sub">Mins</div>
+    </div>
+    <div class="timer-colon">:</div>
+    <div class="timer-segment">
+      <div class="timer-digits" id="adv-seconds" style="color: var(--amber); font-weight: 400;">00</div>
+      <div class="timer-label-sub">Secs</div>
+    </div>
+  </div>
+
+  <div style="font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 14px; opacity: 0.7;" id="advTargetFootnote">
+    Target Exam Date: 16 May 2027
+  </div>
+</div>
+<!-- ⚡ END OF COUNTDOWN BOARD ⚡ -->
   <div class="dash-stat-row" id="dashStatRow"></div>
 
   <div class="dash-chart-card">
@@ -1857,7 +1981,51 @@ function libDeleteGE(i){
   saveGeVideos();
   renderGeGrid();
 }
+// HIGH-PRECISION JEE ADVANCED COUNTDOWN CALCULATOR
+function startPremiumCountdown() {
+  const targetExamDate = new Date("May 16, 2027 00:00:00").getTime();
 
+  function calculateRemainingTime() {
+    const timeNow = new Date().getTime();
+    const difference = targetExamDate - timeNow;
+
+    // Checking if target date has arrived
+    if (difference <= 0) {
+      clearInterval(liveTickerInterval);
+      document.getElementById("advTimerHeader").innerHTML = "The Ultimate Battle Has Arrived! 🚀";
+      document.getElementById("advTargetFootnote").textContent = "Give it your absolute best assignment!";
+      return;
+    }
+
+    // Mathematical conversions for remaining units
+    const totalDays = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const totalHours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const totalMinutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const totalSeconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    // Render numbers to layout elements with strict standard character padding lengths
+    const elementDays = document.getElementById("adv-days");
+    const elementHours = document.getElementById("adv-hours");
+    const elementMins = document.getElementById("adv-minutes");
+    const elementSecs = document.getElementById("adv-seconds");
+
+    if (elementDays) elementDays.textContent = String(totalDays).padStart(3, '0');
+    if (elementHours) elementHours.textContent = String(totalHours).padStart(2, '0');
+    if (elementMins) elementMins.textContent = String(totalMinutes).padStart(2, '0');
+    if (elementSecs) elementSecs.textContent = String(totalSeconds).padStart(2, '0');
+  }
+
+  // Fire execution cycle instantly, then bind to repeating 1-second interval loops
+  calculateRemainingTime();
+  const liveTickerInterval = setInterval(calculateRemainingTime, 1000);
+}
+
+// Ensure the engine starts cleanly alongside your main dashboard view loading states
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startPremiumCountdown);
+} else {
+  startPremiumCountdown();
+}
 </script>
 </body>
 </html>
