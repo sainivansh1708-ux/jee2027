@@ -1798,10 +1798,7 @@ function renderPlan(){document.getElementById('planContent').innerHTML=PLAN.map(
 
 // ══ NAV ══
 function goPage(id){
-  // 🔊 Play your personal focus sound instantly on tab switch
-  const focusAudio = new Audio('focus.mp3');
-  focusAudio.play().catch(err => console.log("Audio waiting for interaction")
-  
+ 
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
                     document.getElementById('page-'+id).classList.add('active');
                     document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));
