@@ -319,6 +319,71 @@ border:none;
 border-radius:6px;
 cursor:pointer;
 }
+
+/* ══════════ LIBRARY PAGE ══════════ */
+.lib-crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-bottom:14px;flex-wrap:wrap}
+.lib-crumb{cursor:pointer;color:var(--accent);font-weight:500}
+.lib-crumb:hover{text-decoration:underline}
+.lib-crumb-sep{color:var(--border2)}
+.lib-crumb-cur{color:var(--text);font-weight:600}
+
+.lib-pal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.lib-pal-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px 16px;text-align:center;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.lib-pal-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 10px 28px rgba(99,102,241,.18)}
+.lib-pal-icon{font-size:34px}
+.lib-pal-name{font-size:14px;font-weight:700}
+.lib-pal-sub{font-size:11px;color:var(--muted)}
+.lib-pal-count{font-size:10px;padding:2px 9px;border-radius:8px;font-weight:600;margin-top:2px}
+
+.lib-chap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.lib-chap-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .15s;position:relative}
+.lib-chap-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 18px rgba(99,102,241,.12)}
+.lib-chap-num{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.lib-chap-name{font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:8px;min-height:34px}
+.lib-chap-meta{display:flex;gap:6px;flex-wrap:wrap}
+.lib-chip{font-size:9.5px;padding:2px 7px;border-radius:6px;font-weight:600}
+.lib-chip-pdf{background:var(--red-soft);color:var(--red)}
+.lib-chip-link{background:var(--accent-soft);color:var(--accent)}
+.lib-chip-note{background:var(--amber-soft);color:var(--amber)}
+.lib-chip-empty{background:var(--bg3);color:var(--muted)}
+
+.lib-chap-detail{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.lib-chap-detail-head{padding:16px;border-bottom:1px solid var(--border)}
+.lib-chap-detail-title{font-size:16px;font-weight:700;margin-bottom:2px}
+.lib-chap-detail-sub{font-size:11px;color:var(--muted)}
+.lib-section{padding:16px;border-bottom:1px solid var(--border)}
+.lib-section:last-child{border-bottom:none}
+.lib-section-title{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.lib-section-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.lib-file-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lib-file-btn{padding:9px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.lib-file-info{font-size:11px;color:var(--muted);flex:1}
+.lib-pdf-frame{width:100%;height:480px;border:none;border-radius:8px;margin-top:10px;background:#1a1a1a;display:none}
+.lib-pdf-frame.open{display:block}
+.lib-save-row{display:flex;gap:8px;margin-top:8px}
+.lib-save-row input,.lib-save-row textarea{flex:1}
+.lib-saved-tag{font-size:10px;color:var(--green);margin-top:6px;display:none}
+.lib-saved-tag.show{display:inline-block}
+.lib-link-display{margin-top:8px;font-size:12px;display:none}
+.lib-link-display.show{display:block}
+.lib-link-display a{color:var(--accent);word-break:break-all}
+
+.ge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.ge-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ge-thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--bg3),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;text-decoration:none;color:inherit}
+.ge-body{padding:10px 12px}
+.ge-name{font-size:12.5px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.ge-actions{display:flex;justify-content:space-between;align-items:center}
+.ge-link{font-size:11px;color:var(--accent)}
+.ge-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px}
+.ge-del:hover{color:var(--red)}
+.ge-add-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.ge-add-row{display:flex;gap:8px;flex-wrap:wrap}
+.ge-add-row input{flex:1;min-width:160px}
+
+@media(max-width:640px){
+  .lib-pal-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
@@ -334,6 +399,7 @@ cursor:pointer;
         <button class="ntab active" onclick="goPage('today')">Today</button>
         <button class="ntab" onclick="goPage('plan')">Plan</button>
         <button class="ntab" onclick="goPage('resources')">📺 Resources</button>
+        <button class="ntab" onclick="goPage('library')">📚 Library</button>
         <button class="ntab" onclick="goPage('timer')">⏱ Timer</button>
         <button class="ntab" onclick="goPage('calc')">🧮 Calc</button>
         <button class="ntab" onclick="goPage('history')">History</button>
@@ -565,6 +631,12 @@ cursor:pointer;
   </div>
 </div>
 
+<!-- ══════════ LIBRARY ══════════ -->
+<div class="page" id="page-library">
+  <div class="lib-crumbs" id="libCrumbs"></div>
+  <div id="libContent"></div>
+</div>
+
 <!-- TIMER -->
 <div class="page" id="page-timer">
   <div class="timer-page">
@@ -701,6 +773,12 @@ cursor:pointer;
 // ══ DATA ══
 const LSKEY='jee2027_v3',URLKEY='jee2027_sheeturl',PLKEY='jee2027_pl3',SESSKEY='jee2027_sess';
 let DB={},mood='',playlists=[],sessions=[];
+// hoisted early so INIT below can safely call functions that reference these
+let customChannels = JSON.parse(localStorage.getItem("customChannels") || "[]");
+const LIBKEY='jee2027_library_v1', GEKEY='jee2027_ge_videos_v1';
+let libData = {}, geVideos = [];
+let libState = { view:'palettes', subject:null, chapter:null };
+let libCurrentBlobUrl = null;
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function fmtDate(k){const[y,m,d]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const dt=new Date(k);return`${dn[dt.getDay()]}, ${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`}
 function loadDB(){try{DB=JSON.parse(localStorage.getItem(LSKEY)||'{}')}catch(e){DB={}};try{playlists=JSON.parse(localStorage.getItem(PLKEY)||'[]')}catch(e){playlists=[]};try{sessions=JSON.parse(localStorage.getItem(SESSKEY)||'[]')}catch(e){sessions=[]}}
@@ -919,16 +997,14 @@ const PLAN=[{month:'Jun 29 – Jul 31',weeks:[{title:'Week 1: Indefinite Integra
 function renderPlan(){document.getElementById('planContent').innerHTML=PLAN.map(mo=>`<div class="plan-month"><div class="plan-month-title">${mo.month}</div>${mo.weeks.map((w,i)=>`<div class="plan-week"><div class="plan-week-head" onclick="document.getElementById('pw${mo.month.slice(0,3)+i}').classList.toggle('open')"><div><div class="pw-title">${w.title}</div><div class="pw-date">${w.date}</div></div><span style="color:var(--muted)">▾</span></div><div class="plan-week-body" id="pw${mo.month.slice(0,3)+i}"><div class="subj-row"><span class="subj-name" style="color:var(--accent)">Maths</span><span class="subj-val">${w.m}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--purple)">Physics</span><span class="subj-val">${w.p}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--green)">Chem</span><span class="subj-val">${w.c}</span></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${w.tests.map(t=>`<span class="test-tag ${t.includes('⭐')||t.includes('FULLY')?'tt-big':t.includes('QAPT')?'tt-qapt':'tt-qpt'}">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('')}
 
 // ══ NAV ══
-function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.ntab').forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active')});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid()}
+function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.ntab').forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active')});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes()}
 
 // ══ INIT ══
-loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();
+loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 // ═══════════════════════════════
 // CUSTOM CHANNELS SYSTEM
 // ═══════════════════════════════
-
-let customChannels = JSON.parse(localStorage.getItem("customChannels") || "[]");
 
 function saveChannels(){
     localStorage.setItem("customChannels", JSON.stringify(customChannels));
@@ -1060,6 +1136,276 @@ function addFromSearch(name, subject, link){
 // ═══════════════════════════════
 
 
+
+// ═══════════════════════════════
+// LIBRARY SYSTEM
+// ═══════════════════════════════
+
+const LIB_CHAPTERS = {
+  physics: [
+    "Units, Dimensions & Measurement","Kinematics","Laws of Motion","Work, Energy & Power",
+    "System of Particles & Rotational Motion","Gravitation","Mechanical Properties of Solids",
+    "Mechanical Properties of Fluids","Thermal Properties of Matter","Thermodynamics",
+    "Kinetic Theory of Gases","Oscillations","Waves","Electrostatics","Current Electricity",
+    "Moving Charges & Magnetism","Electromagnetic Induction","Alternating Current",
+    "Electromagnetic Waves","Ray Optics & Optical Instruments","Wave Optics",
+    "Dual Nature of Radiation & Matter","Atoms","Nuclei","Semiconductor Electronics",
+    "Experimental Skills"
+  ],
+  chemistry: [
+    "Some Basic Concepts of Chemistry","Structure of Atom","Classification of Elements & Periodicity",
+    "Chemical Bonding & Molecular Structure","States of Matter (Gaseous & Liquid)","Thermodynamics",
+    "Equilibrium","Redox Reactions & Electrochemistry","Chemical Kinetics","Surface Chemistry",
+    "General Principles of Metallurgy","p-Block Elements","d & f Block Elements",
+    "Coordination Compounds","Purification & Characterisation of Organic Compounds",
+    "Hydrocarbons","Haloalkanes & Haloarenes","Alcohols, Phenols & Ethers",
+    "Aldehydes, Ketones & Carboxylic Acids","Amines","Biomolecules & Polymers",
+    "Practical / Environmental Chemistry"
+  ],
+  maths: [
+    "Sets, Relations & Functions","Complex Numbers & Quadratic Equations","Matrices & Determinants",
+    "Permutations & Combinations","Mathematical Induction","Binomial Theorem",
+    "Sequences & Series","Limits, Continuity & Differentiability","Differential Calculus (Applications)",
+    "Integral Calculus","Differential Equations","Coordinate Geometry — Straight Lines & Circles",
+    "Conic Sections (Parabola, Ellipse, Hyperbola)","Three Dimensional Geometry","Vector Algebra",
+    "Statistics & Probability","Trigonometry","Mathematical Reasoning"
+  ]
+};
+const LIB_META = {
+  physics:{label:"Physics",icon:"⚡",color:"bp"},
+  chemistry:{label:"Chemistry",icon:"🧪",color:"bc"},
+  maths:{label:"Mathematics",icon:"📐",color:"bm"}
+};
+
+function loadLibrary(){
+  try{ libData = JSON.parse(localStorage.getItem(LIBKEY) || '{}'); }catch(e){ libData = {}; }
+  try{ geVideos = JSON.parse(localStorage.getItem(GEKEY) || '[]'); }catch(e){ geVideos = []; }
+}
+function saveLibrary(){ localStorage.setItem(LIBKEY, JSON.stringify(libData)); }
+function saveGeVideos(){ localStorage.setItem(GEKEY, JSON.stringify(geVideos)); }
+
+function libChapterKey(subject, idx){ return subject+'::'+idx; }
+function libGetEntry(subject, idx){
+  const k = libChapterKey(subject, idx);
+  if(!libData[k]) libData[k] = { link:'', notes:'' };
+  return libData[k];
+}
+
+function renderCrumbs(){
+  const el = document.getElementById('libCrumbs');
+  let html = `<span class="lib-crumb" onclick="libGoPalettes()">📚 Library</span>`;
+  if(libState.view==='chapters' || libState.view==='detail'){
+    const m = LIB_META[libState.subject];
+    html += `<span class="lib-crumb-sep">›</span>`;
+    if(libState.view==='detail'){
+      html += `<span class="lib-crumb" onclick="libGoChapters('${libState.subject}')">${m.icon} ${m.label}</span>`;
+    } else {
+      html += `<span class="lib-crumb-cur">${m.icon} ${m.label}</span>`;
+    }
+  }
+  if(libState.view==='detail'){
+    const name = LIB_CHAPTERS[libState.subject][libState.chapter];
+    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">${name}</span>`;
+  }
+  if(libState.view==='ge'){
+    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">📦 Other GE Content</span>`;
+  }
+  el.innerHTML = html;
+}
+
+function libGoPalettes(){
+  libState = { view:'palettes', subject:null, chapter:null };
+  renderCrumbs();
+  const subjCount = (s)=>{
+    let n=0; LIB_CHAPTERS[s].forEach((_,i)=>{ const e=libData[libChapterKey(s,i)]; if(e && (e.link||e.notes||e.pdfName)) n++; });
+    return n;
+  };
+  document.getElementById('libContent').innerHTML = `
+    <div class="lib-pal-grid">
+      <div class="lib-pal-card" onclick="libGoChapters('physics')">
+        <div class="lib-pal-icon">⚡</div>
+        <div class="lib-pal-name">Physics</div>
+        <div class="lib-pal-sub">${LIB_CHAPTERS.physics.length} chapters · JEE Advanced</div>
+        <span class="lib-pal-count bp" style="background:var(--purple-soft);color:var(--purple)">${subjCount('physics')} chapters with material</span>
+      </div>
+      <div class="lib-pal-card" onclick="libGoChapters('chemistry')">
+        <div class="lib-pal-icon">🧪</div>
+        <div class="lib-pal-name">Chemistry</div>
+        <div class="lib-pal-sub">${LIB_CHAPTERS.chemistry.length} chapters · JEE Advanced</div>
+        <span class="lib-pal-count" style="background:var(--green-soft);color:var(--green)">${subjCount('chemistry')} chapters with material</span>
+      </div>
+      <div class="lib-pal-card" onclick="libGoChapters('maths')">
+        <div class="lib-pal-icon">📐</div>
+        <div class="lib-pal-name">Mathematics</div>
+        <div class="lib-pal-sub">${LIB_CHAPTERS.maths.length} chapters · JEE Advanced</div>
+        <span class="lib-pal-count" style="background:var(--accent-soft);color:var(--accent)">${subjCount('maths')} chapters with material</span>
+      </div>
+      <div class="lib-pal-card" onclick="libGoGE()">
+        <div class="lib-pal-icon">📦</div>
+        <div class="lib-pal-name">Other GE Content</div>
+        <div class="lib-pal-sub">Misc. videos & resources</div>
+        <span class="lib-pal-count" style="background:var(--amber-soft);color:var(--amber)">${geVideos.length} videos added</span>
+      </div>
+    </div>`;
+}
+
+function libGoChapters(subject){
+  libState = { view:'chapters', subject, chapter:null };
+  renderCrumbs();
+  const chapters = LIB_CHAPTERS[subject];
+  const m = LIB_META[subject];
+  let cards = chapters.map((name, idx)=>{
+    const e = libData[libChapterKey(subject, idx)] || {};
+    let chips = '';
+    chips += e.pdfName ? `<span class="lib-chip lib-chip-pdf">📄 PDF (this session)</span>` : '';
+    chips += e.link ? `<span class="lib-chip lib-chip-link">🔗 Link saved</span>` : '';
+    chips += e.notes ? `<span class="lib-chip lib-chip-note">📝 Notes</span>` : '';
+    if(!chips) chips = `<span class="lib-chip lib-chip-empty">Empty</span>`;
+    return `<div class="lib-chap-card" onclick="libGoDetail('${subject}',${idx})">
+        <div class="lib-chap-num">Chapter ${idx+1}</div>
+        <div class="lib-chap-name">${name}</div>
+        <div class="lib-chap-meta">${chips}</div>
+      </div>`;
+  }).join('');
+  document.getElementById('libContent').innerHTML = `
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px">${m.icon} ${m.label} — tap a chapter</div>
+    <div class="lib-chap-grid">${cards}</div>`;
+}
+
+function libGoDetail(subject, idx){
+  libCurrentBlobUrl = null;
+  libState = { view:'detail', subject, chapter:idx };
+  renderCrumbs();
+  const name = LIB_CHAPTERS[subject][idx];
+  const e = libGetEntry(subject, idx);
+  document.getElementById('libContent').innerHTML = `
+    <div class="lib-chap-detail">
+      <div class="lib-chap-detail-head">
+        <div class="lib-chap-detail-title">${name}</div>
+        <div class="lib-chap-detail-sub">${LIB_META[subject].label} · Chapter ${idx+1} of ${LIB_CHAPTERS[subject].length}</div>
+      </div>
+
+      <div class="lib-section">
+        <div class="lib-section-title">📄 Chapter notes PDF</div>
+        <div class="lib-section-desc">Upload the PDF to view it right now. Browser storage can't keep large files permanently, so re-upload it next time you visit this chapter — use the link box below if you want something that stays saved (e.g. a Drive link to the PDF).</div>
+        <div class="lib-file-row">
+          <button class="lib-file-btn" onclick="document.getElementById('libPdfInput').click()">Choose PDF</button>
+          <input type="file" id="libPdfInput" accept="application/pdf" style="display:none" onchange="libHandlePdf(this)">
+          <span class="lib-file-info" id="libPdfInfo">${e.pdfName ? 'Loaded: '+e.pdfName+' (this session)' : 'No PDF loaded this session'}</span>
+        </div>
+        <iframe class="lib-pdf-frame" id="libPdfFrame"></iframe>
+      </div>
+
+      <div class="lib-section">
+        <div class="lib-section-title">🔗 Playlist / custom link</div>
+        <div class="lib-section-desc">Add any link — a YouTube playlist, a Drive folder, anything. This is saved permanently.</div>
+        <div class="lib-save-row">
+          <input id="libLinkInput" placeholder="https://..." value="${e.link ? e.link.replace(/"/g,'&quot;') : ''}">
+          <button class="settings-btn" onclick="libSaveLink('${subject}',${idx})">Save</button>
+        </div>
+        <span class="lib-saved-tag ${e.link?'show':''}" id="libLinkSaved">✓ Saved</span>
+        <div class="lib-link-display ${e.link?'show':''}" id="libLinkDisplay">${e.link ? `🔗 <a href="${e.link}" target="_blank">${e.link}</a>` : ''}</div>
+      </div>
+
+      <div class="lib-section">
+        <div class="lib-section-title">📝 Notes</div>
+        <div class="lib-section-desc">Anything you want — formulas, gaps, reminders. Saved permanently.</div>
+        <textarea id="libNotesInput" rows="4" placeholder="Add your notes for this chapter...">${e.notes || ''}</textarea>
+        <div class="lib-save-row"><button class="settings-btn" onclick="libSaveNotes('${subject}',${idx})" style="width:100%">Save notes</button></div>
+        <span class="lib-saved-tag ${e.notes?'show':''}" id="libNotesSaved">✓ Saved</span>
+      </div>
+    </div>`;
+}
+
+function libHandlePdf(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(libCurrentBlobUrl) URL.revokeObjectURL(libCurrentBlobUrl);
+  libCurrentBlobUrl = URL.createObjectURL(file);
+  const e = libGetEntry(libState.subject, libState.chapter);
+  e.pdfName = file.name;
+  saveLibrary();
+  document.getElementById('libPdfInfo').textContent = 'Loaded: '+file.name+' (this session)';
+  const frame = document.getElementById('libPdfFrame');
+  frame.src = libCurrentBlobUrl;
+  frame.classList.add('open');
+  showToast('PDF loaded for this session');
+}
+
+function libSaveLink(subject, idx){
+  const val = document.getElementById('libLinkInput').value.trim();
+  const e = libGetEntry(subject, idx);
+  e.link = val;
+  saveLibrary();
+  const tag = document.getElementById('libLinkSaved');
+  const disp = document.getElementById('libLinkDisplay');
+  if(val){
+    tag.classList.add('show');
+    disp.classList.add('show');
+    disp.innerHTML = `🔗 <a href="${val}" target="_blank">${val}</a>`;
+  } else {
+    tag.classList.remove('show');
+    disp.classList.remove('show');
+  }
+  showToast('Link saved');
+}
+
+function libSaveNotes(subject, idx){
+  const val = document.getElementById('libNotesInput').value;
+  const e = libGetEntry(subject, idx);
+  e.notes = val;
+  saveLibrary();
+  const tag = document.getElementById('libNotesSaved');
+  if(val) tag.classList.add('show'); else tag.classList.remove('show');
+  showToast('Notes saved');
+}
+
+// ── Other GE Content ──
+function libGoGE(){
+  libState = { view:'ge', subject:null, chapter:null };
+  renderCrumbs();
+  renderGeGrid();
+}
+
+function renderGeGrid(){
+  const cards = geVideos.map((v, i)=>`
+    <div class="ge-card">
+      <a class="ge-thumb" href="${v.link}" target="_blank">🎬</a>
+      <div class="ge-body">
+        <div class="ge-name">${v.title}</div>
+        <div class="ge-actions">
+          <a class="ge-link" href="${v.link}" target="_blank">Open ↗</a>
+          <button class="ge-del" onclick="libDeleteGE(${i})">🗑 Remove</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('libContent').innerHTML = `
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📦 Other GE Content — any random videos you want to keep</div>
+    <div class="ge-add-wrap">
+      <div class="ge-add-row">
+        <input id="geTitle" placeholder="Title (e.g. 'Random GK video')">
+        <input id="geLink" placeholder="Video link (YouTube or any URL)">
+        <button class="lib-file-btn" onclick="libAddGE()">➕ Add video</button>
+      </div>
+    </div>
+    <div class="ge-grid" id="geGrid">${cards || '<div class="empty">No videos added yet. Add one above ☝️</div>'}</div>`;
+}
+
+function libAddGE(){
+  const title = document.getElementById('geTitle').value.trim();
+  const link = document.getElementById('geLink').value.trim();
+  if(!title || !link){ alert('Please add both a title and a link.'); return; }
+  geVideos.push({ title, link });
+  saveGeVideos();
+  renderGeGrid();
+  showToast('Video added');
+}
+
+function libDeleteGE(i){
+  geVideos.splice(i,1);
+  saveGeVideos();
+  renderGeGrid();
+}
 
 </script>
 </body>
