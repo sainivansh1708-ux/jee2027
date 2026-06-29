@@ -1808,5 +1808,28 @@ function libDeleteGE(i){
 }
 
 </script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCFzOi61IP9_J5jmJ3NsidaL95CVrlXmRc",
+    authDomain: "jee-tracker-876a2.firebaseapp.com",
+    projectId: "jee-tracker-876a2",
+    storageBucket: "jee-tracker-876a2.firebasestorage.app",
+    messagingSenderId: "259412703289",
+    appId: "1:259412703289:web:5e94434f19847145c0f5e8",
+    measurementId: "G-KWCSCT28PG"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
