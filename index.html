@@ -593,24 +593,94 @@ cursor:pointer;
 
 /* ══ TEST PLANNER ══ */
 .tp-card{margin-bottom:18px}
-.tp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:12px}
+.tp-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+gap:20px;
+}
 @media(max-width:820px){.tp-grid{grid-template-columns:1fr}}
-.tp-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}
+.tp-col{
+background:var(--bg2);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
 .tp-col-head{font-size:12.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.tp-col[data-subj="physics"] .tp-col-head{color:#a855f7}
-.tp-col[data-subj="chemistry"] .tp-col-head{color:#22c55e}
-.tp-col[data-subj="maths"] .tp-col-head{color:#6366f1}
+.tp-col[data-subj="physics"]{
+border-left:4px solid #a855f7;
+}
+
+.tp-col[data-subj="chemistry"]{
+border-left:4px solid #22c55e;
+}
+
+.tp-col[data-subj="maths"]{
+border-left:4px solid #6366f1;
+}
 .tp-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;min-height:6px}
-.tp-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:6px 8px}
-.tp-item input[type=checkbox]{accent-color:var(--accent);flex:none}
-.tp-item span{flex:1;font-size:12.5px;line-height:1.3}
-.tp-item.done span{text-decoration:line-through;color:var(--muted)}
-.tp-item button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;flex:none;padding:2px 4px}
-.tp-item button:hover{color:var(--red)}
-.tp-add-row{display:flex;gap:6px}
-.tp-add-row input{flex:1;font-size:12px;padding:7px 9px}
-.tp-add-row button{flex:none;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 12px;font-size:13px;cursor:pointer}
-.tp-empty{font-size:11px;color:var(--muted);padding:4px 2px}
+.tp-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 14px;
+background:var(--bg3);
+border-radius:12px;
+min-height:50px;
+transition:.2s;
+}
+
+.tp-item:hover{
+background:var(--border2);
+}
+
+.tp-item input[type=checkbox]{
+width:14px;
+height:14px;
+margin:0;
+flex:none;
+accent-color:var(--accent);
+}
+
+.tp-item span{
+flex:1;
+font-size:14px;
+font-weight:500;
+line-height:1.5;
+white-space:normal;
+word-break:break-word;
+overflow-wrap:anywhere;
+}
+
+.tp-item button{
+width:28px;
+height:28px;
+border:none;
+background:transparent;
+border-radius:50%;
+cursor:pointer;
+font-size:14px;
+color:var(--muted);
+flex:none;
+transition:.2s;
+}
+
+.tp-item button:hover{
+background:rgba(239,68,68,.15);
+color:#ef4444;
+}
+  /* Completed chapter styling */
+.tp-item.done{
+opacity:.7;
+background:rgba(34,197,94,.12);
+}
+
+.tp-item.done span{
+text-decoration:line-through;
+color:var(--muted);
+}
 
 /* ══ FORMULAS TAB ══ */
 .fm-add-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:16px}
