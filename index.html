@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+// ══ FORCE LATEST VERSION — kills old cached copies on every visit ══
+(function(){
+  var APP_VERSION = '2026-06-30-v7'; // bump this string every time you re-upload the file
+  try{
+    if('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations){
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){ r.unregister(); });
+      });
+    }
+    if(window.caches && caches.keys){
+      caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); });
+    }
+    var seen = localStorage.getItem('jee2027_app_version');
+    if(seen && seen !== APP_VERSION){
+      localStorage.setItem('jee2027_app_version', APP_VERSION);
+      location.reload();
+    } else if(!seen){
+      localStorage.setItem('jee2027_app_version', APP_VERSION);
+    }
+  }catch(e){}
+})();
+</script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -500,6 +523,9 @@ cursor:pointer;
 .lib-link-display{margin-top:8px;font-size:12px;display:none}
 .lib-link-display.show{display:block}
 .lib-link-display a{color:var(--accent);word-break:break-all}
+.lib-chip-nlm{background:var(--purple-soft);color:var(--purple)}
+.lib-section-heading{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.lib-nlm-open-btn{display:inline-block;margin-top:8px;background:var(--purple);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
 
 .ge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 .ge-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -517,6 +543,96 @@ cursor:pointer;
 @media(max-width:640px){
   .lib-pal-grid{grid-template-columns:1fr 1fr}
 }
+
+/* ══ COUNTDOWN CLOCKS ══ */
+.countdown-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:680px){.countdown-row{grid-template-columns:1fr}}
+.cd-card{position:relative;border-radius:var(--radius-lg);padding:18px 20px;overflow:hidden;display:flex;align-items:center;gap:16px;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow)}
+.cd-card.cd-mains{background:linear-gradient(135deg,rgba(99,102,241,.16),rgba(99,102,241,.04)),var(--glass-bg)}
+.cd-card.cd-adv{background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.04)),var(--glass-bg)}
+.cd-ring-wrap{position:relative;width:96px;height:96px;flex:none}
+.cd-ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.cd-ring-bg{fill:none;stroke:var(--bg3);stroke-width:8}
+.cd-ring-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.cd-mains .cd-ring-fg{stroke:#6366f1}
+.cd-adv .cd-ring-fg{stroke:#f59e0b}
+.cd-ring-days{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cd-ring-days-num{font-size:17px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.cd-ring-days-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.cd-body{flex:1;min-width:0}
+.cd-title{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:6px}
+.cd-mains .cd-title{color:#6366f1}
+.cd-adv .cd-title{color:#f59e0b}
+.cd-date{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:8px}
+.cd-units{display:flex;gap:8px}
+.cd-unit{flex:1;text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:6px 2px}
+.cd-unit-num{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.cd-unit-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+
+/* ══ MOTIVATION PANEL ══ */
+.motiv-row{margin-bottom:18px}
+.motiv-card{border-radius:var(--radius-lg);padding:22px 26px;background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(168,85,247,.1)),var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow);display:flex;align-items:center;gap:22px;flex-wrap:wrap;position:relative;overflow:hidden}
+.motiv-emblems{display:flex;gap:10px;flex:none}
+.motiv-emblem{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;text-align:center;line-height:1.1}
+.motiv-emblem.iitb{background:rgba(168,85,247,.2);color:#a855f7}
+.motiv-emblem.iitd{background:rgba(34,197,94,.2);color:#22c55e}
+.motiv-body{flex:1;min-width:200px}
+.motiv-name{font-size:15px;font-weight:800}
+.motiv-tag{font-size:11.5px;color:var(--muted);margin-top:2px}
+.motiv-target-wrap{flex:none;text-align:center;padding:10px 26px;border-radius:18px;background:linear-gradient(135deg,rgba(99,102,241,.22),rgba(168,85,247,.2));border:1px solid rgba(168,85,247,.3)}
+.motiv-target-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.motiv-target-num{font-size:34px;font-weight:900;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.15}
+
+/* ══ MOTIVATION QUOTE ══ */
+.motiv-quote-card{margin-top:12px;border-radius:var(--radius-lg);padding:18px 22px;background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(99,102,241,.08)),var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:10px}
+.motiv-quote-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.motiv-quote-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.motiv-quote-refresh{background:var(--bg2);border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px;cursor:pointer;padding:4px 10px}
+.motiv-quote-refresh:hover{color:var(--accent);border-color:var(--accent)}
+.motiv-quote-text{font-size:13.5px;line-height:1.6;font-weight:500}
+
+/* ══ TEST PLANNER ══ */
+.tp-card{margin-bottom:18px}
+.tp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:12px}
+@media(max-width:820px){.tp-grid{grid-template-columns:1fr}}
+.tp-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}
+.tp-col-head{font-size:12.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.tp-col[data-subj="physics"] .tp-col-head{color:#a855f7}
+.tp-col[data-subj="chemistry"] .tp-col-head{color:#22c55e}
+.tp-col[data-subj="maths"] .tp-col-head{color:#6366f1}
+.tp-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;min-height:6px}
+.tp-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:6px 8px}
+.tp-item input[type=checkbox]{accent-color:var(--accent);flex:none}
+.tp-item span{flex:1;font-size:12.5px;line-height:1.3}
+.tp-item.done span{text-decoration:line-through;color:var(--muted)}
+.tp-item button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;flex:none;padding:2px 4px}
+.tp-item button:hover{color:var(--red)}
+.tp-add-row{display:flex;gap:6px}
+.tp-add-row input{flex:1;font-size:12px;padding:7px 9px}
+.tp-add-row button{flex:none;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 12px;font-size:13px;cursor:pointer}
+.tp-empty{font-size:11px;color:var(--muted);padding:4px 2px}
+
+/* ══ FORMULAS TAB ══ */
+.fm-add-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:16px}
+.fm-add-row{display:flex;gap:8px;flex-wrap:wrap}
+.fm-add-row select{flex:none;width:130px}
+.fm-add-row input{flex:1;min-width:160px}
+.fm-add-row textarea{width:100%;margin-top:8px}
+.fm-add-row button{flex:none;background:var(--accent);color:#fff;border:none;border-radius:999px;padding:9px 18px;font-size:12.5px;font-weight:600;cursor:pointer}
+.fm-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fm-tab{padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer}
+.fm-tab.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.fm-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;backdrop-filter:blur(var(--glass-blur));position:relative}
+.fm-card-subj{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
+.fm-card[data-subj="Physics"] .fm-card-subj{background:rgba(168,85,247,.16);color:#a855f7}
+.fm-card[data-subj="Chemistry"] .fm-card-subj{background:rgba(34,197,94,.16);color:#22c55e}
+.fm-card[data-subj="Maths"] .fm-card-subj{background:rgba(99,102,241,.16);color:#6366f1}
+.fm-card-title{font-size:13.5px;font-weight:700;margin-bottom:6px}
+.fm-card-formula{font-size:13px;background:var(--bg3);border-radius:8px;padding:8px 10px;line-height:1.5;white-space:pre-wrap;word-break:break-word;font-family:'Cambria Math',Georgia,serif}
+.fm-card-del{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px}
+.fm-card-del:hover{color:var(--red)}
+.fm-empty{color:var(--muted);font-size:13px;padding:20px;text-align:center}
 </style>
 </head>
 <body>
@@ -542,6 +658,7 @@ cursor:pointer;
     <div class="side-link" data-page="plan" onclick="goPage('plan')"><span class="side-link-icon">🗓️</span> Plan</div>
     <div class="side-link" data-page="resources" onclick="goPage('resources')"><span class="side-link-icon">📺</span> Resources</div>
     <div class="side-link" data-page="library" onclick="goPage('library')"><span class="side-link-icon">📚</span> Library</div>
+    <div class="side-link" data-page="formulas" onclick="goPage('formulas')"><span class="side-link-icon">🧠</span> Formulas</div>
     <div class="side-link" data-page="timer" onclick="goPage('timer')"><span class="side-link-icon">⏱️</span> Timer</div>
     <div class="side-link" data-page="calc" onclick="goPage('calc')"><span class="side-link-icon">🧮</span> Calculator</div>
     <div class="side-link" data-page="history" onclick="goPage('history')"><span class="side-link-icon">📖</span> History</div>
@@ -560,6 +677,10 @@ cursor:pointer;
     </div>
   </div>
 
+  <div class="countdown-row" id="countdownRow"></div>
+
+  <div class="motiv-row" id="motivRow"></div>
+
   <div class="dash-stat-row" id="dashStatRow"></div>
 
   <div class="dash-chart-card">
@@ -572,6 +693,11 @@ cursor:pointer;
     </div>
     <div class="dash-chart-readout" id="dashChartReadout">Hover the graph to see a day's numbers</div>
     <canvas class="dash-trend-canvas" id="dashTrendCanvas"></canvas>
+  </div>
+
+  <div class="card tp-card">
+    <div class="card-head"><span class="card-title">🗓️ Upcoming Test Topics</span></div>
+    <div class="tp-grid" id="tpGrid"></div>
   </div>
 
   <div class="dash-section-label">Jump to a section</div>
@@ -781,12 +907,13 @@ cursor:pointer;
             <input id="pl-url" placeholder="https://youtube.com/playlist?list=PLxxxx" oninput="previewThumb()">
           </div>
           <div class="form-group" style="margin-bottom:10px">
-            <label>Thumbnail — paste any YouTube video ID from this playlist (optional)</label>
+            <label>Thumbnail — paste a video link/ID from this playlist, or just any video URL (optional)</label>
             <div class="vid-id-row">
-              <input id="pl-thumb-id" placeholder="e.g. dQw4w9WgXcQ (the part after ?v=)">
+              <input id="pl-thumb-id" placeholder="e.g. https://youtu.be/dQw4w9WgXcQ or just the video ID" oninput="previewThumb()">
               <button class="vid-id-btn" onclick="previewThumb()">Preview thumbnail</button>
             </div>
             <img id="thumbPreview" class="thumb-preview" alt="thumbnail preview">
+            <div id="thumbPreviewHint" style="display:none;font-size:11px;color:var(--muted);margin-top:6px">That looks like a playlist link without a specific video — paste one video's link from the playlist above to get a thumbnail.</div>
           </div>
           <button class="settings-btn" onclick="addPlaylist()">Add playlist</button>
         </div>
@@ -802,6 +929,24 @@ cursor:pointer;
 <div class="page" id="page-library">
   <div class="lib-crumbs" id="libCrumbs"></div>
   <div id="libContent"></div>
+</div>
+
+<!-- ══════════ FORMULAS ══════════ -->
+<div class="page" id="page-formulas">
+  <div class="fm-add-wrap">
+    <div class="fm-add-row">
+      <select id="fmSubj">
+        <option>Physics</option>
+        <option>Chemistry</option>
+        <option>Maths</option>
+      </select>
+      <input id="fmTitle" placeholder="Formula name (e.g. Lens Maker's Equation)">
+    </div>
+    <textarea id="fmText" rows="2" placeholder="Write the formula here (e.g. 1/f = (n-1)(1/R1 - 1/R2))"></textarea>
+    <div style="margin-top:8px"><button onclick="addFormula()">+ Save formula</button></div>
+  </div>
+  <div class="fm-tabs" id="fmTabs"></div>
+  <div class="fm-grid" id="fmGrid"></div>
 </div>
 
 <!-- TIMER -->
@@ -1263,7 +1408,8 @@ const DASH_TILES=[
   {page:'today',icon:'📝',name:'Today',iconBg:'accent-soft',iconColor:'accent',statFn:()=>{const k=todayKey();return DB[k]?`${DB[k].taskPct||0}% of today's tasks done`:'Not logged yet — tap to start'}},
   {page:'plan',icon:'🗓️',name:'Plan',iconBg:'purple-soft',iconColor:'purple',statFn:()=>'Your week-by-week JEE roadmap'},
   {page:'resources',icon:'📺',name:'Resources',iconBg:'red-soft',iconColor:'red',statFn:()=>`${playlists.length} playlist${playlists.length===1?'':'s'} tracked`},
-  {page:'library',icon:'📚',name:'Library',iconBg:'green-soft',iconColor:'green',statFn:()=>{let n=0;['physics','chemistry','maths'].forEach(s=>(LIB_CHAPTERS[s]||[]).forEach((_,i)=>{const e=libData[s+'::'+i];if(e&&(e.link||e.notes||e.pdfName))n++}));return`${n} chapters with material · ${geVideos.length} extra videos`}},
+  {page:'library',icon:'📚',name:'Library',iconBg:'green-soft',iconColor:'green',statFn:()=>{let n=0;['physics','chemistry','maths'].forEach(s=>(LIB_CHAPTERS[s]||[]).forEach((_,i)=>{const e=libData[s+'::'+i];if(e&&(e.link||e.notes||e.pdfName))n++}));return`${n} chapters with material · ${geVideos.length} JEE Books added`}},
+  {page:'formulas',icon:'🧠',name:'Formulas',iconBg:'purple-soft',iconColor:'purple',statFn:()=>{const n=(formulas||[]).length;return n?`${n} formula${n===1?'':'s'} saved`:'Save formulas you tend to forget'}},
   {page:'timer',icon:'⏱️',name:'Timer',iconBg:'amber-soft',iconColor:'amber',statFn:()=>{const t=sessions.reduce((s,x)=>s+x.secs,0);return t?`${Math.round(t/60)} min logged today`:'No sessions logged today'}},
   {page:'calc',icon:'🧮',name:'Calculator',iconBg:'accent-soft',iconColor:'accent',statFn:()=>'Basic & scientific modes'},
   {page:'history',icon:'📖',name:'History',iconBg:'purple-soft',iconColor:'purple',statFn:()=>`${Object.keys(DB).length} day${Object.keys(DB).length===1?'':'s'} logged`},
@@ -1327,6 +1473,9 @@ function renderDashboard(){
   if(dateEl)dateEl.textContent=fmtDate(todayKey());
   renderDashStats();
   renderDashTiles();
+  renderTestPlanner();
+  if(!document.getElementById('countdownRow').innerHTML)renderCountdowns();
+  if(!document.getElementById('motivRow').innerHTML){renderMotivation();}else{showRandomQuote();}
   setTimeout(drawDashTrend,30);
 }
 window.addEventListener('resize',()=>{if(document.getElementById('page-dashboard').classList.contains('active'))drawDashTrend()});
@@ -1358,14 +1507,62 @@ const SUBJ_COLOR={Maths:'#6366f1',Physics:'#a855f7',Chemistry:'#22c55e',Other:'#
 const SUBJ_BADGE={Maths:'bm',Physics:'bp',Chemistry:'bc',Other:'bw'};
 function savePlaylists(){localStorage.setItem(PLKEY,JSON.stringify(playlists))}
 
+function extractVideoId(url){
+  if(!url) return '';
+  url=url.trim();
+  let m=url.match(/[?&]v=([^&#]+)/); if(m) return m[1];
+  m=url.match(/youtu\.be\/([^?&#/]+)/); if(m) return m[1];
+  m=url.match(/youtube\.com\/embed\/([^?&#/]+)/); if(m) return m[1];
+  m=url.match(/youtube\.com\/shorts\/([^?&#/]+)/); if(m) return m[1];
+  if(/^[a-zA-Z0-9_-]{10,12}$/.test(url)) return url; // looks like a bare video ID
+  return '';
+}
+
+let thumbFetchTimer=null;
 function previewThumb(){
+  clearTimeout(thumbFetchTimer);
   const id=document.getElementById('pl-thumb-id').value.trim();
   const url=document.getElementById('pl-url').value.trim();
-  let vidId=id;
-  if(!vidId&&url){const m=url.match(/[?&]v=([^&]+)/);if(m)vidId=m[1]}
   const img=document.getElementById('thumbPreview');
-  if(vidId){img.src=`https://img.youtube.com/vi/${vidId}/mqdefault.jpg`;img.style.display='block'}
-  else{img.style.display='none'}
+  const hint=document.getElementById('thumbPreviewHint');
+  delete img.dataset.fetchedUrl;
+  let vidId=extractVideoId(id)||extractVideoId(url);
+  if(vidId){
+    img.src=`https://img.youtube.com/vi/${vidId}/mqdefault.jpg`;
+    img.style.display='block';
+    if(hint)hint.style.display='none';
+    return;
+  }
+  // No video ID found directly — try asking YouTube's oEmbed endpoint,
+  // which can return a thumbnail straight from a plain playlist link.
+  const lookupUrl=id||url;
+  if(lookupUrl){
+    if(hint){hint.style.display='block';hint.textContent='Looking up a thumbnail for this link…'}
+    thumbFetchTimer=setTimeout(()=>fetchOembedThumb(lookupUrl),450);
+  }else{
+    img.style.display='none';
+    if(hint)hint.style.display='none';
+  }
+}
+async function fetchOembedThumb(url){
+  const img=document.getElementById('thumbPreview');
+  const hint=document.getElementById('thumbPreviewHint');
+  try{
+    const res=await fetch('https://www.youtube.com/oembed?format=json&url='+encodeURIComponent(url));
+    if(!res.ok)throw new Error('oembed failed');
+    const data=await res.json();
+    if(data&&data.thumbnail_url){
+      img.src=data.thumbnail_url;
+      img.style.display='block';
+      img.dataset.fetchedUrl=data.thumbnail_url;
+      if(hint)hint.style.display='none';
+      return;
+    }
+    throw new Error('no thumbnail in response');
+  }catch(e){
+    img.style.display='none';
+    if(hint){hint.style.display='block';hint.textContent="Couldn't auto-detect a thumbnail for that link — paste a single video's link/ID from the playlist instead."}
+  }
 }
 
 function addPlaylist(){
@@ -1373,12 +1570,14 @@ function addPlaylist(){
   const total=parseInt(document.getElementById('pl-total').value)||0;
   if(!name||!total){showToast('Enter name and total videos','var(--red)');return}
   const url=document.getElementById('pl-url').value.trim();
-  let thumbId=document.getElementById('pl-thumb-id').value.trim();
-  if(!thumbId&&url){const m=url.match(/[?&]v=([^&]+)/);if(m)thumbId=m[1]}
-  playlists.push({id:Date.now(),name,url,subj:document.getElementById('pl-subject').value,channel:document.getElementById('pl-channel').value.trim(),total,done:0,thumbId});
+  let thumbId=extractVideoId(document.getElementById('pl-thumb-id').value.trim())||extractVideoId(url);
+  const thumbImg=document.getElementById('thumbPreview');
+  const thumbUrl=(!thumbId&&thumbImg.dataset.fetchedUrl)?thumbImg.dataset.fetchedUrl:'';
+  playlists.push({id:Date.now(),name,url,subj:document.getElementById('pl-subject').value,channel:document.getElementById('pl-channel').value.trim(),total,done:0,thumbId,thumbUrl});
   savePlaylists();renderPlaylists();
   ['pl-name','pl-url','pl-total','pl-channel','pl-thumb-id'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('thumbPreview').style.display='none';
+  delete thumbImg.dataset.fetchedUrl;
+  thumbImg.style.display='none';
   document.getElementById('addPlBody').classList.remove('open');
   showToast('Playlist added!');
 }
@@ -1395,7 +1594,8 @@ function renderPlaylists(){
   if(!playlists.length){el.innerHTML='<div class="empty" style="grid-column:1/-1">No playlists yet — add one above!</div>';return}
   el.innerHTML=playlists.map(pl=>{
     const pct=Math.round(pl.done/pl.total*100);
-    const thumb=pl.thumbId?`<img class="pl-thumb" src="https://img.youtube.com/vi/${pl.thumbId}/mqdefault.jpg" alt="${pl.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="pl-thumb-placeholder" style="display:none">📋</div>`:`<div class="pl-thumb-placeholder">📋</div>`;
+    const thumbSrc=pl.thumbUrl||(pl.thumbId?`https://img.youtube.com/vi/${pl.thumbId}/mqdefault.jpg`:'');
+    const thumb=thumbSrc?`<img class="pl-thumb" src="${thumbSrc}" alt="${pl.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="pl-thumb-placeholder" style="display:none">📋</div>`:`<div class="pl-thumb-placeholder">📋</div>`;
     const openUrl=pl.url?`onclick="window.open('${pl.url}','_blank')"`:'' ;
     const color=SUBJ_COLOR[pl.subj]||'#6366f1';
     return`<div class="pl-card">
@@ -1458,12 +1658,138 @@ const PLAN=[{month:'Jun 29 – Jul 31',weeks:[{title:'Week 1: Indefinite Integra
 
 function renderPlan(){document.getElementById('planContent').innerHTML=PLAN.map(mo=>`<div class="plan-month"><div class="plan-month-title">${mo.month}</div>${mo.weeks.map((w,i)=>`<div class="plan-week"><div class="plan-week-head" onclick="document.getElementById('pw${mo.month.slice(0,3)+i}').classList.toggle('open')"><div><div class="pw-title">${w.title}</div><div class="pw-date">${w.date}</div></div><span style="color:var(--muted)">▾</span></div><div class="plan-week-body" id="pw${mo.month.slice(0,3)+i}"><div class="subj-row"><span class="subj-name" style="color:var(--accent)">Maths</span><span class="subj-val">${w.m}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--purple)">Physics</span><span class="subj-val">${w.p}</span></div><div class="subj-row"><span class="subj-name" style="color:var(--green)">Chem</span><span class="subj-val">${w.c}</span></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${w.tests.map(t=>`<span class="test-tag ${t.includes('⭐')||t.includes('FULLY')?'tt-big':t.includes('QAPT')?'tt-qapt':'tt-qpt'}">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('')}
 
+// ══ COUNTDOWN CLOCKS ══
+const EXAM_DATES={mains:new Date('2027-01-20T09:00:00'),adv:new Date('2027-05-16T09:00:00')};
+const EXAM_START={mains:new Date('2026-01-20T09:00:00'),adv:new Date('2026-05-16T09:00:00')};
+function renderCountdowns(){
+  const el=document.getElementById('countdownRow');if(!el)return;
+  el.innerHTML=`
+    <div class="cd-card cd-mains" id="cdMains">
+      <div class="cd-ring-wrap"><svg viewBox="0 0 100 100"><circle class="cd-ring-bg" cx="50" cy="50" r="42"/><circle class="cd-ring-fg" id="cdRingMains" cx="50" cy="50" r="42" stroke-dasharray="264"/></svg><div class="cd-ring-days"><div class="cd-ring-days-num" id="cdHoursMains">0</div><div class="cd-ring-days-lbl">hours left</div></div></div>
+      <div class="cd-body">
+        <div class="cd-title">🎯 JEE Mains</div>
+        <div class="cd-date">Target: 20 Jan 2027, 9:00 AM</div>
+        <div class="cd-units" id="cdUnitsMains"></div>
+      </div>
+    </div>
+    <div class="cd-card cd-adv" id="cdAdv">
+      <div class="cd-ring-wrap"><svg viewBox="0 0 100 100"><circle class="cd-ring-bg" cx="50" cy="50" r="42"/><circle class="cd-ring-fg" id="cdRingAdv" cx="50" cy="50" r="42" stroke-dasharray="264"/></svg><div class="cd-ring-days"><div class="cd-ring-days-num" id="cdHoursAdv">0</div><div class="cd-ring-days-lbl">hours left</div></div></div>
+      <div class="cd-body">
+        <div class="cd-title">🚀 JEE Advanced</div>
+        <div class="cd-date">Target: 16 May 2027, 9:00 AM</div>
+        <div class="cd-units" id="cdUnitsAdv"></div>
+      </div>
+    </div>`;
+  tickCountdowns();
+}
+function tickCountdowns(){
+  ['mains','adv'].forEach(k=>{
+    const now=new Date(),target=EXAM_DATES[k],start=EXAM_START[k];
+    let diff=target-now;if(diff<0)diff=0;
+    const totalHours=Math.floor(diff/3600000);
+    const days=Math.floor(diff/86400000),mins=Math.floor(diff/60000)%60,secs=Math.floor(diff/1000)%60;
+    const hoursEl=document.getElementById(k==='mains'?'cdHoursMains':'cdHoursAdv');
+    if(hoursEl)hoursEl.textContent=totalHours.toLocaleString();
+    const unitsEl=document.getElementById(k==='mains'?'cdUnitsMains':'cdUnitsAdv');
+    if(unitsEl)unitsEl.innerHTML=`<div class="cd-unit"><div class="cd-unit-num">${days}</div><div class="cd-unit-lbl">days</div></div><div class="cd-unit"><div class="cd-unit-num">${mins}</div><div class="cd-unit-lbl">min</div></div><div class="cd-unit"><div class="cd-unit-num">${secs}</div><div class="cd-unit-lbl">sec</div></div>`;
+    const totalSpan=target-start,elapsed=Math.min(Math.max(now-start,0),totalSpan),pct=totalSpan>0?elapsed/totalSpan:1;
+    const ring=document.getElementById(k==='mains'?'cdRingMains':'cdRingAdv');
+    if(ring)ring.style.strokeDashoffset=264-264*pct;
+  });
+}
+setInterval(tickCountdowns,1000);
+
+const MOTIV_QUOTES=[{"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish one more reaction-series recap — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "Resonance happens when effort matches frequency — keep showing up at the same intensity. So today, finish another Numerical Odyssey level — Stay consistent. The rank will follow.", "tag": "Physics"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish your weak-topic error list — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "A body at rest stays at rest until force acts on it. So today, finish one more timed mechanics problem — Stay consistent. The rank will follow.", "tag": "Physics"}, {"text": "Integration is just adding up infinitely small efforts until they become something whole. So today, finish a timed QACT round — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "A sequence converges only if you keep adding terms — don't stop at problem nineteen. So today, finish today's PYQ set — This is how toppers are made — quietly, daily.", "tag": "Mathematics"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish a timed QACT round — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish today's three-subject revision — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish one more reaction-series recap — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish another disciplined study day — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "The seat at IIT Bombay or IIT Delhi isn't reserved by talent alone — it's earned by whoever refuses to quit longer. So today, finish today's full mock attempt — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish your weak-topic error list — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish one more reaction-series recap — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish a timed QACT round — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish today's thermodynamics problem set — Keep going.", "tag": "Chemistry-Physical"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish your daily Physics Galaxy revision — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish one combined mock test — Show up again tomorrow.", "tag": "Science-Mix"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish today's Sachin Rana lecture — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish your weak named-reactions list — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Every proof starts from an assumption you trust — trust the process, then prove it right. So today, finish one more Black Book question — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish your revision checklist — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "The escape velocity from mediocrity is just one more focused hour away. So today, finish another Numerical Odyssey level — Small effort, compounded daily, wins JEE.", "tag": "Physics"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish a full reaction mechanism page — Show up again tomorrow.", "tag": "Chemistry-Organic"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish a timed QACT round — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish today's full mock attempt — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one more kinetics numerical — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one more kinetics numerical — That's how AIR under 1000 is built.", "tag": "Chemistry-Physical"}, {"text": "A sequence converges only if you keep adding terms — don't stop at problem nineteen. So today, finish one more Black Book question — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "A good leaving group makes way for something better — let go of yesterday's mistakes. So today, finish a full reaction mechanism page — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish your inorganic flashcard round — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one timed physical chemistry test — Show up again tomorrow.", "tag": "Chemistry-Physical"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish one more reaction-series recap — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish today's thermodynamics problem set — Keep going.", "tag": "Chemistry-Physical"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish your weak-topic error list — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish your revision checklist — One step closer to your seat.", "tag": "IIT-Spirit"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish one more kinetics numerical — Show up again tomorrow.", "tag": "Chemistry-Physical"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish one full periodic table revision pass — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish one more named reaction — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish your weak named-reactions list — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Every proof starts from an assumption you trust — trust the process, then prove it right. So today, finish one more Black Book question — Keep going.", "tag": "Mathematics"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish one more kinetics numerical — Keep going.", "tag": "Chemistry-Physical"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish your inorganic flashcard round — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish one more named reaction — Stay consistent. The rank will follow.", "tag": "Chemistry-Organic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one timed physical chemistry test — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish one timed physical chemistry test — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish today's full mock attempt — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "The escape velocity from mediocrity is just one more focused hour away. So today, finish your error notebook review — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish a timed QACT round — One step closer to your seat.", "tag": "Mathematics"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish your electrochemistry revision block — Show up again tomorrow.", "tag": "Chemistry-Physical"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish another disciplined study day — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish one more focused study block — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish your inorganic flashcard round — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish one more focused study block — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish your inorganic flashcard round — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish one more named reaction — Show up again tomorrow.", "tag": "Chemistry-Organic"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish another disciplined study day — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Coordination compounds are strongest when every ligand pulls its weight — so is your routine. So today, finish today's coordination chemistry chart — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "An AIR under 1000 isn't a miracle, it's a thousand small disciplined hours stacked one after another. So today, finish your revision checklist — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish today's thermodynamics problem set — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish today's full mock attempt — Stay consistent. The rank will follow.", "tag": "IIT-Spirit"}, {"text": "The same curiosity that asks 'why does this reaction happen' is the curiosity that will carry you through JEE. So today, finish one combined mock test — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish your inorganic flashcard round — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish today's thermodynamics problem set — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish one more reaction-series recap — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish one more focused study block — Small effort, compounded daily, wins JEE.", "tag": "IIT-Spirit"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish today's Sachin Rana lecture — Your future IIT self is counting on this hour.", "tag": "Chemistry-Organic"}, {"text": "Somewhere, right now, another aspirant is taking a break — this is exactly the hour to pull ahead. So today, finish your revision checklist — One step closer to your seat.", "tag": "IIT-Spirit"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish one more reaction-series recap — Keep going.", "tag": "Chemistry-Inorganic"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish one more reaction-series recap — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish another disciplined study day — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish another disciplined study day — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "Friction slows you down, but it's also what lets you walk forward. So today, finish your error notebook review — That's how AIR under 1000 is built.", "tag": "Physics"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish today's coordination chemistry chart — Keep going.", "tag": "Chemistry-Inorganic"}, {"text": "Somewhere, right now, another aspirant is taking a break — this is exactly the hour to pull ahead. So today, finish your revision checklist — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "The first law says energy can't be created or destroyed — every hour you study becomes a result later. So today, finish today's thermodynamics problem set — Show up again tomorrow.", "tag": "Chemistry-Physical"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish one more QCT chapter test — Small effort, compounded daily, wins JEE.", "tag": "Physics"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish a full reaction mechanism page — Show up again tomorrow.", "tag": "Chemistry-Organic"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish one timed physical chemistry test — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish one full periodic table revision pass — Keep going.", "tag": "Chemistry-Inorganic"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish your weak named-reactions list — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish a timed QACT round — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Just like light bends through a denser medium, pressure refracts you into a sharper version of yourself. So today, finish another Numerical Odyssey level — One step closer to your seat.", "tag": "Physics"}, {"text": "Energy is never destroyed, only transformed — let your doubt become your drive. So today, finish your error notebook review — Your future IIT self is counting on this hour.", "tag": "Physics"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish one more Black Book question — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish one more kinetics numerical — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "Coordination compounds are strongest when every ligand pulls its weight — so is your routine. So today, finish one full periodic table revision pass — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Somewhere, right now, another aspirant is taking a break — this is exactly the hour to pull ahead. So today, finish one more focused study block — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "The seat at IIT Bombay or IIT Delhi isn't reserved by talent alone — it's earned by whoever refuses to quit longer. So today, finish one more focused study block — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish one more reaction-series recap — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish one more named reaction — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish one combined mock test — Keep going.", "tag": "Science-Mix"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish today's three-subject revision — Show up again tomorrow.", "tag": "Science-Mix"}, {"text": "Integration is just adding up infinitely small efforts until they become something whole. So today, finish today's PYQ set — Keep going.", "tag": "Mathematics"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish one combined mock test — That's how AIR under 1000 is built.", "tag": "Science-Mix"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish your electrochemistry revision block — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish one more focused study block — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one timed physical chemistry test — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish another disciplined study day — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish one more QCT chapter test — Your future IIT self is counting on this hour.", "tag": "Physics"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — Stay consistent. The rank will follow.", "tag": "Science-Mix"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish today's full mock attempt — Keep going.", "tag": "IIT-Spirit"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish your electrochemistry revision block — That's how AIR under 1000 is built.", "tag": "Chemistry-Physical"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish your revision checklist — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish one combined mock test — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish one more named reaction — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one more kinetics numerical — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish today's thermodynamics problem set — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Coordination compounds are strongest when every ligand pulls its weight — so is your routine. So today, finish today's coordination chemistry chart — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Just like light bends through a denser medium, pressure refracts you into a sharper version of yourself. So today, finish one more QCT chapter test — Your future IIT self is counting on this hour.", "tag": "Physics"}, {"text": "Terminal velocity is reached only after enough free fall — your breakthrough is closer than it feels. So today, finish another Numerical Odyssey level — Stay consistent. The rank will follow.", "tag": "Physics"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish one combined mock test — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish a full reaction mechanism page — Stay consistent. The rank will follow.", "tag": "Chemistry-Organic"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish today's Sachin Rana lecture — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish today's Sachin Rana lecture — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Organic"}, {"text": "Every action has an equal and opposite reaction — push harder, and the universe pushes you toward IIT. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish one full periodic table revision pass — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish one more timed mechanics problem — Small effort, compounded daily, wins JEE.", "tag": "Physics"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish today's thermodynamics problem set — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish today's PYQ set — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "Nobody remembers the mock test you skipped — they remember the rank you earned. So today, finish one more chapter test — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish one full periodic table revision pass — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish one more kinetics numerical — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish another disciplined study day — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish one more Black Book question — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish your full error-notebook pass — Show up again tomorrow.", "tag": "Science-Mix"}, {"text": "Energy is never destroyed, only transformed — let your doubt become your drive. So today, finish your daily Physics Galaxy revision — Keep going.", "tag": "Physics"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish today's thermodynamics problem set — Your future IIT self is counting on this hour.", "tag": "Chemistry-Physical"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish your electrochemistry revision block — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish one more chapter test — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish today's full mock attempt — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish one full periodic table revision pass — Show up again tomorrow.", "tag": "Chemistry-Inorganic"}, {"text": "Energy is never destroyed, only transformed — let your doubt become your drive. So today, finish another Numerical Odyssey level — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish one more kinetics numerical — Your future IIT self is counting on this hour.", "tag": "Chemistry-Physical"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish your weak-topic error list — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish your inorganic flashcard round — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "An AIR under 1000 isn't a miracle, it's a thousand small disciplined hours stacked one after another. So today, finish one more focused study block — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Every reaction needs activation energy — your first ten minutes of focus is yours. So today, finish your weak named-reactions list — Keep going.", "tag": "Chemistry-Organic"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish your revision checklist — Small effort, compounded daily, wins JEE.", "tag": "IIT-Spirit"}, {"text": "The same curiosity that asks 'why does this reaction happen' is the curiosity that will carry you through JEE. So today, finish today's three-subject revision — That's how AIR under 1000 is built.", "tag": "Science-Mix"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish another disciplined study day — Keep going.", "tag": "Science-Mix"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish one more chapter test — Your future IIT self is counting on this hour.", "tag": "IIT-Spirit"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "Energy is never destroyed, only transformed — let your doubt become your drive. So today, finish another Numerical Odyssey level — Keep going.", "tag": "Physics"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish your full error-notebook pass — Keep going.", "tag": "Science-Mix"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish one more Black Book question — Keep going.", "tag": "Mathematics"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish today's coordination chemistry chart — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish one full periodic table revision pass — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish another disciplined study day — Stay consistent. The rank will follow.", "tag": "Science-Mix"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish another disciplined study day — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish your weak-topic error list — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish one more focused study block — Your future IIT self is counting on this hour.", "tag": "IIT-Spirit"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish your weak-topic error list — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish one combined mock test — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish one more named reaction — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Organic"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish one full periodic table revision pass — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish one more QCT chapter test — Show up again tomorrow.", "tag": "Physics"}, {"text": "Coordination compounds are strongest when every ligand pulls its weight — so is your routine. So today, finish one full periodic table revision pass — Show up again tomorrow.", "tag": "Chemistry-Inorganic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one more kinetics numerical — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish another disciplined study day — Show up again tomorrow.", "tag": "Science-Mix"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish today's Sachin Rana lecture — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Organic"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish one timed physical chemistry test — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Every reaction needs activation energy — your first ten minutes of focus is yours. So today, finish a full reaction mechanism page — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish one more Black Book question — Keep going.", "tag": "Mathematics"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish today's full mock attempt — Keep going.", "tag": "IIT-Spirit"}, {"text": "A good leaving group makes way for something better — let go of yesterday's mistakes. So today, finish your weak named-reactions list — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "The same curiosity that asks 'why does this reaction happen' is the curiosity that will carry you through JEE. So today, finish your full error-notebook pass — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "A sequence converges only if you keep adding terms — don't stop at problem nineteen. So today, finish today's PYQ set — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish one more Black Book question — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish one combined mock test — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish one combined mock test — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "Terminal velocity is reached only after enough free fall — your breakthrough is closer than it feels. So today, finish one more timed mechanics problem — Your future IIT self is counting on this hour.", "tag": "Physics"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish your inorganic flashcard round — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Momentum isn't given, it's built one push at a time. So today, finish your error notebook review — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish your weak named-reactions list — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish your inorganic flashcard round — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish a timed QACT round — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish one more Black Book question — Small effort, compounded daily, wins JEE.", "tag": "Mathematics"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish your electrochemistry revision block — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish today's coordination chemistry chart — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish one more named reaction — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "An AIR under 1000 isn't a miracle, it's a thousand small disciplined hours stacked one after another. So today, finish your revision checklist — One step closer to your seat.", "tag": "IIT-Spirit"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish one full periodic table revision pass — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "Coordination compounds are strongest when every ligand pulls its weight — so is your routine. So today, finish one full periodic table revision pass — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish today's coordination chemistry chart — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish one full periodic table revision pass — One step closer to your seat.", "tag": "Chemistry-Inorganic"}, {"text": "Periodicity isn't random — neither is your growth when you revise on a schedule. So today, finish one full periodic table revision pass — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish one more QCT chapter test — Stay consistent. The rank will follow.", "tag": "Physics"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish one more named reaction — Show up again tomorrow.", "tag": "Chemistry-Organic"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish your weak named-reactions list — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish today's thermodynamics problem set — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Resonance happens when effort matches frequency — keep showing up at the same intensity. So today, finish another Numerical Odyssey level — Show up again tomorrow.", "tag": "Physics"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish today's full mock attempt — One step closer to your seat.", "tag": "IIT-Spirit"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish one more focused study block — Stay consistent. The rank will follow.", "tag": "IIT-Spirit"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish today's Sachin Rana lecture — That's how AIR under 1000 is built.", "tag": "Chemistry-Organic"}, {"text": "The first law says energy can't be created or destroyed — every hour you study becomes a result later. So today, finish one more kinetics numerical — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "A sequence converges only if you keep adding terms — don't stop at problem nineteen. So today, finish one more Black Book question — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "A function is continuous when there are no sudden breaks — don't let one bad day break your streak. So today, finish one more Black Book question — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish your revision checklist — One step closer to your seat.", "tag": "IIT-Spirit"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish another disciplined study day — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish today's three-subject revision — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish your inorganic flashcard round — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Inorganic"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish your full error-notebook pass — That's how AIR under 1000 is built.", "tag": "Science-Mix"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish a full reaction mechanism page — Stay consistent. The rank will follow.", "tag": "Chemistry-Organic"}, {"text": "A good leaving group makes way for something better — let go of yesterday's mistakes. So today, finish a full reaction mechanism page — Stay consistent. The rank will follow.", "tag": "Chemistry-Organic"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish one more chapter test — Your future IIT self is counting on this hour.", "tag": "IIT-Spirit"}, {"text": "Somewhere, right now, another aspirant is taking a break — this is exactly the hour to pull ahead. So today, finish one more focused study block — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish today's three-subject revision — That's how AIR under 1000 is built.", "tag": "Science-Mix"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish your revision checklist — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish a full reaction mechanism page — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish a full reaction mechanism page — That's how AIR under 1000 is built.", "tag": "Chemistry-Organic"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish one combined mock test — One step closer to your seat.", "tag": "Science-Mix"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish one full periodic table revision pass — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish today's full mock attempt — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish your electrochemistry revision block — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "The escape velocity from mediocrity is just one more focused hour away. So today, finish one more QCT chapter test — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish one more chapter test — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish your weak-topic error list — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "A good leaving group makes way for something better — let go of yesterday's mistakes. So today, finish today's Sachin Rana lecture — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Organic"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish one more kinetics numerical — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish today's three-subject revision — This is how toppers are made — quietly, daily.", "tag": "Science-Mix"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish today's thermodynamics problem set — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish your inorganic flashcard round — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish today's thermodynamics problem set — That's how AIR under 1000 is built.", "tag": "Chemistry-Physical"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish one more focused study block — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "A scientist doesn't fear failure, they just call it a controlled experiment and try again. So today, finish one combined mock test — Stay consistent. The rank will follow.", "tag": "Science-Mix"}, {"text": "Just like light bends through a denser medium, pressure refracts you into a sharper version of yourself. So today, finish a tough rotational motion question — That's how AIR under 1000 is built.", "tag": "Physics"}, {"text": "A catalyst doesn't get consumed, it just makes every reaction faster — let consistency be yours. So today, finish your electrochemistry revision block — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish today's PYQ set — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish one more named reaction — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "The first law says energy can't be created or destroyed — every hour you study becomes a result later. So today, finish one timed physical chemistry test — Stay consistent. The rank will follow.", "tag": "Chemistry-Physical"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish today's Sachin Rana lecture — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Every action has an equal and opposite reaction — push harder, and the universe pushes you toward IIT. So today, finish one more QCT chapter test — Show up again tomorrow.", "tag": "Physics"}, {"text": "JEE doesn't test how smart you are in one moment, it tests how consistent you are across thousands of moments. So today, finish your revision checklist — Stay consistent. The rank will follow.", "tag": "IIT-Spirit"}, {"text": "Every reaction needs activation energy — your first ten minutes of focus is yours. So today, finish today's Sachin Rana lecture — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Every proof starts from an assumption you trust — trust the process, then prove it right. So today, finish today's PYQ set — This is how toppers are made — quietly, daily.", "tag": "Mathematics"}, {"text": "Matrices remind you: even ordered, structured effort can transform anything. So today, finish one more Black Book question — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "Rate of reaction depends on concentration — increase your focused hours, and your results will follow. So today, finish today's thermodynamics problem set — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "Science rewards patience — so does this exam, one chapter, one mock, one revision at a time. So today, finish one combined mock test — Keep going.", "tag": "Science-Mix"}, {"text": "Resonance happens when effort matches frequency — keep showing up at the same intensity. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "The first law says energy can't be created or destroyed — every hour you study becomes a result later. So today, finish one more kinetics numerical — That's how AIR under 1000 is built.", "tag": "Chemistry-Physical"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one more kinetics numerical — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish a timed QACT round — That's how AIR under 1000 is built.", "tag": "Mathematics"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish today's Sachin Rana lecture — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Every reaction needs activation energy — your first ten minutes of focus is yours. So today, finish your weak named-reactions list — Your future IIT self is counting on this hour.", "tag": "Chemistry-Organic"}, {"text": "Momentum isn't given, it's built one push at a time. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish your weak-topic error list — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "Substitution or elimination — every day you choose which reaction your effort follows. So today, finish a full reaction mechanism page — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Momentum isn't given, it's built one push at a time. So today, finish a tough rotational motion question — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish another disciplined study day — Stay consistent. The rank will follow.", "tag": "Science-Mix"}, {"text": "Carbocations rearrange to find stability — your routine can rearrange too, until it holds. So today, finish a full reaction mechanism page — Your future IIT self is counting on this hour.", "tag": "Chemistry-Organic"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish another disciplined study day — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish your weak-topic error list — That's how AIR under 1000 is built.", "tag": "Mathematics"}, {"text": "Every action has an equal and opposite reaction — push harder, and the universe pushes you toward IIT. So today, finish a tough rotational motion question — Show up again tomorrow.", "tag": "Physics"}, {"text": "The same curiosity that asks 'why does this reaction happen' is the curiosity that will carry you through JEE. So today, finish today's three-subject revision — Show up again tomorrow.", "tag": "Science-Mix"}, {"text": "Every proof starts from an assumption you trust — trust the process, then prove it right. So today, finish today's PYQ set — One step closer to your seat.", "tag": "Mathematics"}, {"text": "Just like light bends through a denser medium, pressure refracts you into a sharper version of yourself. So today, finish your daily Physics Galaxy revision — One step closer to your seat.", "tag": "Physics"}, {"text": "Nobody remembers the mock test you skipped — they remember the rank you earned. So today, finish one more chapter test — This is how toppers are made — quietly, daily.", "tag": "IIT-Spirit"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish one more chapter test — Small effort, compounded daily, wins JEE.", "tag": "IIT-Spirit"}, {"text": "Every action has an equal and opposite reaction — push harder, and the universe pushes you toward IIT. So today, finish your error notebook review — Keep going.", "tag": "Physics"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish your weak-topic error list — One step closer to your seat.", "tag": "Mathematics"}, {"text": "Even at absolute zero, atoms still vibrate — there's no such thing as truly standing still. So today, finish your error notebook review — That's how AIR under 1000 is built.", "tag": "Physics"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish your inorganic flashcard round — That's how AIR under 1000 is built.", "tag": "Chemistry-Inorganic"}, {"text": "Even an asymptote, never touched, still shapes the whole curve around it — small effort still bends the outcome. So today, finish a timed QACT round — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "Newton, Mendeleev, and Euler all started exactly where you are — confused, and still showing up. So today, finish your full error-notebook pass — Stay consistent. The rank will follow.", "tag": "Science-Mix"}, {"text": "Equilibrium isn't stillness, it's two forces working equally hard — keep both your prep and your rest in balance. So today, finish your electrochemistry revision block — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Friction slows you down, but it's also what lets you walk forward. So today, finish one more QCT chapter test — Show up again tomorrow.", "tag": "Physics"}, {"text": "Integration is just adding up infinitely small efforts until they become something whole. So today, finish one more Black Book question — That's how AIR under 1000 is built.", "tag": "Mathematics"}, {"text": "The first law says energy can't be created or destroyed — every hour you study becomes a result later. So today, finish one timed physical chemistry test — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish a full reaction mechanism page — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish one full periodic table revision pass — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Every topper sitting in IIT today once stared at the same syllabus you're staring at now. So today, finish one more focused study block — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Resonance happens when effort matches frequency — keep showing up at the same intensity. So today, finish a tough rotational motion question — Keep going.", "tag": "Physics"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish today's full mock attempt — Stay consistent. The rank will follow.", "tag": "IIT-Spirit"}, {"text": "Rank doesn't ask how you felt on your worst day — it only counts how many times you showed up anyway. So today, finish one more chapter test — Show up again tomorrow.", "tag": "IIT-Spirit"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish your full error-notebook pass — Small effort, compounded daily, wins JEE.", "tag": "Science-Mix"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish your daily Physics Galaxy revision — That's how AIR under 1000 is built.", "tag": "Physics"}, {"text": "The seat at IIT Bombay or IIT Delhi isn't reserved by talent alone — it's earned by whoever refuses to quit longer. So today, finish one more chapter test — Keep going.", "tag": "IIT-Spirit"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish your weak-topic error list — That's how AIR under 1000 is built.", "tag": "Mathematics"}, {"text": "The lanthanide contraction proves: small, repeated effects compound into something measurable. So today, finish today's coordination chemistry chart — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish one more timed mechanics problem — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish your weak named-reactions list — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one more kinetics numerical — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Physical"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish your inorganic flashcard round — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one timed physical chemistry test — One step closer to your seat.", "tag": "Chemistry-Physical"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish a full reaction mechanism page — Stay consistent. The rank will follow.", "tag": "Chemistry-Organic"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish today's PYQ set — Show up again tomorrow.", "tag": "Mathematics"}, {"text": "The seat at IIT Bombay or IIT Delhi isn't reserved by talent alone — it's earned by whoever refuses to quit longer. So today, finish today's full mock attempt — Small effort, compounded daily, wins JEE.", "tag": "IIT-Spirit"}, {"text": "Physics gives you the force, Chemistry gives you the reaction, Maths gives you the proof — together they get you to IIT. So today, finish today's three-subject revision — Keep going.", "tag": "Science-Mix"}, {"text": "Resonance structures remind you: there's more than one stable way to get there. So today, finish one more named reaction — Keep going.", "tag": "Chemistry-Organic"}, {"text": "Even noble gases react under enough pressure — nothing is truly unmovable, including your limits. So today, finish today's coordination chemistry chart — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "Stable electronic configurations come from filling shells one orbital at a time. So today, finish one more reaction-series recap — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Inorganic"}, {"text": "Terminal velocity is reached only after enough free fall — your breakthrough is closer than it feels. So today, finish one more QCT chapter test — Keep going.", "tag": "Physics"}, {"text": "A body at rest stays at rest until force acts on it. So today, finish one more timed mechanics problem — Show up again tomorrow.", "tag": "Physics"}, {"text": "Momentum isn't given, it's built one push at a time. So today, finish one more timed mechanics problem — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "A sequence converges only if you keep adding terms — don't stop at problem nineteen. So today, finish a timed QACT round — Keep going.", "tag": "Mathematics"}, {"text": "Somewhere, right now, another aspirant is taking a break — this is exactly the hour to pull ahead. So today, finish today's full mock attempt — Keep going.", "tag": "IIT-Spirit"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish a full reaction mechanism page — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Organic"}, {"text": "Nobody remembers the mock test you skipped — they remember the rank you earned. So today, finish one more focused study block — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish one timed physical chemistry test — Keep going.", "tag": "Chemistry-Physical"}, {"text": "A pendulum needs both sides of the swing to keep moving — embrace the bad days too. So today, finish another Numerical Odyssey level — This is how toppers are made — quietly, daily.", "tag": "Physics"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish your weak named-reactions list — That's how AIR under 1000 is built.", "tag": "Chemistry-Organic"}, {"text": "Stereochemistry teaches that small changes in approach create entirely different outcomes. So today, finish your weak named-reactions list — One step closer to your seat.", "tag": "Chemistry-Organic"}, {"text": "Entropy always increases unless you actively work against it — discipline is your anti-entropy. So today, finish one more kinetics numerical — Small effort, compounded daily, wins JEE.", "tag": "Chemistry-Physical"}, {"text": "Markovnikov's rule rewards the stable path — build stable habits, not shortcuts. So today, finish one more named reaction — This is how toppers are made — quietly, daily.", "tag": "Chemistry-Organic"}, {"text": "Gibbs free energy decides what's spontaneous — make focused study the path of least resistance for yourself. So today, finish your electrochemistry revision block — Show up again tomorrow.", "tag": "Chemistry-Physical"}, {"text": "Energy is never destroyed, only transformed — let your doubt become your drive. So today, finish a tough rotational motion question — Show up again tomorrow.", "tag": "Physics"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish today's coordination chemistry chart — Stay consistent. The rank will follow.", "tag": "Chemistry-Inorganic"}, {"text": "Every formula you memorize today is a tool you'll use for the rest of your life as an engineer. So today, finish today's three-subject revision — Your future IIT self is counting on this hour.", "tag": "Science-Mix"}, {"text": "Terminal velocity is reached only after enough free fall — your breakthrough is closer than it feels. So today, finish your daily Physics Galaxy revision — That's how AIR under 1000 is built.", "tag": "Physics"}, {"text": "A limit doesn't need to be touched to be approached — keep approaching your goal. So today, finish today's PYQ set — Your future IIT self is counting on this hour.", "tag": "Mathematics"}, {"text": "Crystal field splitting shows that the right structure changes everything from the inside. So today, finish one full periodic table revision pass — Your future IIT self is counting on this hour.", "tag": "Chemistry-Inorganic"}, {"text": "Probability rewards those who attempt more trials — attempt one more problem before you stop. So today, finish your weak-topic error list — Keep going.", "tag": "Mathematics"}, {"text": "The gap between you and your rank isn't talent, it's repetition. So today, finish today's full mock attempt — That's how AIR under 1000 is built.", "tag": "IIT-Spirit"}, {"text": "Every proof starts from an assumption you trust — trust the process, then prove it right. So today, finish a timed QACT round — Stay consistent. The rank will follow.", "tag": "Mathematics"}, {"text": "Resonance happens when effort matches frequency — keep showing up at the same intensity. So today, finish another Numerical Odyssey level — One step closer to your seat.", "tag": "Physics"}];
+// ══ MOTIVATION PANEL ══
+function renderMotivation(){
+  const el=document.getElementById('motivRow');if(!el)return;
+  el.innerHTML=`
+    <div class="motiv-card">
+      <div class="motiv-emblems">
+        <div class="motiv-emblem iitb">IIT<br>B</div>
+        <div class="motiv-emblem iitd">IIT<br>D</div>
+      </div>
+      <div class="motiv-body">
+        <div class="motiv-name">IIT Bombay × IIT Delhi</div>
+        <div class="motiv-tag">Two of the finest institutes in the country — either one is a win.</div>
+      </div>
+      <div class="motiv-target-wrap">
+        <div class="motiv-target-lbl">The Goal</div>
+        <div class="motiv-target-num">AIR &lt; 1000</div>
+      </div>
+    </div>
+    <div class="motiv-quote-card">
+      <div class="motiv-quote-head">
+        <span class="motiv-quote-tag" id="motivQuoteTag"></span>
+        <button class="motiv-quote-refresh" onclick="showRandomQuote()">🔀 New one</button>
+      </div>
+      <div class="motiv-quote-text" id="motivQuoteText"></div>
+    </div>`;
+  showRandomQuote();
+}
+function showRandomQuote(){
+  const tagEl=document.getElementById('motivQuoteTag'),textEl=document.getElementById('motivQuoteText');
+  if(!tagEl||!textEl||!MOTIV_QUOTES.length)return;
+  const q=MOTIV_QUOTES[Math.floor(Math.random()*MOTIV_QUOTES.length)];
+  tagEl.textContent=q.tag;
+  textEl.textContent=q.text;
+}
+
+// ══ TEST PLANNER ══
+const TPKEY='jee2027_testplan';
+let testPlan={};
+function loadTestPlan(){try{testPlan=JSON.parse(localStorage.getItem(TPKEY)||'{}')}catch(e){testPlan={}};['physics','chemistry','maths'].forEach(s=>{if(!Array.isArray(testPlan[s]))testPlan[s]=[]})}
+function saveTestPlan(){localStorage.setItem(TPKEY,JSON.stringify(testPlan))}
+const TP_SUBJ_LABEL={physics:'⚡ Physics',chemistry:'🧪 Chemistry',maths:'📐 Maths'};
+function renderTestPlanner(){
+  const el=document.getElementById('tpGrid');if(!el)return;
+  el.innerHTML=['physics','chemistry','maths'].map(s=>`
+    <div class="tp-col" data-subj="${s}">
+      <div class="tp-col-head">${TP_SUBJ_LABEL[s]}</div>
+      <div class="tp-list">${testPlan[s].length?testPlan[s].map((item,i)=>`<div class="tp-item ${item.done?'done':''}"><input type="checkbox" ${item.done?'checked':''} onchange="toggleTpItem('${s}',${i})"><span>${item.text}</span><button onclick="deleteTpItem('${s}',${i})">✕</button></div>`).join(''):'<div class="tp-empty">No chapters added yet</div>'}</div>
+      <div class="tp-add-row"><input id="tpInput-${s}" placeholder="Add a chapter..." onkeydown="if(event.key==='Enter')addTpItem('${s}')"><button onclick="addTpItem('${s}')">+</button></div>
+    </div>`).join('');
+}
+function addTpItem(s){
+  const inp=document.getElementById('tpInput-'+s);const v=inp.value.trim();if(!v)return;
+  testPlan[s].push({text:v,done:false});inp.value='';saveTestPlan();renderTestPlanner();
+}
+function toggleTpItem(s,i){testPlan[s][i].done=!testPlan[s][i].done;saveTestPlan();renderTestPlanner()}
+function deleteTpItem(s,i){testPlan[s].splice(i,1);saveTestPlan();renderTestPlanner()}
+
+// ══ FORMULAS ══
+const FMKEY='jee2027_formulas';
+let formulas=[];
+let fmFilter='All';
+function loadFormulas(){try{formulas=JSON.parse(localStorage.getItem(FMKEY)||'[]')}catch(e){formulas=[]}}
+function saveFormulas(){localStorage.setItem(FMKEY,JSON.stringify(formulas))}
+function addFormula(){
+  const subj=document.getElementById('fmSubj').value;
+  const title=document.getElementById('fmTitle').value.trim();
+  const text=document.getElementById('fmText').value.trim();
+  if(!title||!text)return;
+  formulas.unshift({subj,title,text,id:Date.now()});
+  document.getElementById('fmTitle').value='';document.getElementById('fmText').value='';
+  saveFormulas();renderFormulas();
+}
+function deleteFormula(id){formulas=formulas.filter(f=>f.id!==id);saveFormulas();renderFormulas()}
+function setFmFilter(f){fmFilter=f;renderFormulas()}
+function renderFormulas(){
+  const tabsEl=document.getElementById('fmTabs'),gridEl=document.getElementById('fmGrid');
+  if(!tabsEl||!gridEl)return;
+  const cats=['All','Physics','Chemistry','Maths'];
+  tabsEl.innerHTML=cats.map(c=>`<button class="fm-tab ${fmFilter===c?'active':''}" onclick="setFmFilter('${c}')">${c}</button>`).join('');
+  const list=fmFilter==='All'?formulas:formulas.filter(f=>f.subj===fmFilter);
+  gridEl.innerHTML=list.length?list.map(f=>`<div class="fm-card" data-subj="${f.subj}"><button class="fm-card-del" onclick="deleteFormula(${f.id})">✕</button><div class="fm-card-subj">${f.subj}</div><div class="fm-card-title">${f.title}</div><div class="fm-card-formula">${f.text}</div></div>`).join(''):'<div class="fm-empty">No formulas saved yet. Add the ones you keep forgetting above. 🧠</div>';
+}
+
 // ══ NAV ══
-function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes();if(id==='dashboard')renderDashboard()}
+function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.side-link').forEach(t=>t.classList.toggle('active',t.getAttribute('data-page')===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='stats')renderStats();if(id==='settings')loadSettings();if(id==='resources')renderPlaylists();if(id==='timer')renderSessions();if(id==='calc')renderCalcGrid();if(id==='library')libGoPalettes();if(id==='formulas')renderFormulas();if(id==='dashboard')renderDashboard()}
 
 // ══ INIT ══
-loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();renderDashboard();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+loadDB();loadTheme();renderPlan();initToday();renderStats();renderPlaylists();renderCalcGrid();renderCustomChannels();loadLibrary();loadTestPlan();loadFormulas();renderTestPlanner();renderCountdowns();renderMotivation();renderDashboard();
+// Service worker intentionally NOT registered — see version-check script in <head>,
+// which actively unregisters any old service worker so you always get the latest file.
 // ═══════════════════════════════
 // CUSTOM CHANNELS SYSTEM
 // ═══════════════════════════════
@@ -1594,7 +1920,8 @@ function saveGeVideos(){ localStorage.setItem(GEKEY, JSON.stringify(geVideos)); 
 function libChapterKey(subject, idx){ return subject+'::'+idx; }
 function libGetEntry(subject, idx){
   const k = libChapterKey(subject, idx);
-  if(!libData[k]) libData[k] = { link:'', notes:'' };
+  if(!libData[k]) libData[k] = { link:'', notes:'', notebooklm:'' };
+  if(libData[k].notebooklm===undefined) libData[k].notebooklm='';
   return libData[k];
 }
 
@@ -1615,7 +1942,7 @@ function renderCrumbs(){
     html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">${name}</span>`;
   }
   if(libState.view==='ge'){
-    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">📦 Other JEE Content</span>`;
+    html += `<span class="lib-crumb-sep">›</span><span class="lib-crumb-cur">📘 JEE Books</span>`;
   }
   el.innerHTML = html;
 }
@@ -1648,10 +1975,10 @@ function libGoPalettes(){
         <span class="lib-pal-count" style="background:var(--accent-soft);color:var(--accent)">${subjCount('maths')} chapters with material</span>
       </div>
       <div class="lib-pal-card" onclick="libGoGE()">
-        <div class="lib-pal-icon">📦</div>
-        <div class="lib-pal-name">Other JEE Content</div>
-        <div class="lib-pal-sub">Misc. videos & resources</div>
-        <span class="lib-pal-count" style="background:var(--amber-soft);color:var(--amber)">${geVideos.length} videos added</span>
+        <div class="lib-pal-icon">📘</div>
+        <div class="lib-pal-name">JEE Books</div>
+        <div class="lib-pal-sub">Reference books & extra sheets</div>
+        <span class="lib-pal-count" style="background:var(--amber-soft);color:var(--amber)">${geVideos.length} added</span>
       </div>
     </div>`;
 }
@@ -1666,6 +1993,7 @@ function libGoChapters(subject){
     let chips = '';
     chips += e.pdfName ? `<span class="lib-chip lib-chip-pdf">📄 PDF (this session)</span>` : '';
     chips += e.link ? `<span class="lib-chip lib-chip-link">🔗 Link saved</span>` : '';
+    chips += e.notebooklm ? `<span class="lib-chip lib-chip-nlm">📓 NotebookLM linked</span>` : '';
     chips += e.notes ? `<span class="lib-chip lib-chip-note">📝 Notes</span>` : '';
     if(!chips) chips = `<span class="lib-chip lib-chip-empty">Empty</span>`;
     return `<div class="lib-chap-card" onclick="libGoDetail('${subject}',${idx})">
@@ -1693,14 +2021,27 @@ function libGoDetail(subject, idx){
       </div>
 
       <div class="lib-section">
-        <div class="lib-section-title">📄 Chapter notes PDF</div>
-        <div class="lib-section-desc">Upload a PDF once — it saves to the cloud and reloads automatically every time you open this chapter.</div>
+        <div class="lib-section-heading">🔍 Preview only — add any document to preview</div>
+        <div class="lib-section-desc">This is just for previewing — it does not get saved permanently. Upload a PDF to view it here; you'll need to re-add it next time you open this chapter.</div>
         <div class="lib-file-row">
           <button class="lib-file-btn" onclick="document.getElementById('libPdfInput').click()">Choose PDF</button>
           <input type="file" id="libPdfInput" accept="application/pdf" style="display:none" onchange="libHandlePdf(this)">
-          <span class="lib-file-info" id="libPdfInfo">${e.pdfName ? 'Loaded: '+e.pdfName+' (this session)' : 'No PDF uploaded yet'}</span>
+          <span class="lib-file-info" id="libPdfInfo">${e.pdfName ? 'Previewing: '+e.pdfName+' (this session only)' : 'No PDF chosen yet'}</span>
         </div>
         <iframe class="lib-pdf-frame" id="libPdfFrame"></iframe>
+      </div>
+
+      <div class="lib-section">
+        <div class="lib-section-heading">📓 Go into full details — view this chapter's NotebookLM</div>
+        <div class="lib-section-desc">Paste your Google NotebookLM share link for this chapter. It saves permanently, and you can jump straight into it any time.</div>
+        <div class="lib-save-row">
+          <input id="libNlmInput" placeholder="https://notebooklm.google.com/notebook/..." value="${e.notebooklm ? e.notebooklm.replace(/"/g,'&quot;') : ''}">
+          <button class="settings-btn" onclick="libSaveNotebookLM('${subject}',${idx})">Save</button>
+        </div>
+        <span class="lib-saved-tag ${e.notebooklm?'show':''}" id="libNlmSaved">✓ Saved</span>
+        <div style="margin-top:4px">
+          ${e.notebooklm ? `<a class="lib-nlm-open-btn" href="${e.notebooklm}" target="_blank">📓 Open full NotebookLM details ↗</a>` : `<a class="lib-nlm-open-btn" href="https://notebooklm.google.com" target="_blank" style="background:var(--bg3);color:var(--muted)">Create a notebook on NotebookLM ↗</a>`}
+        </div>
       </div>
 
       <div class="lib-section">
@@ -1783,6 +2124,15 @@ function loadPdf(subject, chapter){
   infoEl.textContent = 'No PDF uploaded yet';
 }
 
+function libSaveNotebookLM(subject, idx){
+  const val = document.getElementById('libNlmInput').value.trim();
+  const e = libGetEntry(subject, idx);
+  e.notebooklm = val;
+  saveLibrary();
+  showToast(val ? 'NotebookLM link saved' : 'NotebookLM link cleared');
+  libGoDetail(subject, idx);
+}
+
 function libSaveLink(subject, idx){
   const val = document.getElementById('libLinkInput').value.trim();
   const e = libGetEntry(subject, idx);
@@ -1811,7 +2161,7 @@ function libSaveNotes(subject, idx){
   showToast('Notes saved');
 }
 
-// ── Other JEE Content ──
+// ── JEE Books ──
 function libGoGE(){
   libState = { view:'ge', subject:null, chapter:null };
   renderCrumbs();
@@ -1821,7 +2171,7 @@ function libGoGE(){
 function renderGeGrid(){
   const cards = geVideos.map((v, i)=>`
     <div class="ge-card">
-      <a class="ge-thumb" href="${v.link}" target="_blank">🎬</a>
+      <a class="ge-thumb" href="${v.link}" target="_blank">📘</a>
       <div class="ge-body">
         <div class="ge-name">${v.title}</div>
         <div class="ge-actions">
@@ -1831,15 +2181,15 @@ function renderGeGrid(){
       </div>
     </div>`).join('');
   document.getElementById('libContent').innerHTML = `
-    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📦 Other JEE Content — any random videos you want to keep</div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📘 JEE Books — reference books, modules & extra practice sheets</div>
     <div class="ge-add-wrap">
       <div class="ge-add-row">
-        <input id="geTitle" placeholder="Title (e.g. 'Random GK video')">
-        <input id="geLink" placeholder="Video link (YouTube or any URL)">
-        <button class="lib-file-btn" onclick="libAddGE()">➕ Add video</button>
+        <input id="geTitle" placeholder="Title (e.g. 'Cengage Maths — Algebra')">
+        <input id="geLink" placeholder="Link (Drive / PDF / any URL)">
+        <button class="lib-file-btn" onclick="libAddGE()">➕ Add book / sheet</button>
       </div>
     </div>
-    <div class="ge-grid" id="geGrid">${cards || '<div class="empty">No videos added yet. Add one above ☝️</div>'}</div>`;
+    <div class="ge-grid" id="geGrid">${cards || '<div class="empty">No books or sheets added yet. Add one above ☝️</div>'}</div>`;
 }
 
 function libAddGE(){
@@ -1849,7 +2199,7 @@ function libAddGE(){
   geVideos.push({ title, link });
   saveGeVideos();
   renderGeGrid();
-  showToast('Video added');
+  showToast('Added to JEE Books');
 }
 
 function libDeleteGE(i){
