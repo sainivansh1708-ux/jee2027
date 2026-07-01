@@ -4,7 +4,7 @@
 <script>
 // ══ FORCE LATEST VERSION — kills old cached copies on every visit ══
 (function(){
-  var APP_VERSION = '2026-06-30-v7'; // bump this string every time you re-upload the file
+  var APP_VERSION = '2026-07-01-v8'; // bump this string every time you re-upload the file
   try{
     if('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations){
       navigator.serviceWorker.getRegistrations().then(function(regs){
@@ -358,6 +358,82 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
 .toggle-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .toggle-row input{width:auto}
 .toggle-row label{font-size:14px;color:var(--muted);cursor:pointer}
+
+/* ══ PLAN YOUR DAY ══ */
+.task-row{flex-wrap:wrap}
+.task-time{border:1px solid var(--border);background:var(--bg2);color:var(--text);border-radius:8px;font-size:12.5px;font-family:var(--font);padding:3px 6px;cursor:pointer;min-width:92px}
+body:not(.light):not(.theme-lavender-light):not(.theme-sky):not(.theme-sunshine) .task-time::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.75;cursor:pointer}
+
+/* ── Task table: Task | Start | Deadline ── */
+.tasks{display:grid;grid-template-columns:1fr 76px 76px;column-gap:8px;row-gap:10px;align-items:center}
+.task-col-head{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:2px;border-bottom:1px solid var(--border)}
+.task-col-head.left{text-align:left}
+.task-cell{display:flex;align-items:flex-start;gap:9px;cursor:pointer;min-width:0}
+.task-cell input[type=checkbox]{width:16px;height:16px;min-width:16px;accent-color:var(--accent);margin-top:2px;cursor:pointer}
+.tasks .task-time{width:100%;min-width:0;text-align:center;padding:5px 2px;font-size:11px}
+@media(max-width:520px){
+  .tasks{grid-template-columns:1fr 62px 62px;column-gap:5px}
+  .tasks .task-time{font-size:10px;padding:5px 1px}
+  .task-col-head{font-size:8.5px}
+}
+
+/* ══ ANALOG CLOCK TIME PICKER ══ */
+.tc-overlay{position:fixed;inset:0;background:rgba(8,11,20,.6);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.tc-overlay.show{display:flex}
+.tc-panel{background:var(--bg2);border:1px solid var(--border);border-radius:22px;padding:22px 22px 18px;width:320px;max-width:100%;box-shadow:0 24px 70px rgba(0,0,0,.45);animation:pageIn .22s cubic-bezier(.22,.8,.25,1)}
+.tc-title{font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;text-align:center}
+.tc-digital{display:flex;align-items:center;justify-content:center;gap:2px;margin-bottom:20px}
+.tc-seg{font-family:var(--font-display);font-size:38px;font-weight:800;background:transparent;border:none;outline:none;color:var(--muted);width:62px;text-align:center;border-radius:12px;padding:4px 0;cursor:text;-moz-appearance:textfield}
+.tc-seg::-webkit-outer-spin-button,.tc-seg::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.tc-seg.active{color:var(--accent);background:var(--accent-soft)}
+.tc-colon{font-size:34px;font-weight:800;color:var(--muted);margin:0 1px}
+.tc-ampm{display:flex;flex-direction:column;gap:4px;margin-left:10px}
+.tc-ampm button{font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);cursor:pointer;font-family:var(--font)}
+.tc-ampm button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tc-face-wrap{display:flex;justify-content:center;margin-bottom:18px}
+.tc-face{position:relative;width:248px;height:248px;border-radius:50%;background:var(--bg3);touch-action:none;user-select:none;border:1px solid var(--border)}
+.tc-num{position:absolute;width:32px;height:32px;line-height:32px;text-align:center;font-size:13.5px;font-weight:600;color:var(--text);border-radius:50%;transform:translate(-50%,-50%);cursor:pointer;transition:background .12s,color .12s}
+.tc-num.sel{background:var(--accent);color:#fff;font-weight:700}
+.tc-num.minute-tick{font-size:0;width:6px;height:6px;background:var(--border2);pointer-events:none}
+.tc-center-dot{position:absolute;left:50%;top:50%;width:8px;height:8px;background:var(--accent);border-radius:50%;transform:translate(-50%,-50%);z-index:4}
+.tc-hand{position:absolute;left:50%;top:50%;background:var(--accent);border-radius:4px;transform-origin:50% 100%;z-index:2;pointer-events:none}
+.tc-hand.minute{opacity:.5;background:var(--accent2)}
+.tc-mode-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.tc-mode-tab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:5px 14px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font)}
+.tc-mode-tab.sel{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.tc-btns{display:flex;justify-content:flex-end;gap:8px}
+.tc-btn{padding:9px 18px;border-radius:999px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.tc-btn-cancel{background:transparent;color:var(--muted)}
+.tc-btn-cancel:hover{color:var(--text)}
+.tc-btn-ok{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.35)}
+.tc-btn-ok:hover{opacity:.9}
+button.task-time{border:1px solid var(--border);background:var(--bg2);color:var(--text);border-radius:8px;font-size:11px;font-family:var(--font);padding:5px 2px;cursor:pointer;width:100%;text-align:center}
+button.task-time:hover{border-color:var(--accent);color:var(--accent)}
+button.task-time.unset{color:var(--muted)}
+.pyd-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+.pyd-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.pyd-title{font-family:var(--font-display);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.pyd-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pyd-switch{position:relative;display:inline-block;width:40px;height:22px}
+.pyd-switch input{opacity:0;width:0;height:0}
+.pyd-slider{position:absolute;cursor:pointer;inset:0;background:var(--bg3);border-radius:999px;transition:.2s}
+.pyd-slider::before{content:'';position:absolute;height:16px;width:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.pyd-switch input:checked+.pyd-slider{background:var(--accent)}
+.pyd-switch input:checked+.pyd-slider::before{transform:translateX(18px)}
+.pyd-switch-lbl{font-size:13px;color:var(--muted);font-weight:600}
+.pyd-test-btn{padding:6px 14px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.pyd-test-btn:hover{border-color:var(--accent);color:var(--accent)}
+.pyd-sub{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.pyd-strip{display:flex;flex-direction:column;gap:6px}
+.pyd-empty{font-size:13px;color:var(--muted);padding:6px 0}
+.pyd-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--bg2);border:1px solid var(--border)}
+.pyd-item.next{border-color:var(--accent);background:var(--accent-soft)}
+.pyd-item.done{opacity:.55}
+.pyd-time{font-size:13px;font-weight:700;color:var(--accent);min-width:70px;font-variant-numeric:tabular-nums}
+.pyd-item.done .pyd-time{color:var(--muted)}
+.pyd-label{font-size:13.5px;color:var(--text);flex:1;line-height:1.4}
+.pyd-label.done{text-decoration:line-through;color:var(--muted)}
+.pyd-tag{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:999px;white-space:nowrap}
 
 /* HISTORY */
 .hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
@@ -1010,38 +1086,52 @@ color:var(--muted);
     <div class="scard"><div class="scard-num" id="s-tasks">0/13</div><div class="scard-lbl">Tasks today</div></div>
   </div>
   <div style="font-size:15px;font-weight:600;margin-bottom:10px;color:var(--muted)" id="todayLabel"></div>
+
+  <div class="pyd-card">
+    <div class="pyd-head">
+      <div class="pyd-title">⏰ Plan Your Day</div>
+      <div class="pyd-controls">
+        <button class="pyd-test-btn" onclick="testReminderSound()">🔊 Test sound</button>
+        <span class="pyd-switch-lbl">Reminders</span>
+        <label class="pyd-switch"><input type="checkbox" id="remindersToggle" onchange="toggleReminders(this)"><span class="pyd-slider"></span></label>
+      </div>
+    </div>
+    <div class="pyd-sub">For every task below, set a <strong>Start</strong> time and a <strong>Deadline</strong> time using the clock icons in the table. Turn reminders on and keep this tab open — you'll get a sound + popup right when a task should start, and another when its deadline hits.</div>
+    <div class="pyd-strip" id="pydStrip"></div>
+  </div>
+
   <div class="meta-row">
     <div class="meta-group"><label>Hours studied</label><select id="hours"><option value="">— select —</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></div>
     <div class="meta-group"><label>Focus level</label><div class="mood-row" style="margin:4px 0 0"><button class="mbtn" onclick="setMood('🔥')" id="mb-🔥">🔥 Peak</button><button class="mbtn" onclick="setMood('✅')" id="mb-✅">✅ Good</button><button class="mbtn" onclick="setMood('😐')" id="mb-😐">😐 Okay</button><button class="mbtn" onclick="setMood('😴')" id="mb-😴">😴 Low</button></div></div>
   </div>
   <div class="card">
     <div class="card-head"><span class="card-title">📐 Mathematics</span><span class="badge bm">Mathsmerizing + Black Book + Mohit Tyagi </span></div>
-    <div class="tasks">
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Mathsmerizing lecture(s) completed for today's chapter</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Black Book — 15 min struggle per problem before checking solution</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Maths chapter test done</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Maths chapter test done</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Maths question cold</span></label>
+    <div class="tasks"><div class="task-col-head left">Task</div><div class="task-col-head">Start</div><div class="task-col-head">Deadline</div>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Mathsmerizing lecture(s) completed for today's chapter</span></label><button type="button" class="task-time unset" data-idx="0" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="0" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Black Book — 15 min struggle per problem before checking solution</span></label><button type="button" class="task-time unset" data-idx="1" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="1" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Maths chapter test done</span></label><button type="button" class="task-time unset" data-idx="2" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="2" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Maths chapter test done</span></label><button type="button" class="task-time unset" data-idx="3" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="3" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Maths question cold</span></label><button type="button" class="task-time unset" data-idx="4" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="4" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
     </div>
     <div class="input-group"><div class="input-label">Chapter covered + what was hard</div><textarea id="mathNotes" rows="2" placeholder="e.g. Indefinite Integration — stuck on partial fractions in Black Book Q12..."></textarea></div>
   </div>
   <div class="card">
     <div class="card-head"><span class="card-title">⚡ Physics</span><span class="badge bp">Numerical Odyssey + Physics Galaxy + INSP</span></div>
-    <div class="tasks">
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Numerical Odyssey — completed today's section in order (no skipping levels)</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Physics Galaxy / INSP — consulted for concept gaps only</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Physics chapter test done</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Physics chapter test done</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Physics problem cold</span></label>
+    <div class="tasks"><div class="task-col-head left">Task</div><div class="task-col-head">Start</div><div class="task-col-head">Deadline</div>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Numerical Odyssey — completed today's section in order (no skipping levels)</span></label><button type="button" class="task-time unset" data-idx="5" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="5" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Physics Galaxy / INSP — consulted for concept gaps only</span></label><button type="button" class="task-time unset" data-idx="6" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="6" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — at least 1 timed Physics chapter test done</span></label><button type="button" class="task-time unset" data-idx="7" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="7" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">QACT (JEE Advanced pattern) — 1 Physics chapter test done</span></label><button type="button" class="task-time unset" data-idx="8" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="8" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Error analysis — redid every wrong Physics problem cold</span></label><button type="button" class="task-time unset" data-idx="9" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="9" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
     </div>
     <div class="input-group"><div class="input-label">Chapter + what stumped you</div><textarea id="phyNotes" rows="2" placeholder="e.g. NLM Odyssey Level 3 Q7 — FBD in non-inertial frame..."></textarea></div>
   </div>
   <div class="card">
     <div class="card-head"><span class="card-title">🧪 Chemistry</span><span class="badge bc">Organic / Physical / Inorganic</span></div>
-    <div class="tasks">
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Sachin Rana video(s) OR Physical Chem hard Qs OR Inorganic revision</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — 1 Chemistry chapter test done</span></label>
-      <label class="task-row"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Stayed within 1.5 hr Chemistry cap</span></label>
+    <div class="tasks"><div class="task-col-head left">Task</div><div class="task-col-head">Start</div><div class="task-col-head">Deadline</div>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Sachin Rana video(s) OR Physical Chem hard Qs OR Inorganic revision</span></label><button type="button" class="task-time unset" data-idx="10" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="10" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Quizrr QCT — 1 Chemistry chapter test done</span></label><button type="button" class="task-time unset" data-idx="11" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="11" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
+      <label class="task-cell"><input type="checkbox" class="task-check" onchange="taskChanged()"><span class="task-lbl">Stayed within 1.5 hr Chemistry cap</span></label><button type="button" class="task-time unset" data-idx="12" data-kind="start" data-value="" title="Start time" onclick="openTimeClock(this)">--:--</button><button type="button" class="task-time unset" data-idx="12" data-kind="end" data-value="" title="Deadline time" onclick="openTimeClock(this)">--:--</button>
     </div>
     <div class="input-group"><div class="input-label">What you covered</div><textarea id="chemNotes" rows="2" placeholder="e.g. Sachin Rana video 24 — Alcohol oxidation patterns..."></textarea></div>
   </div>
@@ -1437,6 +1527,37 @@ color:var(--muted);
 </div>
 <div class="toast" id="toast"></div>
 
+<!-- ANALOG CLOCK TIME PICKER -->
+<div class="tc-overlay" id="tcOverlay" onclick="if(event.target===this)tcCancel()">
+  <div class="tc-panel" onclick="event.stopPropagation()">
+    <div class="tc-title" id="tcTitle">Set time</div>
+    <div class="tc-digital">
+      <input class="tc-seg active" id="tcHourSeg" type="text" inputmode="numeric" maxlength="2" value="12" onfocus="tcFocusSeg('hour')" oninput="tcTypeSeg('hour',this)">
+      <span class="tc-colon">:</span>
+      <input class="tc-seg" id="tcMinSeg" type="text" inputmode="numeric" maxlength="2" value="00" onfocus="tcFocusSeg('minute')" oninput="tcTypeSeg('minute',this)">
+      <div class="tc-ampm">
+        <button id="tcAM" onclick="tcSetAmPm('AM')">AM</button>
+        <button id="tcPM" onclick="tcSetAmPm('PM')">PM</button>
+      </div>
+    </div>
+    <div class="tc-mode-tabs">
+      <button class="tc-mode-tab" id="tcTabHour" onclick="tcSwitchMode('hour')">Hour</button>
+      <button class="tc-mode-tab" id="tcTabMinute" onclick="tcSwitchMode('minute')">Minute</button>
+    </div>
+    <div class="tc-face-wrap">
+      <div class="tc-face" id="tcFace">
+        <div class="tc-hand minute" id="tcHandMinute"></div>
+        <div class="tc-hand hour" id="tcHandHour"></div>
+        <div class="tc-center-dot"></div>
+      </div>
+    </div>
+    <div class="tc-btns">
+      <button class="tc-btn tc-btn-cancel" onclick="tcCancel()">Cancel</button>
+      <button class="tc-btn tc-btn-ok" onclick="tcConfirm()">OK</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://nprjtssljmkvhphjbhgm.supabase.co";
@@ -1568,15 +1689,322 @@ function initToday(){
     if(d.test){document.getElementById('testToggle').checked=true;document.getElementById('testBlock').classList.add('open');document.getElementById('testName').value=d.test.name||'';document.getElementById('testScore').value=d.test.score||'';document.getElementById('testWeak').value=d.test.weak||''}
   }
   updateStreak();
+  loadTaskTimes();
+  loadReminderPref();
 }
 function setMood(m){mood=m;document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('sel'));const el=document.getElementById('mb-'+m);if(el)el.classList.add('sel')}
-function taskChanged(){const b=document.querySelectorAll('.task-check');const done=[...b].filter(x=>x.checked).length;document.getElementById('s-tasks').textContent=done+'/'+b.length;b.forEach(x=>{const l=x.closest('.task-row').querySelector('.task-lbl');if(l)l.className='task-lbl'+(x.checked?' done':'')})}
+function taskChanged(){const b=document.querySelectorAll('.task-check');const done=[...b].filter(x=>x.checked).length;document.getElementById('s-tasks').textContent=done+'/'+b.length;b.forEach(x=>{const l=x.closest('.task-row').querySelector('.task-lbl');if(l)l.className='task-lbl'+(x.checked?' done':'')});renderPydStrip()}
 async function saveDay(){
   const tk=todayKey(),b=[...document.querySelectorAll('.task-check')],tasks=b.map(x=>x.checked),done=tasks.filter(Boolean).length;
   const entry={date:tk,hours:document.getElementById('hours').value,mood,tasks,taskPct:Math.round(done/tasks.length*100),mathNotes:document.getElementById('mathNotes').value,phyNotes:document.getElementById('phyNotes').value,chemNotes:document.getElementById('chemNotes').value,reflection:document.getElementById('reflection').value};
   if(document.getElementById('testToggle').checked)entry.test={name:document.getElementById('testName').value,score:document.getElementById('testScore').value,weak:document.getElementById('testWeak').value};
-  DB[tk]=entry;saveDB();updateStreak();renderHistory();await syncToSheet(entry);showToast('✓ Day saved!');
+  DB[tk]=entry;saveDB();updateStreak();renderHistory();await syncToSheet(entry);
 }
+
+// ══ PLAN YOUR DAY — task timings + sound reminders ══
+const TASKTIME_KEY='jee2027_taskTimes';
+const REMIND_KEY='jee2027_remindersOn';
+let remindersOn=false;
+let firedReminders={}; // {dateKey_idx_kind_hhmm: true} — prevents repeat firing within same minute
+
+function saveTaskTimes(){
+  const times=[];
+  for(let i=0;i<13;i++){
+    const startEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="start"]`);
+    const endEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="end"]`);
+    times[i]={start:startEl?startEl.dataset.value:'',end:endEl?endEl.dataset.value:''};
+  }
+  localStorage.setItem(TASKTIME_KEY,JSON.stringify(times));
+  renderPydStrip();
+}
+function loadTaskTimes(){
+  let times=[];
+  try{times=JSON.parse(localStorage.getItem(TASKTIME_KEY)||'[]')}catch(e){times=[]}
+  for(let i=0;i<13;i++){
+    const t=times[i]||{};
+    const startEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="start"]`);
+    const endEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="end"]`);
+    if(startEl)tcSetButtonValue(startEl,t.start||'');
+    if(endEl)tcSetButtonValue(endEl,t.end||'');
+  }
+  renderPydStrip();
+}
+function loadReminderPref(){
+  remindersOn=localStorage.getItem(REMIND_KEY)==='1';
+  const el=document.getElementById('remindersToggle');
+  if(el)el.checked=remindersOn;
+}
+function toggleReminders(cb){
+  remindersOn=cb.checked;
+  localStorage.setItem(REMIND_KEY,remindersOn?'1':'0');
+  if(remindersOn){
+    if('Notification' in window && Notification.permission==='default'){Notification.requestPermission();}
+    playReminderSound('start');
+    showToast('🔔 Reminders on — keep this tab open to hear them');
+  } else {
+    showToast('🔕 Reminders off','var(--muted)');
+  }
+}
+function playReminderSound(kind){
+  try{
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    const ctx=new Ctx();
+    const notes=kind==='end'?[520,390,520,390]:[660,880,660,880];
+    let t=ctx.currentTime;
+    notes.forEach((freq,i)=>{
+      const osc=ctx.createOscillator(),gain=ctx.createGain();
+      osc.type='sine';osc.frequency.value=freq;
+      osc.connect(gain);gain.connect(ctx.destination);
+      const start=t+i*0.28;
+      gain.gain.setValueAtTime(0,start);
+      gain.gain.linearRampToValueAtTime(0.28,start+0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001,start+0.24);
+      osc.start(start);osc.stop(start+0.26);
+    });
+    setTimeout(()=>ctx.close(),(notes.length*0.28+0.3)*1000);
+  }catch(e){}
+}
+function testReminderSound(){playReminderSound('start');showToast('🔊 That\'s what a reminder sounds like');}
+function nowHHMM(){const n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')}
+function fmtTime12(hhmm){
+  if(!hhmm)return'';
+  let[h,m]=hhmm.split(':').map(Number);
+  const ap=h>=12?'PM':'AM';h=h%12;if(h===0)h=12;
+  return h+':'+String(m).padStart(2,'0')+' '+ap;
+}
+function tcSetButtonValue(btn,hhmm){
+  btn.dataset.value=hhmm||'';
+  if(hhmm){btn.textContent=fmtTime12(hhmm);btn.classList.remove('unset');}
+  else{btn.textContent='--:--';btn.classList.add('unset');}
+}
+function renderPydStrip(){
+  const strip=document.getElementById('pydStrip');
+  if(!strip)return;
+  const checks=[...document.querySelectorAll('.task-check')];
+  const labels=[...document.querySelectorAll('.task-lbl')].map(l=>l.textContent);
+  const now=nowHHMM();
+  const items=[];
+  for(let i=0;i<13;i++){
+    const startEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="start"]`);
+    const endEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="end"]`);
+    const start=startEl?(startEl.dataset.value||''):'',end=endEl?(endEl.dataset.value||''):'';
+    if(!start && !end)continue;
+    items.push({i,start,end,done:checks[i]?checks[i].checked:false,label:labels[i]||'',overdue:end&&!checks[i]?.checked&&end<now});
+  }
+  if(!items.length){
+    strip.innerHTML='<div class="pyd-empty">No task timings set yet — use the Start / Deadline clock icons in each subject\'s table above.</div>';
+    return;
+  }
+  items.sort((a,b)=>(a.start||a.end).localeCompare(b.start||b.end));
+  const nextIdx=items.findIndex(x=>!x.done && x.start && x.start>=now);
+  strip.innerHTML=items.map((x,pos)=>{
+    const range=x.start&&x.end?`${fmtTime12(x.start)} – ${fmtTime12(x.end)}`:(x.start?'From '+fmtTime12(x.start):'By '+fmtTime12(x.end));
+    let tag='';
+    if(x.done)tag='<span class="pyd-tag" style="color:var(--green);background:var(--green-soft)">Done</span>';
+    else if(x.overdue)tag='<span class="pyd-tag" style="color:var(--red);background:var(--red-soft)">Overdue</span>';
+    else if(pos===nextIdx)tag='<span class="pyd-tag">Up next</span>';
+    return `<div class="pyd-item ${x.done?'done':''} ${pos===nextIdx?'next':''}">
+      <span class="pyd-time">${range}</span>
+      <span class="pyd-label ${x.done?'done':''}">${x.label}</span>
+      ${tag}
+    </div>`;
+  }).join('');
+}
+function checkReminders(){
+  if(!remindersOn)return;
+  const hhmm=nowHHMM(),tk=todayKey();
+  for(let i=0;i<13;i++){
+    const startEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="start"]`);
+    const endEl=document.querySelector(`.task-time[data-idx="${i}"][data-kind="end"]`);
+    const chk=document.querySelectorAll('.task-check')[i];
+    const lbl=document.querySelectorAll('.task-lbl')[i];
+    const text=lbl?lbl.textContent:'your task';
+    if(chk && chk.checked)continue; // already done, no reminders needed
+    if(startEl && startEl.dataset.value===hhmm){
+      const fireKey=tk+'_'+i+'_start_'+hhmm;
+      if(!firedReminders[fireKey]){
+        firedReminders[fireKey]=true;
+        playReminderSound('start');
+        showToast('⏰ Time to start: '+text,'var(--accent)');
+        if('Notification' in window && Notification.permission==='granted'){try{new Notification('⏰ Start now',{body:text});}catch(e){}}
+      }
+    }
+    if(endEl && endEl.dataset.value===hhmm){
+      const fireKey=tk+'_'+i+'_end_'+hhmm;
+      if(!firedReminders[fireKey]){
+        firedReminders[fireKey]=true;
+        playReminderSound('end');
+        showToast('⛔ Deadline reached: '+text,'var(--red)');
+        if('Notification' in window && Notification.permission==='granted'){try{new Notification('⛔ Deadline reached',{body:text});}catch(e){}}
+      }
+    }
+  }
+  renderPydStrip();
+}
+setInterval(checkReminders,15000);
+setInterval(()=>{ if(document.getElementById('page-today') && document.getElementById('page-today').classList.contains('active')) renderPydStrip(); },60000);
+
+// ══ ANALOG CLOCK PICKER ══
+let tcTarget=null;          // the button currently being edited
+let tcState={hour:12,minute:0,ampm:'AM'};
+let tcMode='hour';          // 'hour' | 'minute'
+let tcDragging=false;
+
+function openTimeClock(btn){
+  tcTarget=btn;
+  const existing=btn.dataset.value; // 24hr HH:MM
+  if(existing){
+    let[h,m]=existing.split(':').map(Number);
+    const ampm=h>=12?'PM':'AM';
+    let h12=h%12; if(h12===0)h12=12;
+    tcState={hour:h12,minute:m,ampm};
+  } else {
+    const now=new Date();
+    let h=now.getHours(),m=now.getMinutes();
+    const ampm=h>=12?'PM':'AM';
+    let h12=h%12; if(h12===0)h12=12;
+    tcState={hour:h12,minute:Math.round(m/5)*5%60,ampm};
+  }
+  tcMode='hour';
+  document.getElementById('tcTitle').textContent = btn.dataset.kind==='end' ? 'Set deadline time' : 'Set start time';
+  tcRenderAll();
+  document.getElementById('tcOverlay').classList.add('show');
+}
+function tcCancel(){
+  document.getElementById('tcOverlay').classList.remove('show');
+  tcTarget=null;
+}
+function tcConfirm(){
+  if(!tcTarget)return;
+  let h24=tcState.hour%12;
+  if(tcState.ampm==='PM')h24+=12;
+  const hhmm=String(h24).padStart(2,'0')+':'+String(tcState.minute).padStart(2,'0');
+  tcSetButtonValue(tcTarget,hhmm);
+  saveTaskTimes();
+  document.getElementById('tcOverlay').classList.remove('show');
+  tcTarget=null;
+}
+function tcSwitchMode(mode){
+  tcMode=mode;
+  tcRenderAll();
+}
+function tcFocusSeg(which){
+  tcMode=which;
+  tcRenderAll();
+  const seg=which==='hour'?document.getElementById('tcHourSeg'):document.getElementById('tcMinSeg');
+  seg.select();
+}
+function tcTypeSeg(which,el){
+  let v=el.value.replace(/[^0-9]/g,'').slice(0,2);
+  el.value=v;
+  const n=parseInt(v||'0',10);
+  if(which==='hour'){
+    if(n>=1&&n<=12)tcState.hour=n;
+  } else {
+    if(n>=0&&n<=59)tcState.minute=n;
+  }
+  tcRenderClockOnly();
+}
+function tcSetAmPm(v){
+  tcState.ampm=v;
+  tcRenderAll();
+}
+function tcRenderAll(){
+  document.getElementById('tcHourSeg').value=String(tcState.hour);
+  document.getElementById('tcMinSeg').value=String(tcState.minute).padStart(2,'0');
+  document.getElementById('tcHourSeg').classList.toggle('active',tcMode==='hour');
+  document.getElementById('tcMinSeg').classList.toggle('active',tcMode==='minute');
+  document.getElementById('tcAM').classList.toggle('sel',tcState.ampm==='AM');
+  document.getElementById('tcPM').classList.toggle('sel',tcState.ampm==='PM');
+  document.getElementById('tcTabHour').classList.toggle('sel',tcMode==='hour');
+  document.getElementById('tcTabMinute').classList.toggle('sel',tcMode==='minute');
+  tcBuildFace();
+  tcRenderClockOnly();
+}
+function tcBuildFace(){
+  const face=document.getElementById('tcFace');
+  face.querySelectorAll('.tc-num').forEach(n=>n.remove());
+  const R=100,cx=124,cy=124;
+  if(tcMode==='hour'){
+    for(let i=1;i<=12;i++){
+      const ang=(i/12)*2*Math.PI - Math.PI/2;
+      const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+      const d=document.createElement('div');
+      d.className='tc-num'+(tcState.hour===i?' sel':'');
+      d.style.left=x+'px';d.style.top=y+'px';
+      d.textContent=i;
+      d.onclick=(e)=>{e.stopPropagation();tcState.hour=i;tcMode='minute';tcRenderAll();};
+      face.insertBefore(d,face.firstChild);
+    }
+  } else {
+    for(let i=0;i<12;i++){
+      const val=i*5;
+      const ang=(i/12)*2*Math.PI - Math.PI/2;
+      const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+      const d=document.createElement('div');
+      d.className='tc-num'+(tcState.minute===val?' sel':'');
+      d.style.left=x+'px';d.style.top=y+'px';
+      d.textContent=String(val).padStart(2,'0');
+      d.onclick=(e)=>{e.stopPropagation();tcState.minute=val;tcRenderAll();};
+      face.insertBefore(d,face.firstChild);
+    }
+  }
+}
+function tcRenderClockOnly(){
+  const minuteHand=document.getElementById('tcHandMinute');
+  const hourHand=document.getElementById('tcHandHour');
+  const minAngle=(tcState.minute/60)*360;
+  const hourAngle=((tcState.hour%12)/12)*360 + (tcState.minute/60)*30;
+  minuteHand.style.width='4px';
+  minuteHand.style.height='92px';
+  minuteHand.style.marginLeft='-2px';
+  minuteHand.style.marginTop='-92px';
+  minuteHand.style.transform='rotate('+minAngle+'deg)';
+  hourHand.style.width='5px';
+  hourHand.style.height='64px';
+  hourHand.style.marginLeft='-2.5px';
+  hourHand.style.marginTop='-64px';
+  hourHand.style.transform='rotate('+hourAngle+'deg)';
+}
+
+function tcAngleToValue(clientX,clientY){
+  const face=document.getElementById('tcFace');
+  const rect=face.getBoundingClientRect();
+  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  let ang=Math.atan2(clientY-cy,clientX-cx)*180/Math.PI + 90;
+  if(ang<0)ang+=360;
+  if(tcMode==='hour'){
+    let h=Math.round(ang/30);
+    if(h===0)h=12; if(h>12)h=h-12;
+    return h;
+  } else {
+    let m=Math.round(ang/6)%60;
+    if(m<0)m+=60;
+    return m;
+  }
+}
+function tcHandleDrag(e){
+  const point=e.touches?e.touches[0]:e;
+  const val=tcAngleToValue(point.clientX,point.clientY);
+  if(tcMode==='hour')tcState.hour=val; else tcState.minute=val;
+  tcRenderAll();
+}
+(function tcInitFaceEvents(){
+  const face=document.getElementById('tcFace');
+  if(!face)return;
+  const start=(e)=>{tcDragging=true;tcHandleDrag(e);e.preventDefault();};
+  const move=(e)=>{if(tcDragging){tcHandleDrag(e);e.preventDefault();}};
+  const end=(e)=>{
+    if(tcDragging && tcMode==='hour'){tcMode='minute';tcRenderAll();}
+    tcDragging=false;
+  };
+  face.addEventListener('mousedown',start);
+  face.addEventListener('touchstart',start,{passive:false});
+  document.addEventListener('mousemove',move);
+  document.addEventListener('touchmove',move,{passive:false});
+  document.addEventListener('mouseup',end);
+  document.addEventListener('touchend',end);
+})();
 
 // ══ STREAK / STATS ══
 function updateStreak(){
